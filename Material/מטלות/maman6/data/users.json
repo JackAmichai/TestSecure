@@ -1,0 +1,242 @@
+[
+  {
+    "username": "weak_user_01",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$IkYnRNK4V+1WaDQpd+wIhg$V+0ARaSzi5uHUBkXgJp8gd+OPrPLroBpzfZo5IrOTDQ",
+    "salt": "2bbdf0c15aa3f78693db0d9c522136b0",
+    "password_strength": "weak",
+    "hash_mode": "argon2id",
+    "totp_secret": "OSBILQLYOUKFHS27CEN2VIGNN3ZCGZHW"
+  },
+  {
+    "username": "weak_user_02",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$6WW4nrCUpCR21C2CHVhsZg$9kEy6YovT7Y1qgGwridGMAAxpuPiHxZvBcu5FkDE9kQ",
+    "salt": "ce3df5e6289fd7a7ad8e12c2aef7c4ab",
+    "password_strength": "weak",
+    "hash_mode": "argon2id",
+    "totp_secret": "X5DVKMZC2OWNQACI3NC2HNUKAM5EBPPC"
+  },
+  {
+    "username": "weak_user_03",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$Ia3Wmvxpq3JJ/1GCN4igjw$SGeALzv2HRolscjGWA7SkzC0gcTr4yLzjY9MsKcOX7Q",
+    "salt": "3727d1c3106fb12b85bf383f8fb46533",
+    "password_strength": "weak",
+    "hash_mode": "argon2id",
+    "totp_secret": "KFH5IQX7LH3QFRBCS7JHJKO75HCNDYZ5"
+  },
+  {
+    "username": "weak_user_04",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$LxCex8TcK1MWINmhHTcvWg$1aMz+1ND6GmRUXlxnCH9RuRzHnpT1+K+Z3VW6yZSNxA",
+    "salt": "d9b12b6deed209d5fcdc06e5256e4680",
+    "password_strength": "weak",
+    "hash_mode": "argon2id",
+    "totp_secret": "HEUMBL5PUHPFOYNDUB3GNT3CG4SOWFSI"
+  },
+  {
+    "username": "weak_user_05",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$sp9Rs7jVHuBQDK3I1dGIfA$6dpqdzwetDiWts8HT56TtOoinjaXzhM+tSpos1aBw0k",
+    "salt": "6bf7d1b11f90003aaed7b627a295bd4c",
+    "password_strength": "weak",
+    "hash_mode": "argon2id",
+    "totp_secret": "6AIOKC4EIQP3NGOBM5OJGIMTU2LQGCLD"
+  },
+  {
+    "username": "weak_user_06",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$FaPXhZUXplNFIgA1bHlVpw$fDgRohmXHczw19+4U/hKss/63WeDHuP7Gp8RBPUmeg8",
+    "salt": "b971b46e84c3ade5518195752cb5fad9",
+    "password_strength": "weak",
+    "hash_mode": "argon2id",
+    "totp_secret": "QLOI72NYSDRHZFCBK3Y7OFJHSFPGUQ5R"
+  },
+  {
+    "username": "weak_user_07",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$bZDIG+V6jkCImnR0Io5xGA$TYG3hsakrex3JepQZp5aBBRb3QJKxSJjw26ON3pk0wo",
+    "salt": "ddac031dc9affc17d85c4a0eefe97863",
+    "password_strength": "weak",
+    "hash_mode": "argon2id",
+    "totp_secret": "EIOKRXHJK3GIBSN5OFDDF3OPKGCO7F7F"
+  },
+  {
+    "username": "weak_user_08",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$rKCEHUnktJW0Yc6BKBKp4w$xpZ9DGmZkYOQ/vwr/XObf4YVyhOQG3tPp5M33BC8l4A",
+    "salt": "fefeddc9e5cc1c2cad57ad78666672b6",
+    "password_strength": "weak",
+    "hash_mode": "argon2id",
+    "totp_secret": "DSGBZCSC3RVSRYIBMVHPYHIVZSCMFFGD"
+  },
+  {
+    "username": "weak_user_09",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$SznuSXa6OwBZTjhDBtMMcg$jEDZJlf1Zz0mDcczWovANaMXsTNCha2n5UMChkWvddo",
+    "salt": "4548ee487f3c45f18f622ba5c74c30f2",
+    "password_strength": "weak",
+    "hash_mode": "argon2id",
+    "totp_secret": "Q3KAPZQQFVNLCNCHE2XJNCQKJSZBH4ES"
+  },
+  {
+    "username": "weak_user_10",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$bMaFmZw0R9YmKfWFzNG/uw$0Z5EP6PX0hGQZ5V3SxNV0SEsySBzrrZKcTc4fBYPzxg",
+    "salt": "b9acfaace44f74671df375b92fffd18e",
+    "password_strength": "weak",
+    "hash_mode": "argon2id",
+    "totp_secret": "EI4FM2JGY3E3MNDUUQ6IR5ALPSYZQDYP"
+  },
+  {
+    "username": "medium_user_01",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$9I/ZMi3PfRIqACv/c0btlA$dlnkOyNXookoQ7IABqCmjpNeY+SQCBKdg+XFP17MBjM",
+    "salt": "8f237355c54c00dc1a45c61b19bb0915",
+    "password_strength": "medium",
+    "hash_mode": "argon2id",
+    "totp_secret": "DOZO6H6QWP6PA55J3CX76R2ZNCMLIBS6"
+  },
+  {
+    "username": "medium_user_02",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$algjd4uhKQMPVGwOzLcUcQ$RgnrmmGIJ+jbOoq+ijp8jD4AR/GtFqznkLvv3vVEp5Q",
+    "salt": "005bcdec81286548227321d390231062",
+    "password_strength": "medium",
+    "hash_mode": "argon2id",
+    "totp_secret": "3WGPAWQ4O2BCX3Y72RXS4FJGHGFGKF65"
+  },
+  {
+    "username": "medium_user_03",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$U0EjehoVPNNuZuAjgkepMQ$U1ddPGqDbRULGchl1frdh7YMdY/kAaiJROui3lksfnQ",
+    "salt": "d58090f5d404347207c216c92851bce3",
+    "password_strength": "medium",
+    "hash_mode": "argon2id",
+    "totp_secret": "TYX7KOFUOJ7GAVWHHVH57YM4J66WXHTS"
+  },
+  {
+    "username": "medium_user_04",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$zOBBItVEtRYP0D+w9NQ5iw$HGywUBPhZS/DYtyVn7cEGIWwsWhYftmJ5TeSLAqXNoM",
+    "salt": "27758f4a468e76cca685ba1d05b3f098",
+    "password_strength": "medium",
+    "hash_mode": "argon2id",
+    "totp_secret": "6DIFPH4VMXLTYI5TVHCRJMG4RKGMOC7V"
+  },
+  {
+    "username": "medium_user_05",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$kJP2i+JK18jiizzaoYcfDA$ZErzLJuiUQx2PAFjEY5tG044VjJfg3fbO9yx7mQ3k4o",
+    "salt": "f7af6cbb43745a3f66a93a961fc44ee9",
+    "password_strength": "medium",
+    "hash_mode": "argon2id",
+    "totp_secret": "Y6ODIWM7GN3JJIZGCY5GCKQARAA2N24K"
+  },
+  {
+    "username": "medium_user_06",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$ahuptF9pXxCNUrmeTG+1Hw$wnGomlP9ITgUE40tBwq9S4Zrro/Xtsz9sswTCZzb608",
+    "salt": "aeead1f297b0a989cf311c42fd25c60a",
+    "password_strength": "medium",
+    "hash_mode": "argon2id",
+    "totp_secret": "GNZZNJYDH2C5EV3K36JH4JTMN5ZYRXJY"
+  },
+  {
+    "username": "medium_user_07",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$wHGdwcjdhGeJ6n0URKk+1g$td8hEq39KNSeiI7Jum1XZXrzDD8d4bkjFk1HzubSxFU",
+    "salt": "9a4a91ff546bbe80e3743bc1aa520074",
+    "password_strength": "medium",
+    "hash_mode": "argon2id",
+    "totp_secret": "H2Z2SHCN35Z4YW4AQJ7JH5NTVQ42VOI4"
+  },
+  {
+    "username": "medium_user_08",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$dz6vx09ngWktcE2L1H/cqQ$IAVQFd46ux19PREAiT84JDNsQaiINcj762pV+cbbPqI",
+    "salt": "fd3cf481f7caac88b9734dd85f658a67",
+    "password_strength": "medium",
+    "hash_mode": "argon2id",
+    "totp_secret": "TG3I3LM4CVH6UVVAZ7RKUNXMLY3EAEIJ"
+  },
+  {
+    "username": "medium_user_09",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$7MBcAm+K708m6cRsOzAQSQ$HnHBN/2ugQ9skljBbce4dJF/b9UvZ3IwBRjPtDZXo4c",
+    "salt": "9197b3f48aba3cdc1b56b7b6bf8f629f",
+    "password_strength": "medium",
+    "hash_mode": "argon2id",
+    "totp_secret": "4VSURBHCTEA37HGDEJPSWI24YFZKRGDQ"
+  },
+  {
+    "username": "medium_user_10",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$GTcZNRibTYyfjt2G5OUUlg$vLOmNlJD7vlVEuJIHEhs/woKJfQvCDax0bxLId0ewQ8",
+    "salt": "28daf08722a23f8f3e855fcfe4b1d69f",
+    "password_strength": "medium",
+    "hash_mode": "argon2id",
+    "totp_secret": "KDNA3VKFXHSD3EH67H5CNND2Y3TDMFUU"
+  },
+  {
+    "username": "strong_user_01",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$cr79C+k6rqcD9w4fDtlD6A$UXZO0nQBeCmLNt+ebStrEpACci5LDtFkp1PdcfdjLLU",
+    "salt": "e29c7a41b8baa751299c8fc2aeb1de01",
+    "password_strength": "strong",
+    "hash_mode": "argon2id",
+    "totp_secret": "WUAL3TSSYWHONLIZFCNBDKBME357LYBQ"
+  },
+  {
+    "username": "strong_user_02",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$n2dXbM5DTIJVhOtDEQEyow$1VAGkB+3rCruj3uUGyba0RksMgf52otxWa5MTCNNx6Q",
+    "salt": "d15303ec3ee73a8419cede84ac4bac21",
+    "password_strength": "strong",
+    "hash_mode": "argon2id",
+    "totp_secret": "GGADYEANI3I3D7XTTX2ED6NJF26N3UAQ"
+  },
+  {
+    "username": "strong_user_03",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$qz0O/1/Cyf6NhR+g25BVEg$ajCg7oM1ylkCXLrVKaNvLjYHsyu/AkxOTLiEi2rwSwY",
+    "salt": "ce19a7ff98d45c16f6294ae3a5355c5c",
+    "password_strength": "strong",
+    "hash_mode": "argon2id",
+    "totp_secret": "IGF6Q7O67ZATFWUAYKQ4AATVNJE3Q76X"
+  },
+  {
+    "username": "strong_user_04",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$YYdlh4u1Y1VihDQF15EW2w$rNsl+2eBccGsBXr1rKov4DkY+EcHBtcJAwuvGeBh7GY",
+    "salt": "16b16ff4c777cedb17b37f4423d49c86",
+    "password_strength": "strong",
+    "hash_mode": "argon2id",
+    "totp_secret": "KWL7RMENUH6ZX7ZLMTTEXGXC5ZSFI7US"
+  },
+  {
+    "username": "strong_user_05",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$yfb3P2PI+v+9D76j+eJ7jw$NttPPKbho4EOCWSNABwjoaeJK1vi6h4y6FKnUgwTGfc",
+    "salt": "819aa342f684c3160d03c20d78cfc2e7",
+    "password_strength": "strong",
+    "hash_mode": "argon2id",
+    "totp_secret": "36KHSEZ7QFU6KCRKV3SDPAAPQWJWJRKF"
+  },
+  {
+    "username": "strong_user_06",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$M7nMK7KnQtfgtmFDddrniw$bsuYS5bF9inqvQpkYjwSN3YZQ6QgWfcRs3nLwHEvX9U",
+    "salt": "93a67293f9323569b46c00c1dfe8b687",
+    "password_strength": "strong",
+    "hash_mode": "argon2id",
+    "totp_secret": "GQBY2BAC6SJ4QEREZZYSUITDLAADBS6J"
+  },
+  {
+    "username": "strong_user_07",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$DsbtiHuxN4eBIbH1+ToFfw$A2DdMARkhR3zC+KmMd4HMgi8HwPU8V7s7LZSzs5C8wY",
+    "salt": "8cec3095d201bd96695121944f65ca96",
+    "password_strength": "strong",
+    "hash_mode": "argon2id",
+    "totp_secret": "4YZEF5IUM43YCAJJGY26DZEFZBDPYUQD"
+  },
+  {
+    "username": "strong_user_08",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$3v+RufXezNzcKyGWH+wmjw$BOClr7LgSEK1qrz3QVozN3nCs5PoQuPrW+9k5nTqW24",
+    "salt": "ea5d17b353ae30481af66182702cd349",
+    "password_strength": "strong",
+    "hash_mode": "argon2id",
+    "totp_secret": "5MHADVCMTXV4X6QA3R35KRLU66642O2H"
+  },
+  {
+    "username": "strong_user_09",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$yID3DNmnjuplbvvGeqnW8g$mZGc6SfkMIRQ+Rul8VSE3ANau5v2e1mpuUCRA5tGOP0",
+    "salt": "c1a040a2ca32a7fccb065f8f08870ded",
+    "password_strength": "strong",
+    "hash_mode": "argon2id",
+    "totp_secret": "E4TTQ7DD6KYHM7NJT47CRZ2TFMPOANHK"
+  },
+  {
+    "username": "strong_user_10",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$PCctu7nuV6BR3RWqbQikdQ$AaR53X/+Xtrz5YncnctZ4CEFvu9A1bMh0iuzqcH1m3k",
+    "salt": "d541d0b756315dc6752b5873099ac3dc",
+    "password_strength": "strong",
+    "hash_mode": "argon2id",
+    "totp_secret": "UNYYK4QNJWXL3ZGX2W7RIHRVISQJ5XKZ"
+  }
+]

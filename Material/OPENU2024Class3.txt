@@ -1,0 +1,275 @@
+1המצגת הינה לשימוש פנימי בלבד
+אין לצלם או לעשות שימוש שלא במסגרת הקורסאבטחת סייבר
+(אבטחת מידע /מחשבים /מערכות ממוחשבות /...)
+
+בקרת כניסה
+2
+User Authentication
+fundamental security building block
+basis of access control & user accountability
+is the process of verifying an identity claimed by or for a 
+system entity
+has two steps:
+identification -specify identifier
+verification -bind entity (person) and identifier
+distinct from message authentication
+3
+User Authentication
+Something you know
+password, PIN, answers to prearranged questions
+Something you have
+smartcard, electronic keycard, physical key
+Something you are (static)
+Fingerprint, retina, face
+Something you do (dynamic)
+voice pattern, handwriting, typing rhythm (ABV-Activity -based Verification )
+4
+can use alone or combined 
+(multi factor authentication)
+all can provide user authentication
+all have issues
+5
+
+Not just phishing …
+6
+
+7
+
+8
+
+9
+
+Password Authentication
+widely used user authentication method
+user provides name/login and password
+system compares password with that saved for specified login
+authenticates ID of user logging and
+that the user is authorized to access system
+determines the user ’s privileges
+is used in discretionary access control
+10
+11Authentication Using Passwords
+(a) A successful login
+(b) Login rejected after name entered
+(c) Login rejected after name and password typed
+
+12Authentication Using Passwords
+How a cracker broke into LBL ( a U.S. Dept. of Energy research lab )
+The uucp (UNIX to UNIX Copy Program) account is used for intermachine network traffic 
+and has superuser power, so the cracker was now in a U.S. Dept. of Energy machine as 
+superuser
+
+13Authentication –
+Guidelines for Selecting Passwords
+Use characters other then A -Z
+Choose long passwords (> 6)
+Avoid actual names or words (about 150,000 words of 6 in 
+English)
+Choose unlikely passwords (control char, digits, etc.)
+Change passwords regularly
+Don’t write down; Don ’t tell anyone …
+Password Vulnerabilities
+offline dictionary attack
+specific account attack
+popular password attack
+password guessing against single user
+workstation hijacking
+exploiting user mistakes
+exploiting multiple password use
+electronic monitoring
+14
+Countermeasures
+stop unauthorized access to password file
+intrusion detection measures
+account lockout mechanisms
+policies against using common passwords but rather hard 
+to guess passwords
+training & enforcement of policies
+automatic workstation logout
+encrypted network links
+15
+16Authentication Using Passwords
+The use of salt to defeat pre -computation of encrypted 
+passwords
+Salt Password
+UNIX Implementation
+original scheme
+8 character password form 56-bit key
+12-bit salt used to modify DES encryption 
+into a one -way hash function
+0 value repeatedly encrypted 25 times
+output translated to 11 character sequence
+now regarded as woefully insecure
+e.g. supercomputer, 50 million tests, 80 min
+sometimes still used for compatibility
+17
+Password Cracking
+dictionary attacks
+try each word then obvious variants in large 
+dictionary against hash in password file
+rainbow table attacks
+precompute tables of hash values for all salts
+a mammoth table of hash values 
+e.g. 1.4GB table cracks 99.9% of 
+alphanumeric Windows passwords in 13.8 
+secs
+not feasible if larger salt values used 18
+Password Choices
+users may pick short passwords
+e.g. 3% were 3 chars or less, easily guessed
+system can reject choices that are too short
+users may pick guessable passwords
+so crackers use lists of likely passwords
+e.g. one study of 14000 encrypted passwords guessed nearly 1/4 
+of them
+would take about 1 hour on fastest systems to compute all 
+variants, and only need 1 break!
+19
+20
+
+21
+
+22
+
+23
+
+24
+
+Proactive Password Checking
+rule enforcement plus user advice, e.g.
+8+ chars, upper/lower/numeric/punctuation
+may not sufficepassword cracker
+time and space issuesMarkov Model
+Training using dataset of  guessable passwords  -use 
+them to derive probabilities of transition
+hence reject any password it might generateBloom Filter
+use to build table based on dictionary using multiple hash 
+functions
+check desired password against this table(false 
+positives …)
+12/20/2022 25 22923
+12/20/2022 22923 26Authentication –
+Using one -time Passwords
+Use hardware card like BGU ’s secur -id
+Use one -way hashing functions:
+i = 0    P0 = f(f( …(f(P)
+n
+i = 1    P1 = f(f( …(f(P)
+n-1
+i = n-1    Pn-1 = f(P)
+Only user knows P not computer!
+First try –user sends P 1, computer computes P 0
+Second try –user sends P 2, computer computes P 1.              
+Enemy who listens cannot break it!
+Passwords: Text vs Graphical
+12/20/2022 27 22923
+28
+
+12/20/2022 22923 29
+Authentication Using a Physical Object
+Magnetic cards
+magnetic stripe cards
+chip cards: stored value cards, smart cards
+Smartcard
+credit -card like 
+has own processor, memory, I/O ports
+wired or wireless access by reader
+may have crypto co -processor
+ROM, EEPROM, RAM memory
+executes protocol to authenticate with 
+reader/computer
+also have USB dongles
+12/20/2022 30 22923
+Tokens -asynchronous authentication
+Uses the challenge -response method
+Masquerading attack is possible if the token is shared or stolen
+Not vulnerable to eavesdropping, sniffing, replay, or password guessing
+31
+1. request 
+access ( Bob)
+2. Challenge
+value ( nonce )4. Enters 
+Challenge and PIN
+5. Encrypts the 
+Challenge and 
+presents the one -
+time password
+3. Present 
+Challenge value
+6. Enters the one -
+time password 7. one -time 
+password8. verify the 
+one-time 
+password Bob
+32
+
+Biometric Authentication
+attempts to authenticate an individual based on unique 
+physical characteristics
+based on pattern recognition
+Is technically complex and expensive when compared to 
+passwords and tokens
+33
+
+Biometric Authentication
+Face recognition
+Measures various features in the face such as distances 
+between eyes, nose etc.
+Accurate but no well accepted due to privacy issues
+Fingerprint
+Patterns on the tip of a finger
+Sensitive to minor changes (temperature, pressure, surface 
+damage)
+Accurate, acceptable by the user
+Hand geometry and hand topography 
+Shape, size peaks and valleys
+Accurate, acceptable by the user
+34
+Biometric Authentication
+Retina ( רשתית) 
+Blood vessel patterns
+Very accurate however, sensitive to physical condition (diabetes, 
+pregnancy, heart attack); perceived as intrusive
+Iris scan ( קשתית)
+Patterns in the iris
+Very accurate however, sensitive to physical condition (diabetes, 
+pregnancy, heart attack); perceived as intrusive
+35
+Biometric Authentication
+Voice patterns
+Not so accurate
+The person can be recorded; solution –use a 
+challenge
+Keystroke dynamics
+Dwell time; flight time
+Accurate
+2-factor authentication
+Can provide continuous verification
+Signature dynamics
+36
+Biometrics -parameters to consider
+Accuracy
+Intrusiveness
+Cost
+Time to process
+37
+
+Operation of a Biometric System
+38
+
+Biometric Accuracy
+39
+
+BioMetrics Vulnerabilities
+In WOOT Workshop of Usenix conference 2014 held in San -Diego it was shown that using 
+Smartphones:
+Fingerprints are not secured at all ….
+40
+
+עוד אמצעים ביומטריים
+ סריקת ורידים
+ מצלמות תלת מימד
+ חיישני אינפרה אדום
+ABV
+...
+41

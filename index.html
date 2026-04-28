@@ -37,16 +37,17 @@
     </header>
 
     <div id="app">
-        <nav style="display: flex; justify-content: center; gap: 8px; margin: 20px auto; max-width: 1200px; padding: 0 24px; flex-wrap: wrap;">
-            <button class="topic-btn active" onclick="showTab('algo'); setActiveNav(this)">🚀 האלגוריתם למעבר</button>
-            <button class="topic-btn" onclick="showTab('practice'); setActiveNav(this)">תרגול מבחנים</button>
-            <button class="topic-btn" onclick="showTab('mcqCards'); setActiveNav(this)">כרטיסיות אמריקאיות</button>
-            <button class="topic-btn" onclick="showTab('cards'); setActiveNav(this)">כרטיסיות מושגים</button>
-            <button class="topic-btn" onclick="showTab('guide'); setActiveNav(this)">מדריך למידה עמוק</button>
+        <nav>
+            <button class="topic-btn active" data-tab="algo">🚀 האלגוריתם למעבר</button>
+            <button class="topic-btn" data-tab="practice">תרגול מבחנים</button>
+            <button class="topic-btn" data-tab="mcqCards">כרטיסיות אמריקאיות</button>
+            <button class="topic-btn" data-tab="cards">כרטיסיות מושגים</button>
+            <button class="topic-btn" data-tab="guide">מדריך למידה עמוק</button>
+            <button class="topic-btn" data-tab="chatbot">🤖 צ'אט בוט חכם</button>
         </nav>
 
         <!-- Tab: Algorithm -->
-        <div id="algo" class="tab-content active" style="max-width: 1200px; margin: 0 auto; padding: 0 24px 80px;">
+        <div id="algo" class="tab-content active">
             <div class="guide-card" style="max-width: 600px; margin: 0 auto 20px;">
                 <h3>🛡️ סימולטור הרשאות Unix (UGO)</h3>
                 <p>הכנס 3 ספרות (למשל 754) כדי לראות מה כל קבוצה יכולה לעשות:</p>
@@ -71,7 +72,7 @@
         </div>
 
         <!-- Tab: Practice -->
-        <div id="practice" class="tab-content" style="max-width: 800px; margin: 0 auto; padding: 32px 24px 100px;">
+        <div id="practice" class="tab-content">
             <div class="exam-header">
                 <label style="color: var(--text-secondary); margin-bottom: 8px; display: block;">בחר מבחן:</label>
                 <select id="examSelect" onchange="loadExam()" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); font-family: var(--font); font-size: 1rem; margin-bottom: 24px;">
@@ -85,13 +86,13 @@
         </div>
 
         <!-- Tab: MCQ Cards -->
-        <div id="mcqCards" class="tab-content" style="max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; text-align: center;">
+        <div id="mcqCards" class="tab-content">
             <div class="section-title">
                 <h2>כרטיסיות אמריקאיות</h2>
                 <p>לחץ על הכרטיסייה כדי להפוך אותה</p>
             </div>
             <div style="max-width: 600px; margin: 0 auto;">
-                <div class="flip-card" id="mcqFlipCard" onclick="this.classList.toggle('flipped')">
+                <div class="flip-card" id="mcqFlipCard">
                     <div class="flip-card-inner">
                         <div class="flip-card-front">
                             <div class="card-type" id="mcqTopic" style="color: var(--accent); font-weight: 600; margin-bottom: 12px;"></div>
@@ -108,13 +109,13 @@
         </div>
 
         <!-- Tab: Concept Cards -->
-        <div id="cards" class="tab-content" style="max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; text-align: center;">
+        <div id="cards" class="tab-content">
             <div class="section-title">
                 <h2>כרטיסיות מושגים</h2>
                 <p>לחץ על הכרטיסייה כדי להפוך אותה</p>
             </div>
             <div style="max-width: 600px; margin: 0 auto;">
-                <div class="flip-card" id="conceptFlipCard" onclick="this.classList.toggle('flipped')" style="height: 300px;">
+                <div class="flip-card" id="conceptFlipCard" style="height: 300px;">
                     <div class="flip-card-inner">
                         <div class="flip-card-front">
                             <div id="cardType" class="card-type" style="color: var(--accent); font-weight: 600; margin-bottom: 16px;"></div>
@@ -130,7 +131,7 @@
         </div>
 
         <!-- Tab: Guide -->
-        <div id="guide" class="tab-content" style="max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px;">
+        <div id="guide" class="tab-content">
             <div class="section-title">
                 <h2>מדריך למידה עמוק</h2>
                 <p>מושגי יסוד ומלכודות נפוצות</p>
@@ -142,7 +143,7 @@
                     <div class="mnemonic">"רוצה ורץ" (R-W-X) - קריאה, כתיבה, ריצה.</div>
                     <ul style="text-align: right; padding-right: 20px;">
                         <li><strong>SUID (4xxx):</strong> מריץ בכוח של הבעלים.</li>
-                        <li><strong>SGID (2xxx):</strong> מריץ עם הרשאות הקבוצה.</li>
+                        <li><strong>SGID (2xxx):</strong> מריץ עם הרשאת הקבוצה.</li>
                         <li><strong>Sticky Bit (1xxx):</strong> רק הבעלים מוחק.</li>
                     </ul>
                     <div class="trap-box">
@@ -173,7 +174,7 @@
                 </div>
 
                 <div class="guide-card">
-                    <h3>אנטרופיה ודליפת מידור</h3>
+                    <h3>אנטרופיה וזרימת מידע</h3>
                     <p><strong>נוסחה:</strong> log₂(אפשרויות לפני / אפשרויות אחרי)</p>
                     <p><strong>דוגמה:</strong> 8 אפשרויות ל-2 אפשרויות = log₂(4) = 2 ביטים דלפו.</p>
                     <div class="mnemonic">יותר אפשרויות לפני = יותר אנטרופיה אבדה.</div>
@@ -201,7 +202,7 @@
                     <ul style="text-align: right; padding-right: 20px;">
                         <li><strong>AES:</strong> Advanced Encryption Standard - 128/192/256 ביט.</li>
                         <li><strong>DES:</strong> הוחלף ע"י AES (56 ביט מפתח בלבד).</li>
-                        <li><strong>ECB Mode:</strong> הצפנה בלוק בלוק - חשוף להתקפות דפוסים!</li>
+                        <li><strong>ECB Mode:</strong> הצפנה בלוק בלוק - חשוף דפוסים!</li>
                         <li><strong>CBC Mode:</strong> כל בלוק מקושר לקודם (IV נדרש).</li>
                     </ul>
                     <div class="trap-box">
@@ -212,21 +213,20 @@
                 <div class="guide-card">
                     <h3>קריפטוגרפיה - הצפנה אסימטרית</h3>
                     <ul style="text-align: right; padding-right: 20px;">
-                        <li><strong>RSA:</strong> מבוסס על פירוק מספרים לגורמים - איטי, לסשנים.</li>
+                        <li><strong>RSA:</strong> מבוסס על פירוק מספרים לגורמים ראשוניים.</li>
                         <li><strong>Diffie-Hellman:</strong> הסכמת מפתחות - יוצר מפתח משותף.</li>
                         <li><strong>Digital Signature:</strong> חתימה עם המפתח הפרטי, אימות עם הציבורי.</li>
                     </ul>
-                    <div class="mnemonic">RSA = סימטרי לסשנים, אסימטרי להחלפת מפתחות.</div>
+                    <div class="mnemonic">RSA = סימטרי לאסימטרי, אסימטרי להחלפת מפתחות.</div>
                 </div>
             </div>
 
-            <!-- Tips & Tricks Section - Recurring Exam Questions -->
+            <!-- Tips & Tricks Section -->
             <div style="margin-top: 40px; padding: 20px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 12px;">
                 <h3 style="color: #f59e0b; text-align: center; font-size: 1.3rem;">💡 טיפים והוקוסים - שאלות חוזרות במבחנים</h3>
-                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 20px;">שאלות שמופיעות שוב ושוב במבחנים - כדאי להכיר היטב!</p>
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 20px;">שאלות שמופיעות הרבה ושוב במבחנים - כדאי להכיר היטב!</p>
                 
                 <div class="guide-grid" style="margin-top: 20px;">
-                    <!-- BLP/Biba - Most Common -->
                     <div class="guide-card" style="border: 2px solid rgba(239, 68, 68, 0.3);">
                         <h3 style="color: #ef4444;">🔴 מודלי BLP ו-Biba - שאלות חוזרות</h3>
                         <div class="trap-box">
@@ -242,9 +242,8 @@
                         </ul>
                     </div>
 
-                    <!-- Access Control Representation -->
                     <div class="guide-card" style="border: 2px solid rgba(59, 130, 246, 0.3);">
-                        <h3 style="color: #3b82f6;">📋 ייצוג מטריצת הגישה (מופיע ב-91, 92)</h3>
+                        <h3 style="color: #3b82f6;">📋 ייצוג מטריצת גישה (מופיע ב-91, 92)</h3>
                         <div class="trap-box">
                             <span class="trap-title">שאלה נפוצה:</span>
                             האם ניתן לייצג מטריצת גישה ב-UNIX (9 ביטים)? הראו כיצד.<br>
@@ -252,19 +251,18 @@
                         </div>
                         <ul style="text-align: right; padding-right: 20px; margin-top: 15px;">
                             <li><strong>ACL:</strong> רשימה לכל אובייקט - מי רשאי לגשת</li>
-                            <li><strong>C-List:</strong> רשימת יכולת לכל סובייקט - לאילו אובייקטים יש גישה</li>
+                            <li><strong>C-List:</strong> רשימת יכולות לכל סובייקט - לאילו אובייקטים יש גישה</li>
                             <li><strong>Access Matrix:</strong> טבלה של כל הסובייקטים × כל האובייקטים</li>
                         </ul>
                     </div>
 
-                    <!-- RSA Digital Signature -->
                     <div class="guide-card" style="border: 2px solid rgba(16, 185, 129, 0.3);">
                         <h3 style="color: #10b981;">🔐 RSA חתימה דיגיטלית (מופיע ב-91, 92, מועד א1)</h3>
                         <div class="trap-box">
                             <span class="trap-title">שאלת חתימה (נפוצה מאוד):</span>
                             אליס רוצה לשלוח הודעה M לבוב ולחתום עליה.<br>
-                            <strong>השאלה:</strong> כיצד בוב מאמת שההודעה באמת מאליס?<br>
-                            <strong>התשובה:</strong> אליס חותמת עם המפתח הפרטי שלה: S = M^d mod n. בוב בודק עם המפתח הציבורי: M = S^e mod n.
+                            <strong>השאלה:</strong> כיצד בוב מאמת שההודעה מאליס?<br>
+                            <strong>התשובה:</strong> אליס חותמת עם המפתח הפרטי שלה: S = M^d mod n. בוב בודק עם המפתח הציבורי של אליס: M = S^e mod n.
                         </div>
                         <ul style="text-align: right; padding-right: 20px; margin-top: 15px;">
                             <li><strong>חתימה:</strong> הודעה + מפתח פרטי → חתימה</li>
@@ -273,13 +271,12 @@
                         </ul>
                     </div>
 
-                    <!-- Buffer Overflow Defenses -->
                     <div class="guide-card" style="border: 2px solid rgba(245, 158, 11, 0.3);">
                         <h3 style="color: #f59e0b;">🛡️ הגנות מפני Buffer Overflow (מופיע ב-91, 92, מועד א1, מועד א2)</h3>
                         <div class="trap-box">
                             <span class="trap-title">שאלה נפוצה:</span>
-                            תנו דוגמה לפגיעות Buffer Overflow ואיזה מהגנות הבאות ימנעו אותה.<br>
-                            <strong>הגנות (בחר נכון):</strong> ASLR, DEP/NX, Canary, Stack Randomization
+                            תנו דוגמה לפגיעות Buffer Overflow ואיזה מגנוני הגנה ימנעו אותה.<br>
+                            <strong>התשובה (בחר נכון):</strong> ASLR, DEP/NX, Canary, Stack Randomization
                         </div>
                         <table style="width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85rem;">
                             <tr style="background: rgba(255,255,255,0.05);">
@@ -289,19 +286,16 @@
                             <tr><td style="padding: 8px; border: 1px solid var(--border);">DEP/NX</td><td style="padding: 8px; border: 1px solid var(--border);">הרצת קוד מה-Stack</td></tr>
                             <tr><td style="padding: 8px; border: 1px solid var(--border);">ASLR</td><td style="padding: 8px; border: 1px solid var(--border);">ניחוש כתובות זיכרון</td></tr>
                             <tr><td style="padding: 8px; border: 1px solid var(--border);">Canary</td><td style="padding: 8px; border: 1px solid var(--border);">גלישת Stack</td></tr>
-                            <tr><td style="padding: 8px; border: 1px solid var(--border);">Stack Randomization</td><td style="padding: 8px; border: 1px solid var(--border);">ניחוש כתובת החזרה</td></tr>
                         </table>
                     </div>
 
-                    <!-- Hash & HMAC -->
                     <div class="guide-card" style="border: 2px solid rgba(139, 92, 246, 0.3);">
                         <h3 style="color: #8b5cf6;">🔐 Hash ו-HMAC (מופיע ב-91, 92, מועד א1)</h3>
                         <div class="trap-box">
                             <span class="trap-title">שאלה נפוצה:</span>
                             מערכת משתמשת בפונקציית גיבוב t למשלוח הודעות.<br>
                             הסבירו כיצד השיטה נפרצת וכיצד HMAC פותרת זאת.<br>
-                            <strong>הבעיה:</strong> התוקף יכול לשנות M→M' ו-g(M)→g(M') ללא צורך במפתח.<br>
-                            <strong>הפתרון:</strong> HMAC = Hash(key + Hash(key + message)) - דורש מפתח סודי!
+                            <strong>הבעיה:</strong> התוקף יכול לשנות M→M' ולחתום עליה (M' לא משתנה). <strong>הפתרון:</strong> HMAC = Hash(key + Hash(key + message)) - דורש מפתח סודי!
                         </div>
                         <ul style="text-align: right; padding-right: 20px; margin-top: 15px;">
                             <li><strong>Hash רגיל:</strong> צד ג' יכול לזייף (אין מפתח)</li>
@@ -310,12 +304,11 @@
                         </ul>
                     </div>
 
-                    <!-- Firewall Rules -->
                     <div class="guide-card" style="border: 2px solid rgba(236, 72, 153, 0.3);">
                         <h3 style="color: #ec4899;">🔥 חומת אש - כתיבת חוקים (מופיע ב-91, 92)</h3>
                         <div class="trap-box">
                             <span class="trap-title">שאלת כתיבת חוקים (Stateless Firewall):</span>
-                            כתבו טבלת חוקים שמאפשרת תעבורה יוצאת מהארגון לרשת, דוא"ל יוצא, ודפדפן.<br>
+                            כתוב את טבלת החוקים המתאימה.<br>
                             <strong>התשובה:</strong> ALLOW OUTBOUND TCP port 25 (SMTP), 80 (HTTP), 443 (HTTPS)
                         </div>
                         <ul style="text-align: right; padding-right: 20px; margin-top: 15px;">
@@ -325,7 +318,6 @@
                         </ul>
                     </div>
 
-                    <!-- Kerberos Tickets -->
                     <div class="guide-card" style="border: 2px solid rgba(6, 182, 212, 0.3);">
                         <h3 style="color: #06b6d4;">🎫 Kerberos (מופיע ב-91, 92, מועד א1)</h3>
                         <div class="trap-box">
@@ -337,19 +329,18 @@
                             <li><strong>AS:</strong> Authentication Server - מאמת משתמשים, מעניק TGT</li>
                             <li><strong>TGS:</strong> Ticket Granting Server - מעניק Service Tickets</li>
                             <li><strong>TGT:</strong> Ticket Granting Ticket - מאפשר קבלת כרטיסי שירות</li>
-                            <li><strong>יתרון:</strong> סיסמה לא עוברת ברשת (הצפנה סימטרית)</li>
+                            <li><strong>יתרון:</strong> סיסמה לא עוברת ברשת (הסיסמה אינה עוברת בטקסט)</li>
                         </ul>
                     </div>
 
-                    <!-- Common Confusions -->
                     <div class="guide-card" style="border: 2px solid rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.05);">
-                        <h3 style="color: #ef4444;">⚠️ דברים שסטודנטים מתבלבלים בהם - שים לב!</h3>
+                        <h3 style="color: #ef4444;">⚠️ דברים שסטודנטים מתבלבלים בהם - שימו לב!</h3>
                         <ul style="text-align: right; padding-right: 20px;">
-                            <li><strong>ב-BLP:</strong> רמה 0 (TS) גבוהה מרמה 3 (U) - לא להתבלבל!</li>
+                            <li><strong>ב-BLP:</strong> רמה 0 (TS) גבוהה מרמה 3 (U) - אל תתבלבל!</li>
                             <li><strong>RSA:</strong> חתימה = מודולו d (פרטי), אימות = מודולו e (ציבורי)</li>
-                            <li><strong>ECB Mode:</strong> אותו קלט = אותו פלט תמיד → חושף דפוסים! תמיד בחר CBC</li>
+                            <li><strong>ECB Mode:</strong> אותו קלט = אותו פלט → חושף דפוסים! תמיד בחר CBC</li>
                             <li><strong>Hash vs MAC:</strong> Hash פשוט לא מאמת מקור, MAC כולל מפתח (מאמת גם מקור)</li>
-                            <li><strong>Salt:</strong> מונע Rainbow Tables אבל לא Brute Force! (מונע הצפנה מראש)</li>
+                            <li><strong>Salt:</strong> מונע Rainbow Tables אבל לא Brute Force! (מונע הצפנה מהירה)</li>
                             <li><strong>IDS vs IPS:</strong> IDS רק מתריע, IPS חוסם תעבורה זדונית</li>
                             <li><strong>Stateless vs Stateful:</strong> Stateless בודק כל חבילה בנפרד, Stateful זוכר חיבורים</li>
                             <li><strong>Zero-day:</strong> פגיעות שלא ידועה (אין Patch) - הכי מסוכנת!</li>
@@ -358,8 +349,36 @@
                 </div>
             </div>
         </div>
+
+        <!-- Tab: Chatbot -->
+        <div id="chatbot" class="tab-content">
+            <div class="section-title">
+                <h2>🤖 צ'אט בוט חכם</h2>
+                <p>תרגל שאלות, קבל טיפים, ובדוק את עצמך עם הבוט</p>
+            </div>
+            <div style="max-width: 800px; margin: 0 auto;">
+                <div id="chatContainer" style="background: var(--bg-card); border-radius: 16px; padding: 20px; min-height: 400px; max-height: 500px; overflow-y: auto; margin-bottom: 20px; border: 1px solid var(--border);">
+                    <div id="chatMessages" style="display: flex; flex-direction: column; gap: 12px;">
+                        <div class="chat-message bot-message" style="background: rgba(99, 102, 241, 0.1); padding: 12px 16px; border-radius: 12px; border-right: 3px solid var(--accent);">
+                            <strong>בוט:</strong> שלום! אני הבוט של TestSecure. אני יכול לעזור לך לתרגל שאלות, לתת טיפים ללמוד, ולבדוק את התשובות שלך. במה תרצה להתחיל?
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+                    <button class="retry-btn" onclick="chatbotAskQuestion()">שאל שאלה אקראית</button>
+                    <button class="retry-btn" onclick="chatbotStartExam()">התחל מבחן (5 שאלות)</button>
+                    <button class="retry-btn" onclick="chatbotGetTip()">תן לי טיפ ללמידה</button>
+                    <button class="retry-btn" onclick="chatbotShowStats()">הצג סטטיסטיקות</button>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="chatInput" style="flex: 1; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); font-family: var(--font);" placeholder="הקלד תשובה או שאלה..." onkeypress="if(event.key==='Enter') chatbotSendMessage()">
+                    <button class="done-btn" onclick="chatbotSendMessage()">שלח</button>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <script src="chatbot.js"></script>
     <script>
         let allQuestions = [];
         let allConcepts = [];
@@ -405,19 +424,32 @@
             } catch (e) { console.error('Error loading data:', e); }
         }
 
+        // Fixed tab navigation
         function showTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
+            // Update nav buttons
+            document.querySelectorAll('nav .topic-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-tab') === tabId) {
+                    btn.classList.add('active');
+                }
+            });
         }
 
-        function setActiveNav(btn) {
-            document.querySelectorAll('nav .topic-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        }
+        // Initialize nav button click handlers
+        document.querySelectorAll('nav .topic-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.getAttribute('data-tab');
+                showTab(tabId);
+            });
+        });
 
         function nextConceptCard() {
+            if (allConcepts.length === 0) return;
             const card = allConcepts[Math.floor(Math.random() * allConcepts.length)];
-            document.getElementById('conceptFlipCard').classList.remove('flipped');
+            const flipCard = document.getElementById('conceptFlipCard');
+            flipCard.classList.remove('flipped');
             setTimeout(() => {
                 document.getElementById('cardType').textContent = card.type;
                 document.getElementById('cardFrontText').textContent = card.q;
@@ -430,8 +462,10 @@
         }
 
         function nextMcqCard() {
+            if (allQuestions.length === 0) return;
             const q = allQuestions[Math.floor(Math.random() * allQuestions.length)];
-            document.getElementById('mcqFlipCard').classList.remove('flipped');
+            const flipCard = document.getElementById('mcqFlipCard');
+            flipCard.classList.remove('flipped');
             setTimeout(() => {
                 document.getElementById('mcqTopic').textContent = q.topic;
                 document.getElementById('mcqFrontText').textContent = q.question;
@@ -520,6 +554,123 @@
         }
 
         init();
+
+        // Chatbot integration
+        let chatbot = null;
+        let chatbotMode = 'idle'; // 'idle', 'question', 'exam'
+        let examQuestions = [];
+        let examCurrent = 0;
+
+        async function initChatbot() {
+            chatbot = new TestSecureChatbot();
+            await chatbot.init();
+            addChatMessage('בוט', 'הבוט מוכן! יש לי ' + chatbot.questions.length + ' שאלות ו-' + chatbot.concepts.length + ' מושגים. במה תרצה להתחיל?',+  'bot');
+        }
+
+        function addChatMessage(sender, text, type =+  'user') {
+            const messagesDiv = document.getElementById('chatMessages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = type === 'bot' ? 'chat-message bot-message' : 'chat-message user-message';
+            msgDiv.style.cssText = type === 'bot' 
+                ? 'background: rgba(99, 102, 241, 0.1); padding: 12px 16px; border-radius: 12px; border-right: 3px solid var(--accent);'
+                : 'background: rgba(16, 185, 129, 0.1); padding: 12px 16px; border-radius: 12px; border-left: 3px solid var(--success); align-self: flex-end;';
+            msgDiv.innerHTML = '<strong>' + sender + ':</strong> ' + text;
+            messagesDiv.appendChild(msgDiv);
+            document.getElementById('chatContainer').scrollTop = document.getElementById('chatContainer').scrollHeight;
+        }
+
+        function chatbotAskQuestion() {
+            if (!chatbot) return;
+            const q = chatbot.getRandomQuestion();
+            if (!q) return;
+            chatbotMode = 'question';
+            chatbot.currentQuestion = q;
+            let optionsHtml = q.options.map((o, i) => String.fromCharCode(97 + i) + ') ' + o).join('<br>');
+            addChatMessage('בוט', '<strong>שאלה:</strong> ' + q.question + '<br><br>' + optionsHtml + '<br><br>הקלד את תשובתך בתיבה למטה.',+  'bot');
+        }
+
+        function chatbotStartExam() {
+            if (!chatbot) return;
+            examQuestions = chatbot.startExam();
+            examCurrent = 0;
+            chatbotMode = 'exam';
+            chatbot.examQuestions = examQuestions;
+            chatbot.examIndex = 0;
+            addChatMessage('בוט', 'התחלת מבחן! יש לך ' + examQuestions.length + ' שאלות. בוא נתחיל בשאלה 1:',+  'bot');
+            showExamQuestion();
+        }
+
+        function showExamQuestion() {
+            if (examCurrent >= examQuestions.length) {
+                addChatMessage('בוט', 'סיימת את המבחן! הציון שלך: ' + chatbot.score + '/' + chatbot.totalAnswered,+  'bot');
+                chatbotMode = 'idle';
+                return;
+            }
+            const q = examQuestions[examCurrent];
+            chatbot.currentQuestion = q;
+            let optionsHtml = q.options.map((o, i) => String.fromCharCode(97 + i) + ') ' + o).join('<br>');
+            addChatMessage('בוט', '<strong>שאלה ' + (examCurrent + 1) + ':</strong> ' + q.question + '<br><br>' + optionsHtml,+  'bot');
+        }
+
+        function chatbotGetTip() {
+            if (!chatbot) return;
+            const topics = chatbot.getTopics();
+            const randomTopic = topics[Math.floor(Math.random() * topics.length)];
+            const tip = chatbot.getStudyTip(randomTopic);
+            addChatMessage('בוט', '<strong>טיפ לנושא ' + randomTopic + ':</strong><br>' + tip,+  'bot');
+        }
+
+        function chatbotShowStats() {
+            if (!chatbot) return;
+            const stats = chatbot.getStats();
+            let statsHtml = '<strong>סטטיסטיקות:</strong><br>';
+            statsHtml += 'סה"כ שאלות: ' + stats.totalQuestions + '<br>';
+            statsHtml += 'סה"כ מושגים: ' + stats.totalConcepts + '<br>';
+            statsHtml += 'נושאים: ' + stats.totalTopics + '<br>';
+            statsHtml += 'ציון נוכחי: ' + stats.score + ' (' + stats.percentage + '%)';
+            addChatMessage('בוט', statsHtml,+  'bot');
+        }
+
+        function chatbotSendMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
+            
+            addChatMessage('אתה', text,+  'user');
+            input.value = '';
+
+            if (chatbotMode === 'question' && chatbot.currentQuestion) {
+                const result = chatbot.evaluateAnswer(text);
+                addChatMessage('בוט', result.message + '<br><br><small>' + result.explanation + '</small>',+  'bot');
+                chatbotMode = 'idle';
+            } else if (chatbotMode === 'exam') {
+                const q = examQuestions[examCurrent];
+                const isCorrect = text.toLowerCase() === q.answer.toLowerCase() || text === q.answer;
+                chatbot.totalAnswered++;
+                if (isCorrect) chatbot.score++;
+                
+                if (isCorrect) {
+                    addChatMessage('בוט', '✅ נכון! ' + q.explanation,+  'bot');
+                } else {
+                    addChatMessage('בוט', '❌ לא נכון. התשובה הנכונה: ' + q.answer + '<br><br>' + q.explanation,+  'bot');
+                }
+                
+                examCurrent++;
+                if (examCurrent < examQuestions.length) {
+                    setTimeout(() => showExamQuestion(), 500);
+                } else {
+                    addChatMessage('בוט', 'סיימת! הציון: ' + chatbot.score + '/' + chatbot.totalAnswered,+  'bot');
+                    chatbotMode = 'idle';
+                }
+            } else {
+                addChatMessage('בוט', 'הקלד "שאלה" לקבלת שאלה, "מבחן" להתחלת מבחן, או "טיפ" לקבלת טיפ למידה.',+  'bot');
+            }
+        }
+
+        // Initialize chatbot when page loads
+        window.addEventListener('load', () => {
+            setTimeout(initChatbot, 1000);
+        });
     </script>
 </body>
 </html>

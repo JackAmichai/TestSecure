@@ -1,0 +1,441 @@
+I.B -CompSec 1האוניברסיטה הפתוחה
+מנחה ומרכז: איציק בייז
+המצגת הינה לשימוש פנימי בלבד
+אין לצלם או לעשות שימוש שלא במסגרת הקורסאבטחת מידע
+(אבטחת סייבר /מחשבים /מערכות ממוחשבות /...)
+
+I.B -CompSec 2נושאי השיעור
+ אדמיניסטרציה
+ נושאי הקורס
+  אבטחה–נושאים ומושגים בסיסיים 
+3אדמיניסטרציה
+ ספר הקורס:
+ Computer Security, Stallings, 4thed.
+ קשר איתי:
+ בטלפון: בתיאום
+ כתובת דוא”ל: itzikba@ openu. ac.il
+ מפגשים:
+ סקירה כללית, תרגול
+I.B -CompSec
+I.B -CompSec 4אדמיניסטרציה
+ אתר הקורס: מצגות, מטלות, הודעות, וכדומה.
+ דרישות הקורס:
+5 מטלות תיאורטיות, 1 תכנותי, מבחן (75%)
+ הגשת מטלות:
+ ביחידים
+ הגשת המטלות באתר
+ בודק התרגילים: TBD
+I.B -CompSec 5נושאי הקורס
+ סכנות ושיטות הגנה
+ מודלים ומדיניות
+  הצפנהופרוטוקולים 
+ אימות זיהוי
+ בקרת גישה
+   הגנה בחומרה
+ובמערכות הפעלה הגנה בבסיסי נתונים
+ וירוסים, תולעים, 
+ודומיהם
+ תכנות בטוח
+  הגנהברשתות   
+תקשורתוב- WWW
+ועוד, ככל שירשה לנו  
+הזמן
+I.B -CompSec 6 אבטחה–נושאים ומושגים בסיסיים 
+CIA
+Confidentiality, Integrity, Availability ( סודיות, שלמות, זמינות) 
+Authenticity, Accountability ( אותנטיות, עקרון האחריות) 
+Non-repudiation ( אי הכחשה) 
+Privacy, Trust, etc. ( פרטיות, אמון) 
+Wide topic
+Show conference call for papers 
+e.g. https://attend.ieee.org/dsc -2022/
+I.B -CompSec 7 אבטחה–נושאים ומושגים בסיסיים 
+  סקירת אתרי סייבר מאת יגאלאונא, ראש מערך 
+הסייבר הישראלי
+https:// www. youtube. com/watch? v=zS0rXsyXcC 4
+I.B -CompSec 8Key Security Concepts
+
+Question
+Classify to confidentiality, integrity, 
+availability:
+•Web site defacing ( השחתה) 
+•Changing the amount on a check
+•Forging a signature
+•Shoulder surfing
+I.B -CompSec 9
+Computer Security Challenges
+1.not simple
+2.must consider potential attacks
+3.procedures used counter -intuitive
+4.involve algorithms and secret info
+5.must decide where to deploy mechanisms
+6.battle of wits between attacker / admin
+7.not perceived on benefit until fails
+8.requires regular monitoring
+9.too often an after -thought
+10.regarded as impediment ( מגבלה ) to using the system
+10 I.B -CompSec
+Some common terms
+•Vulnerability ( חולשה/פגיעות )
+•Threat
+•Threat vs. Vulnerability (or Being Vulnerable 
+to the Threat of Confusing Threats with 
+Vulnerabilities)
+•Threat :  Adversaries might install malware in the 
+computers in our Personnel Department so they can 
+steal social security numbers for purposes of 
+identity theft
+•Vulnerability :  The computers in the Personnel 
+Department do not have up to date virus definitions 
+for their anti -malware software
+I.B -CompSec 11
+Some common terms
+•Attack: An attempt by an adversary to 
+cause harm to valuable assets
+•Attack vector: a path or means of an 
+adversary to enable them to exploit system 
+vulnerabilities (including the human 
+element).
+•e.g. viruses, e -mail attachments, deception, …
+•Threat model –usually means what threats 
+or attacks we protect against
+I.B -CompSec 12
+Vulnerabilities and Attacks
+system resource with vulnerabilities may
+be corrupted (loss of integrity)
+become leaky (loss of confidentiality)
+become unavailable (loss of availability)
+attacks are threats carried out and may be
+passive
+active
+insider
+outsider
+13 I.B -CompSec
+I.B -CompSec 14Attackers
+Insiders –
+According to studies, about half of the attacks to a 
+system come from insiders [Neu 99]. Threats include: 
+intellectual property (IP) theft, IT sabotage, fraud, 
+espionage, and accidental insider threats
+Hacker –(Wikipedia)
+“someone who seeks and exploits weaknesses in a 
+computer system or computer network. Hackers may 
+be motivated by a multitude of reasons, such as 
+profit, protest, or challenge. ”
+Warfare / Espionage / etc. –
+Industrial or government espionage/sabotage/etc.
+I.B -CompSecMethods of Attacks
+Bypassing authentication 
+(e.g. guessing password)
+Using Authority dishonestly 
+(e.g. System people )
+Utilizing human error or carelessness
+Utilizing “holes” in Software
+Bypassing access control
+Using Viruses
+Use Inference from authorized access  
+15
+Defense vs. Offense
+•Attackers need to succeed only once
+•Defenders must succeed every time!
+BUT
+•Attackers must pass through a chain 
+of defenses
+•Defenders only need to succeed in 
+one link!
+I.B -CompSec 16
+Common targets
+Ideas?
+https:// www.youtube.com/watch?v=GqW_Xwgwvds
+https:// vimeo.com/ 63176830
+AviRubin ’s Ted Talk
+I.B -CompSec 17
+Major threats
+•Stolen passwords
+•Malware \Spyware
+•Phishing
+•Social Engineering
+•DDOS
+•Rogue SSL certificates
+•Web exploiting (SQL injection, XSS, …)
+•Android
+I.B -CompSec 18
+Notable incidents & 
+vulnarbilities
+Partial list from recent years:
+Sony, HBGary , Lockheed Martin, RSA, “Goto
+fail”, Heartbleed, Meltdown & Spectre …
+Cyber warfare:
+Estonia andGeorgia , Stuxnet , Flame, … 
+(Ongoing)
+I.B -CompSec 20
+נושאים נוספים
+•גונבה 
+•רגולציה 
+•בנק ישראל , המטה הקיברנטי הלאומי,...
+•המדינה נגד אבי מזרחי 
+•דואר זבל 
+•פישינג 
+21 I.B -CompSec
+ מן העתונות–גניבת זהות 
+I.B -CompSec 22
+http:// www. calcalist. co.il/local/ articles/ 1,7340 ,L-3595090,00 .html
+23עוד מן העתונות
+I.B -CompSec
+ועוד מן העתונות
+I.B -CompSec 24Microsoft patches Windows 10 after the NSA 
+quietly told it about a major vulnerability
+TUE, JAN 14 2020
+https:// www. cnbc. com/ 2020 /01/14/microsoft -to-patch -windows -10-
+after-nsa-finds -vulnerability. html
+https:// www. ynet. co.il/articles/ 0,7340 ,L-5629138,00 .html
+20.11.19
+Defending Against COVID -19 Cyber Scams
+Published: Friday, March 6, 2020
+The Cybersecurity and Infrastructure Security Agency 
+(CISA) warns individuals to remain vigilant for scams 
+related to Coronavirus Disease 2019 (COVID -19). 
+Cyber actors may send emails with malicious 
+attachments or links to fraudulent websites to trick 
+victims into revealing sensitive information or 
+donating to fraudulent charities or causes. Exercise 
+caution in handling any email with a COVID -19-
+related subject line, attachment, or hyperlink, and be 
+wary of social media pleas, texts, or calls related to 
+COVID -19.
+(https://www.us -cert.gov/ncas/current -activity )
+I.B -CompSec 25
+חדש מן העתונות
+I.B -CompSec 26
+
+Lo and Bhold …
+Part 6 –earthly invaders
+(http://www.documentarymania.com/player.php?title=Lo% 20and% 20Behold% 20Reveries% 2
+0of%20the% 20Connected% 20World , ~50:00)
+I.B -CompSec 27
+Computer Security Economy
+28CSIS Study Pegs Median 
+Global Cyber -Crime Cost 
+at $445 Billion
+http://csis.org/event/ 2014 -
+mcafee -report -global -cost-
+cybercrimeCyber -Security market share 155.74 B$ by 2019.
+I.B -CompSec
+Countermeasures
+Means used to deals with security attacks
+prevent
+detect
+recover
+Goal: minimize risk to an asset
+May introduce new vulnerabilities
+Residual vulnerability (incomplete solution)
+29 I.B -CompSec
+Physical measures : CCTV, guard, fences, locks, CD -ROM\USB removal, fire alarms, 
+controlling individual access to the facility …
+Administrative measures : developing and
+publishing policies, standards, procedures
+and guidelines, screening and background
+checks, awareness, risk assessment, 
+audit, training …
+Technical (logical) measures : access
+control mechanisms to systems, passwords,
+firewalls, anti -virus, IDS, VPNs, configuration 
+managements, backup …Types of security controls and solutions
+AssetsTechnical measures
+Administrative
+measures
+Physical 
+measures
+30 I.B -CompSec
+Security Technologies Used
+31 I.B -CompSec
+Computer security strategy –how do we 
+get it done?
+Specification/policy
+what is the security scheme supposed to do?
+consider the value of the assets; vulnerabilities; potential threats and the likelihood of attacks
+Trade -off 1: “Ease of use versus security ”
+Trade -off 2: “Cost of security versus cost of failure and recovery ”
+Risk management
+Implementation/mechanisms
+how does it protect the asset?
+prevention, detection, response, recovery
+Correctness/assurance
+does it really work?
+assurance, evaluation
+32 I.B -CompSec
+33Typical Risk Analysis Form
+COSTS OF 
+SAFEGUARD
+AND COMMENTSPREVENTATIVE / REMEDIAL 
+ACTIONCOST PROBABILITY 
+PRODUCT (x 103)
+(RELATIVE PRIORITY)
+(high priority is 
+highest productPROBABILITY
+(high=. 75)
+(average=. 50)
+(low=. 25)
+(negligible=. 05)POTENTIAL 
+COST OF 
+RISK POTENTIAL EFFECTDESCRIPTION 
+OF RISK
+Nil.
+$3,000 per yeari. Ensure adequate backup
+ii. Maintain fall -back manual 
+system
+iii. Insure site and Equipment
+iv. Impose fire Precautions675 Low $     500,000   
+200,000
+2,000,000i. Loss of processing capability 
+for production scheduling, 
+payroll, etc.
+ii. Replacement of computer
+iii. Site reconstruction1. Computer 
+Room 
+Destroyed
+$1,000 per year i. Ensure remote copies kept 
+of all vital files
+ii. Insure against consequential 
+loss during Recovery6437.5 Low 500,000
+250,000
+25,000,000i. Unable to bill customers 
+ii. Production line stoppage 
+within four days
+iii. Unable to continue trading 
+within six weeks2. Complete 
+loss of 
+Records
+i. Impose system 
+for signing out 
+filesi. Strict control of access to 
+vital files
+ii. Personnel bonding505 Average
+1,000,000
+10,000i. Erosion of market position
+ii. Estimated saving to 
+Competitors3. Theft of    
+information 
+of use to 
+Competitors
+No action 
+recommended; 
+risk/small loss 
+outweighed by 
+staff morale 
+considerationsi. Spot checks 0.750 Negligible 10,000
+5,000i. Slightly increased machine 
+costs
+ii. Possible adverse effect on 
+own systems testing4. Illegal sale 
+of machine 
+Time
+Intangible effect 
+and cost to data 
+subjects important 
+but not considered 
+herei. Tighten up controls at areas 
+where information is 
+disseminated
+ii. Put a legal notice on all forms 
+with personal data specifying 
+laws and sanctions applicable to 
+it13125 High
+10,000,000
+7,500,000i. Lawsuit against firm
+ii. Loss of goodwill through 
+publicity5. Improper 
+Disclosure 
+of personal 
+Data
+I.B -CompSec
+Who is responsible for security
+Executive management \CEO ?
+IT department \CTO ?
+IT security stuff ?
+Everyone! –all employees and stakeholders of the organization
+34 I.B -CompSec
+Role of security in today ’s world
+Top management
+Endorse and lead information security
+Chief Information Security Officer (CISO)
+Responsible for the design and implementation of a 
+comprehensive security plan
+Risk management
+Updated with the most recent threats and solutions.
+Information security implementer
+Implement, install, support , maintain security tools
+The “hands -on” function
+Sometime the network administrator is also the IS implementer
+Deep understanding in Windows, Linux, databases, network 
+security and also in specific products (Symantec, Cisco …) 35 I.B -CompSec
+Role of security in today ’s world
+Information security architect \engineer
+Design the security solution that should protect the organization against its risks
+Instruct the IS implementers
+Information security auditor
+Auditing of security products, processes, policies etc.
+•Penetration tester \Ethical Hacker
+Hacking to systems and assets
+Detecting vulnerabilities
+•Forensics investigator
+36 I.B -CompSec
+37Security Measures
+Administrative
+Security
+Measures
+Physical
+Security
+Measures
+Legal
+Security
+MeasuresTechnical
+Security
+Measures
+I.B -CompSec
+Designing a security system
+What goals do we want to achieve?
+Does the system focus on the data, operations or the users of the 
+system?
+What level should the security system operate from? Should it be at the 
+level of hardware, operating system or applications package?
+Should it be simple or sophisticated?
+In a distributed system, should the security be centralized or spread?
+How do you secure the levels below the level of the security system?
+38 I.B -CompSec
+Mitigating Insider Threats (CERT 
+guidelines)
+1. Consider threats from insiders and business partners in enterprise -wide risk assessments.
+2. Clearly document and consistently enforce policies and controls.
+3. Incorporate insider threat awareness into periodic security training for all employees.
+4. Beginning with the hiring process, monitor and respond to suspicious or disruptive behavior.
+5. Anticipate and manage negative issues in the work environment.
+6. Know your assets.
+7. Implement strict password and account management policies and practices.
+8. Enforce separation of duties and least privilege.
+9. Define explicit security agreements for any cloud services, especially access restrictions and monitoring 
+capabilities.
+10. Institute stringent access controls and monitoring policies on privileged users.
+11. Institutionalize system change controls.
+12. Use a log correlation engine or security information and event management (SIEM) system to log, 
+monitor, and audit employee actions.
+13. Monitor and control remote access from all end points, including mobile devices.
+14. Develop a comprehensive employee termination procedure.
+15. Implement secure backup and recovery processes.
+16. Develop a formalized insider threat program.
+17. Establish a baseline of normal network device behavior.
+18. Be especially vigilant regarding social media.
+19. Close the doors to unauthorized data exfiltration. 39 I.B -CompSec
+Information security
+An on going process
+Prevention
+Monitoring and detection
+Response
+Emergency –carry out BCP
+Recovery
+Forensics \investigation
+Updating
+40Auditing,
+Periodic testingAuditing,
+Periodic testing
+I.B -CompSec

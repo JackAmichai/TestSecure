@@ -1,0 +1,523 @@
+1המצגת הינה לשימוש פנימי בלבד
+אין לצלם או לעשות שימוש שלא במסגרת הקורסאבטחת סייבר
+(אבטחת מידע /מחשבים /מערכות ממוחשבות /...)
+
+2בפעם הקודמת
+  בקרת גישה( Access Control )ב-Linuxו- Windows
+  פגיעות Buffer Overflow(BO)
+  הגנות מולBO ומימושן ב- Windows
+3היום
+ פגיעויותנוספות 
+  וירוסים ותולעים
+  נושאים נוספים ככלשירשה הזמן 
+Vulnerabilities
+4
+5
+
+6
+
+7
+
+8Vulnerabilities –Buffer Overflow
+(a) Situation when main program is running
+(b) After program Acalled
+(c) Buffer overflow shown in gray
+
+Buffer Overrun Defenses in Windows
+many compromises exploit buffer 
+overruns
+Windows Vista has “Stack -Based Buffer 
+Overrun Detection (/GS) ” default enabled
+source code compiled with special /GS option
+does not affect every function; only those 
+with at least 4-bytes of contiguous stack data 
+and that takes a pointer or buffer as an 
+argument
+defends against “classic stack smash ” 
+10
+Windows Stack and /GS flag
+11
+Buffer Overrun Defenses
+No eXecuteNamed (NX) / Data Execution 
+Prevention (DEP) / eXecution Disable (XD)
+prevent code executing in data segments
+as commonly used by buffer overrun exploits
+applications linked with /NXCOMPAT option
+Stack Randomization (Vista only)
+randomizes thread stack base addresses
+12
+Other Defenses
+Image Randomization (ASLR)
+O/S boots in one of 256 configurations
+makes O/S less predictable for attackers
+Service Restart Policy
+services can be configured to restart if fail
+great for reliability but lousy for security
+Vista sets some critical services so can only restart 
+twice, then manual restart needed
+gives attacker only two attempts
+13
+Vulnerabilities –Others
+OWASP (The Open Web Application 
+Security Project ) Top 10
+Others
+Clickjacking
+Cross Site Request Forgery
+ROP
+Many more, see e.g. OWASP
+14
+15Malicious code
+Viruses –A virus is a program that attaches itself to 
+another program, propagates, and usually causes some 
+data destruction. General virus detection is an undecidable
+problem, but we can detect specific viruses. 
+Worms —A worm is a program that propagates itself 
+without infecting the host.
+Trojan Horses —A Trojan Horse is an apparently useful 
+program that has hidden functions, usually harmful. 
+Viruses don ’t break into your computer –they 
+are invited by you
+oThey cannot spread unless you run infected 
+application or click on infected attachment –recent 
+RSA breach.
+oEarly viruses spread onto different applications on 
+your computer
+oContemporary viruses spread as attachments 
+through E -mail, they will mail themselves to people 
+from your address book
+Worms break into your computer using some 
+vulnerability, install malicious code and move 
+on to other machines 
+oYou don ’t have to do anything to make them spread
+oRecent Stuxnet worm. 1
+6Viruses vs. Worms
+Viruses attach themselves to other 
+executables 
+oFor example, a shell virus
+oThey can infect any executable
+Trojans claim to be other executables but 
+instead contain malicious code
+oFor example, a cool new game is advertised on the 
+Web site but it also contains malicious code –recent 
+Android apps
+oTrojan code will not spread to other programs on 
+your machine, it will simply gain access and do 
+malicious stuff
+1
+7Viruses vs. Trojans
+18Viruses -program “segments ”
+Program segments attached to another executable
+When program is run, the virus proliferates
+Numerous possible actions:
+erasing, modifying, encrypting files
+display extortion note: send $$$
+damage boot sector on hard disk (or ask for password..)
+Defenses:
+look for known viruses in files
+perform checksum on files
+make directories of binary files 
+ unwritable for users...
+19How Viruses Work
+An executable program
+With a virus at the front
+With the virus at the end
+With a virus spread over free space within program
+
+20How Viruses Work
+After virus has captured interrupt, trap vectors
+After OS has retaken printer interrupt vector
+After virus has noticed loss of printer interrupt vector and recaptured it
+
+Macro Virus
+became very common in mid -1990s since
+platform independent
+infect documents
+easily spread
+exploit macro capability of office apps
+executable program embedded in office doc
+often a form of Basic
+more recent releases include protection
+recognized by many anti -virus programs
+Macro Virus
+became very common in mid -1990s
+Panic like it's 1999 : Microsoft Office 
+macro viruses are BACK
+8Jul2014
+Microsoft Word Macro Viruses Make 
+Dangerous Comeback
+Jun 10, 2016
+23Shell Virus
+The one -liner: rm -r -f /usr
+says, ‘‘Recursively ( -r), and without bothering me with diagnostics ( -f), 
+remove all the files you can from users ’ directories. ’’
+Place in the file earthquake (in a write -protected directory),
+rm -r -f /usr
+at 0200 sunday earthquake
+Submit it for execution at 2AM next Sunday:
+at 0200 sunday earthquake
+After the earthquake happens, another will be scheduled for the following 
+week, and so on. The program will reproduce itself even across computer 
+outages.
+24Shell Virus
+for i in * #virus#
+do case " ‘sed 1q $i‘" in #is it a shell script?
+"#!/bin/sh")
+grep ’#virus#’ $i >/dev/null || #infected?
+sed -n ’/#virus#/,$p ’ $0 >>$i #infect
+esac
+done 2>/dev/null #hide all output
+25Antivirus Techniques
+Integrity checkers
+Behavioral checkers
+Virus avoidance
+good OS
+install only shrink -wrapped software
+use antivirus software
+do not click on attachments to email
+frequent backups
+Recovery from virus attack
+halt computer, reboot from safe disk, run antivirus
+26Anti-Antivirus Techniques
+Examples of a polymorphic virus
+All of these examples do the same thing
+
+27Detection strategies
+Scanners -viruses with fixed signatures 
+(static viruses) are easy to detect by a simple 
+scanner -needs user to keep up to date the 
+signature lists that scanner uses
+encrypting virus with an invariant 
+decryption engine -can be detected as for 
+simple virus
+28Detection strategies
+viruses that are polymorphic can be detected 
+using heuristic scanning techniques
+Look for standard methods to escape 
+detection (e.g. morphed code has lots of jump 
+instructions in the code for no good reason) or 
+unusual actions that might damage the system 
+or user files (e.g. code that attempts to delete 
+important system files or all files in a given 
+category like all .doc files)
+29Detection strategies
+Activity monitoring -since viruses do fairly 
+standard things -an anti -virus program can be 
+set-up to be resident in memory where it can
+monitor activity on the computer for the occurrence of 
+the sorts of things viruses do (or have a list of actions 
+that should not be allowed to happen without user 
+explicit consent)
+interrupt/suspend execution of any programs that are 
+doing something suspicious -on disallowed list
+warn user about suspicious program and its activity
+30Integrity checking -checksums or hash 
+values (message digests) from a hash function are 
+computed for each file and appended to the file. If 
+file changes then hash value will be incorrect for the 
+file.
+It gives an indication for the presence of a virus 
+activity, although it does not identify the virus 
+responsible
+However, when a virus infects a file, it may re -
+compute hash value for file+virus , producing a hash 
+value that is correct for the infected fileDetection strategies
+31Detection strategies
+Solution -encrypt the hash value before 
+appending it to the file
+hash value is effectively acting as a digital 
+signature for the files to authenticate that 
+they have not been modified in an 
+unauthorised manner
+Generic Decryption
+runs executable files through GD 
+scanner:
+CPU emulator to interpret instructions
+virus scanner to check known virus 
+signatures
+emulation control module to manage process
+lets virus decrypt itself in interpreter
+periodically scan for virus signatures
+issue is long to interpret and scan
+tradeoff chance of detection vstime delay
+33Prevention strategies
+Standard prevention policy:
+1. Only download or install software or open 
+documents (input files to the system) from 
+sources that are deemed trustworthy = sources 
+which you believe do not intend to try and 
+deliberately cause damage to your system AND 
+have a sufficiently secure system as to make it 
+unlikely that they will pass on a virus
+2. Scan files that are inputs to the system whatever 
+the source
+34Prevention strategies
+3. Reduce usage/access rights for various activities 
+and resources in the system,
+to prevent certain types of virus from running e.g. you can 
+disable auto -running of document macros, disable script 
+execution (JavaScript, etc) in various applications and ActiveX 
+controls
+to limit damage a virus might cause e.g. by use of activity 
+monitoring (discussed earlier) with a list of actions that need 
+explicit user consent before being executed
+35Removal and recovery
+After detection of a virus recovery from a virus 
+infection is 2 fold:
+1. Removal ( disinfection ) of viruses from system -
+can often remove a virus from  infected files without damage -
+original file was not corrupted
+deletion of infected files where virus cannot be separated 
+from them
+2. Recovery of files deleted or modified by action of the 
+virus or deleted in disinfection process –backups!!!
+A program that:
+oScans network for vulnerable machines
+oBreaks into machines by exploiting the vulnerability
+oInstalls some piece of malicious code –backdoor, 
+DDoS tool ( botnets )
+oMoves on
+Unlike viruses
+oWorms don ’t need any user action to spread –they 
+spread silently and on their own
+oWorms don ’t attach themselves onto other programs 
+–they exist as a separate code in memory
+Sometimes you may not even know your 
+machine has been infected by a worm
+3
+6What is a Worm?
+They spread extremely fast
+They are silent
+Once they are out, they cannot be recalled
+They usually install malicious code
+They clog the network
+3
+7Why Are Worms Dangerous?
+Robert Morris, a PhD student at Cornell, was 
+interested in network security
+He created the first worm with a goal to have a 
+program liveon the Internet in Nov. 1988
+oWorm was supposed only to spread, fairly slowly
+oIt was supposed to take just a little bit of resources 
+so not to draw attention to itself
+oBut things went wrong …
+Worm was supposed to avoid duplicate copies 
+by asking a computer whether it is infected
+oTo avoid false “yes” answers, it was programmed to 
+duplicate itself every 7th time it received “yes” 
+answer
+oThis turned out to be too much
+3
+8First Worm Ever –Morris 
+Worm
+It used four attack vectors (some used “zero 
+day”, i.e. unknown, vulnerabilities) to break in
+oA bug in sendmail
+oA bug in finger deamon
+oA trusted hosts feature (/etc/. rhosts )
+oPassword guessing
+Worm was replicating at a much faster rate 
+than anticipated 
+At that time Internet was small and 
+homogeneous (SUN and VAX workstations 
+running BSD UNIX)
+It infected around 6,000 computers, one tenth 
+of then -Internet, in a day
+3
+9First Worm Ever –Morris 
+Worm
+People quickly devised patches and 
+distributed them (Internet was small then)
+A week later all systems were patched and 
+worm code was removed from most of them
+No lasting damage was caused
+Robert Morris paid $ 10,000 fine, was placed 
+on probation and did some community work
+Worm exposed not only vulnerabilities in 
+UNIX but moreover in Internet organization
+Users didn ’t know who to contact and report 
+infection or where to look for patches
+4
+0First Worm Ever –Morris 
+Worm
+In response to Morris Worm DARPA formed 
+CERT (Computer Emergency Response Team) 
+in November 1988
+oUsers report incidents and get help in handling them 
+from CERT
+oCERT publishes security advisory notes informing 
+users of new vulnerabilities that need to be patched 
+and how to patch them
+oCERT facilitates security discussions and advocates 
+better system management practices
+4
+1First Worm Ever –Morris 
+Worm
+Spread on July 12 and 19, 2001
+Exploited a vulnerability in Microsoft Internet 
+Information Server that allows attacker to get full 
+access to the machine (turned on by default)
+Two variants –both probed random machines, 
+one with static seed for RNG, another with 
+random seed for RNG (CRv 2)
+CRv2 infected more than 359,000 computers in 
+less than 14 hours
+It doubled in size every 37 minutes
+At the peak of infection more than 2,000 hosts were 
+infected each minute
+Rate can be modeled mathematically 42Code Red
+►e (K(t-T))/ 1 + e (K(t-T))
+, K=
+1.8  
+T=
+11.9
+►
+Max probe rate:
+ 510.000 
+ scans per hour
+►
+Came close to saturation before turning off
+Spread on January 25, 2003
+The fastest computer worm in history
+It doubled in size every 8.5 seconds. 
+It infected more than 90% of vulnerable hosts 
+within 10 minutes
+It infected 75,000 hosts overall
+Exploited buffer overflow vulnerability in 
+Microsoft SQL server, discovered 6 months 
+earlier
+45Sapphire/Slammer Worm
+No malicious payload
+The aggressive spread had severe 
+consequences
+Created DoSeffect
+It disrupted backbone operation
+Airline flights were canceled
+Some ATM machines failed
+46Sapphire/Slammer Worm
+47Sapphire/Slammer Worm
+
+Both Slammer and Code Red 2 use 
+random scanning
+oCode Red uses multiple threads that invoke TCP 
+connection establishment through 3-way 
+handshake –must wait for the other party to 
+reply or for TCP timeout to expire
+oSlammer packs its code in single UDP packet –
+speed is limited by how many UDP packets can 
+a machine send
+48Why Was Slammer So 
+Fast?
+I.B -Network security 49מודל רשת ה- Internet 
+Application
+TCP ( תובלה) 
+IP ( רשת) 
+MAC ( פיזית) 
+בשל המורכבות העבודה מתחלקת בין שכבות.
+כל שכבה מתקשרת פיזית עם השכבות הסמוכות לה, ולוגית עם השכבה המקבילה לה.
+I.B -Network security 50מודל רשת ה- Internet
+עיבוד חבילה בשליחה
+
+I.B -Network security 51מודל רשת ה- Internet
+עיבוד חבילה בקבלה
+
+I.B -Network security 52מודל רשת ה- Internet
+מבנה החבילה ותפקיד כל שכבה
+ MAC header– משתנה לפי המדיה הפיזית. מכיל את  
+כתובת ה-MAC ואינפורמציה נוספת.
+ IP header– מכיל בין היתר: כתובות IP של השולח,  
+והמקבל, TTL ,  הפרוטוקול הבא( TCP/UDP או אחר),  
+וגרסת פרוטוקול IP.
+ UDP/TCP header מכיל: מספרי הפורטים של השולח  
+והמקבל. TCP  מכיל בנוסף חיוויים( syn/ack  )   ומספרים
+סידוריים.
+
+I.B -Network security 53מודל רשת ה- Internet
+ מושגים במודל שצריך לזכור ולהבין(רשימה חלקית ):
+Connectionless/Connection oriented
+Reliable/Unreliable 
+3-way handshake (SYN, SYN -ACK, ACK)
+Gateways
+Ports
+Sockets
+I.B -Network security 54מודל רשת ה- Internet
+עולם הרשת
+
+Both Slammer and Code Red 2 use 
+random scanning
+oCode Red uses multiple threads that invoke TCP 
+connection establishment through 3-way 
+handshake –must wait for the other party to 
+reply or for TCP timeout to expire
+oSlammer packs its code in single UDP packet –
+speed is limited by how many UDP packets can 
+a machine send
+55Why Was Slammer So 
+Fast?
+56Stuxnet Worm
+Discovered in June/July 2010Targets industrial equipment
+Uses Windows vulnerabilities (known and 
+new) to break inInstalls PLC (Programmable Logic Controller) 
+rootkit and reprograms PLC
+Without physical schematic it is impossible to tell 
+what’s the ultimate effectSpread via USB drivesUpdates itself either by reporting to server or 
+by exchanging code with new copy of the 
+worm
+See also “Flame ”
+Many worms use random scanning
+This works well only if machines have very 
+good RNGs with different seeds
+Getting large initial population represents 
+a problem
+Then the infection rate skyrockets
+The infection eventually reaches saturation 
+since all machines are probing same addresses
+57Scanning Strategies
+58Random Scanning
+
+Worm can get large initial population with 
+hitlist scanning
+Assemble a list of potentially vulnerable 
+machines prior to releasing the worm –a 
+hitlist . E.g., through a slow scan
+When the scan finds a vulnerable machine, 
+hitlist is divided in half and one half is 
+communicated to this machine upon 
+infection
+This guarantees very fast spread –under one 
+minute! 59Scanning Strategies
+60Hitlist Scanning
+
+Worm can prevent die -out in the end with 
+permutation scanning
+All machines share a common pseudorandom 
+permutation of IP address space
+Machines that are infected continue scanning just 
+after their point in the permutation
+If they encounter already infected machine they will 
+continue from a random point
+Partitioned permutation is the combination of 
+permutation and hitlist scanning
+In the beginning permutation space is halved, later 
+scanning is simple permutation scan
+61Scanning Strategies
+62Permutation Scanning
+
+Worm Countermeasures
+overlaps with anti -virus techniques
+once worm on system A/V can detect
+worms also cause significant net activity
+worm defense approaches include:
+signature -based worm scan filtering
+filter-based worm containment
+payload -classification -based worm containment
+threshold random walk scan detection
+rate limiting and rate halting
+Three factors define worm spread:
+Size of vulnerable population
+Prevention –patch vulnerabilities, increase heterogeneity
+Rate of infection (scanning and propagation 
+strategy)
+Deploy firewalls
+Distribute worm signatures
+Length of infectious period
+Patch vulnerabilities after the outbreakWorm Defense

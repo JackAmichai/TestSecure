@@ -1,0 +1,120 @@
+Last login: Fri Nov  7 16:15:09 on console
+jackamichai@Jacks-MacBook-Air ~ % cd desktop
+jackamichai@Jacks-MacBook-Air desktop % mkdir password-research
+jackamichai@Jacks-MacBook-Air desktop % cd password-research 
+jackamichai@Jacks-MacBook-Air password-research % python -m venv venv
+zsh: command not found: python
+jackamichai@Jacks-MacBook-Air password-research % python3 -m venv venv
+jackamichai@Jacks-MacBook-Air password-research % source venv/bin/activate
+(venv) jackamichai@Jacks-MacBook-Air password-research % pip install flask
+Collecting flask
+  Downloading flask-3.1.2-py3-none-any.whl.metadata (3.2 kB)
+Collecting blinker>=1.9.0 (from flask)
+  Downloading blinker-1.9.0-py3-none-any.whl.metadata (1.6 kB)
+Collecting click>=8.1.3 (from flask)
+  Downloading click-8.3.1-py3-none-any.whl.metadata (2.6 kB)
+Collecting itsdangerous>=2.2.0 (from flask)
+  Downloading itsdangerous-2.2.0-py3-none-any.whl.metadata (1.9 kB)
+Collecting jinja2>=3.1.2 (from flask)
+  Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+Collecting markupsafe>=2.1.1 (from flask)
+  Downloading markupsafe-3.0.3-cp314-cp314-macosx_11_0_arm64.whl.metadata (2.7 kB)
+Collecting werkzeug>=3.1.0 (from flask)
+  Downloading werkzeug-3.1.3-py3-none-any.whl.metadata (3.7 kB)
+Downloading flask-3.1.2-py3-none-any.whl (103 kB)
+Downloading blinker-1.9.0-py3-none-any.whl (8.5 kB)
+Downloading click-8.3.1-py3-none-any.whl (108 kB)
+Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+Downloading markupsafe-3.0.3-cp314-cp314-macosx_11_0_arm64.whl (12 kB)
+Downloading werkzeug-3.1.3-py3-none-any.whl (224 kB)
+Installing collected packages: markupsafe, itsdangerous, click, blinker, werkzeug, jinja2, flask
+Successfully installed blinker-1.9.0 click-8.3.1 flask-3.1.2 itsdangerous-2.2.0 jinja2-3.1.6 markupsafe-3.0.3 werkzeug-3.1.3
+(venv) jackamichai@Jacks-MacBook-Air password-research % mkdir data
+mkdir logs
+
+(venv) jackamichai@Jacks-MacBook-Air password-research % ls
+data	logs	venv
+(venv) jackamichai@Jacks-MacBook-Air password-research % mkdir requirements.txt
+(venv) jackamichai@Jacks-MacBook-Air password-research % rm -r requirements.txt   # מוחק את התיקייה שיצרת
+rm -f flask              # מוחק את הקובץ הריק flask אם נוצר
+#
+rm: #: No such file or directory
+rm: מוחק: No such file or directory
+rm: את: No such file or directory
+rm: התיקייה: No such file or directory
+rm: שיצרת: No such file or directory
+zsh: command not found: #
+(venv) jackamichai@Jacks-MacBook-Air password-research % rm -r requirements.txt   # מוחק את התיקייה שיצרת
+rm -f flask              # מוחק את הקובץ הריק flask אם נוצר
+#
+rm: requirements.txt: No such file or directory
+rm: #: No such file or directory
+rm: מוחק: No such file or directory
+rm: את: No such file or directory
+rm: התיקייה: No such file or directory
+rm: שיצרת: No such file or directory
+zsh: command not found: #
+(venv) jackamichai@Jacks-MacBook-Air password-research % rm -r requirements.txt                     
+rm: requirements.txt: No such file or directory
+(venv) jackamichai@Jacks-MacBook-Air password-research % ls
+data	logs	venv
+(venv) jackamichai@Jacks-MacBook-Air password-research % nano requirements.txt
+
+
+  UW PICO 5.09                           File: requirements.txt                            Modified  
+
+flask
+# bcrypt            
+# argon2-cffi
+# pyotp
+# Flask-Limiter
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+^G Get Help     ^O WriteOut     ^R Read File    ^Y Prev Pg      ^K Cut Text     ^C Cur Pos      
+^X Exit         ^J Justify      ^W Where is     ^V Next Pg      ^U UnCut Text   ^T To Spell     

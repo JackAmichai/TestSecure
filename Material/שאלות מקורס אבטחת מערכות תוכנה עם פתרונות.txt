@@ -1,0 +1,6461 @@
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+ 
+Access Matrix
+ 
+ 
+Subjects\Objects
+ 
+f1
+ 
+f2
+ 
+f3
+ 
+v1
+ 
+RW
+ 
+R
+ 
+ 
+v2
+ 
+R
+ 
+RW
+ 
+ 
+v3
+ 
+ 
+R
+ 
+RW
+ 
+ 
+B.
+ 
+ 
+Capabilities List:
+ 
+ 
+v1: f1(R,W), f2(R)
+ 
+v2: f1(R), f2(RW)
+ 
+v3: f2(R), f3(RW)
+ 
+ 
+C.
+ 
+ 
+In linux you cannot directly represent this matrix (since the permissions in linux are divided to
+ 
+ 
+[OWNER, GROUP, OTHERS]
+ 
+ 
+However, you can mimic something like that using the following methods:
+ 
+ 
+Put both V1 and V2 in a group called GRP_1.
+ 
+For each file I will describe the owner, group, and permissions flag
+ 
+ 
+ 
+File
+ 
+Owner
+ 
+Group
+ 
+Owner Perm
+ 
+Group Perm
+ 
+Other Perm
+ 
+f1
+ 
+v1
+ 
+GRP_1
+ 
+RW
+ 
+R
+ 
+ 
+f2
+ 
+v2
+ 
+GRP_1
+ 
+RW
+ 
+R
+ 
+R
+ 
+f3
+ 
+v3
+ 
+NOBODY
+ 
+RW
+ 
+ 
+ 
+ 
+We will note that users in linux can only belong to only one group in runtime which makes this
+ 
+approach very limited.
+ 
+ 
+D.
+ 
+ 
+Yes, according to the access matrix user v3 should not be able to read the content of f1, but I
+ 
+will show a flow in which this is possible:
+ 
+1.
+User v2 reads f1 and writes all the information to f2
+ 
+2.
+User v3 reads f2
+ 
+ 
+E.
+ 
+ 
+ 
+Subjects\Objects
+ 
+f1
+ 
+f2
+ 
+f3
+ 
+P
+ 
+v1
+ 
+RW
+ 
+R
+ 
+ 
+ 
+v2
+ 
+R
+ 
+RW
+ 
+ 
+RWE
+ 
+v3
+ 
+ 
+R
+ 
+RW
+ 
+E
+ 
+P
+ 
+R
+ 
+W
+ 
+ 
+ 
+ 
+In Unix this is possible if both v2 and v3 share the same group.
+ 
+V2 while creating the file can give the group members execution ability, for example using the
+ 
+access mask 710
+ 
+ 
+This however will not have the intended use, as user v3 does not have the required permission
+ 
+to read f2 and when he runs P the process will run under his privileges.
+ 
+To overcome this user v2 can enable the SUID option on P, this will cause the process P when
+ 
+invoked to run under v2 permissions.
+ 
+ 
+F.
+ 
+ 
+Subjects\Objects
+ 
+f1
+ 
+f2
+ 
+f3
+ 
+Subject Level
+ 
+v1
+ 
+RW
+ 
+W
+ 
+W
+ 
+Conf.
+ 
+v2
+ 
+R
+ 
+RW
+ 
+W
+ 
+Sec.
+ 
+v3
+ 
+R
+ 
+R
+ 
+RW
+ 
+TS.
+ 
+Object Level
+ 
+Conf.
+ 
+Sec.
+ 
+TS.
+ 
+ 
+ 
+There is no information leakage flow in this system, that is because we can match a BLP model.
+ 
+Since the model follows the 2 concepts of BLP there will be no information leakage.
+ 
+ 
+G.
+ 
+ 
+Based on high-water mark, the level of security is determined by the most high level of the data
+ 
+which is accessed (based on the user having permission to access it).
+ 
+Program P (acting in the name of v3) accessed f2 (Secret) file, therefore it is now running under
+ 
+SECRET level. It will write to f3 and there are two possible outcomes which depends on the
+ 
+implementation:
+ 
+1.
+The program will fail, since f3 level is lower (Confidential), and no changes will be made
+ 
+2.
+The operation is permitted, but the level of f3 will be raised to 
+​
+secret
+​
+.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+Answer:
+ 
+ 
+1.
+ 
+ 
+ 
+Subjects\Objects
+ 
+F1
+ 
+F2
+ 
+F3
+ 
+U1
+ 
+RW
+ 
+W
+ 
+W
+ 
+U2
+ 
+R
+ 
+RW
+ 
+W
+ 
+U3
+ 
+RW
+ 
+R
+ 
+RW
+ 
+ 
+ 
+2.
+ 
+Access List:
+ 
+ 
+F1: U1(RW), U2(R), U3(RW)
+ 
+F2: U1(W), U2(RW), U3(R)
+ 
+F3: U1(W), U2(W), U3(RW)
+ 
+ 
+Capabilities List:
+ 
+ 
+U1: F1(RW), F2(W), F3(W)
+ 
+U2: F1(R), F2(RW), F3(W)
+ 
+U3: F1(RW), F2(R), F3(RW)
+ 
+ 
+3.
+ 
+ 
+We cannot define specific permissions to specific users in Unix, however we can design the
+ 
+groups of the systems in a way that this will give us this matrix.
+ 
+ 
+We will add a new group called GROUP_U1_U2 and will assign both U1 and U2 to that group.
+ 
+ 
+I will show now the list of files, with their owner, group and permissions that will give us this
+ 
+result.
+ 
+ 
+ 
+File
+ 
+Owner
+ 
+Group
+ 
+Permissions
+ 
+(owner - group -
+ 
+others)
+ 
+F1
+ 
+U1
+ 
+GROUP_U1_U2
+ 
+ 
+RW - R - RW
+ 
+F2
+ 
+U2
+ 
+GROUP_U1_U2
+ 
+ 
+RW - W - R
+ 
+F3
+ 
+U3
+ 
+U3
+ 
+RW - _ - W
+ 
+ 
+Note: in Unix systems a user can belong only to one group in runtime, this approach will only
+ 
+work as long as users U1 and U2 have only that one group otherwise they can use the newgrp
+ 
+command to elevate their permissions.
+ 
+ 
+4.
+ 
+ 
+There are few scenarios in which illegal flow can happen, here is an example:
+ 
+U2 should not have access to read F3 but the following scenario can make that happen:
+ 
+1.
+User U3 reads F3 and writes the information to F1
+ 
+2.
+User U2 reads from F1
+ 
+ 
+5.
+ 
+ 
+The answer to #4 was yes, so such model does not exist
+ 
+6.
+ 
+ 
+ 
+To make this access matrix compatible with multi-level model (BLP) we will make U3 only able
+ 
+to read F1
+ 
+ 
+The result matrix is this:
+ 
+ 
+ 
+Subjects\Objects
+ 
+F1
+ 
+F2
+ 
+F3
+ 
+Level
+ 
+U1
+ 
+RW
+ 
+W
+ 
+W
+ 
+1(Confi.)
+ 
+U2
+ 
+R
+ 
+RW
+ 
+W
+ 
+2(Secret)
+ 
+U3
+ 
+R
+ 
+R
+ 
+RW
+ 
+3(Top-Secret)
+ 
+Level
+ 
+1(Confi.)
+ 
+2(Secret)
+ 
+3(Top-Secret)
+ 
+ 
+ 
+ 
+The linux command is:
+ 
+Assuming that U3 does is not the owner and does not belong to the group of F1
+ 
+Chmod o-w F1
+ 
+ 
+ 
+7.
+ 
+ 
+To implement this a user that has permissions to access the secret information will need to be
+ 
+the owner of the program and will need to enable the setUID (SUID) flag on the program. That
+ 
+will mean that the program will run as that user even when executed with a user with lower
+ 
+permissions.
+ 
+ 
+Such a program will break the BLP model since we assume that it reads from a high level secret
+ 
+and writes or outputs to a low level causing an information leakage.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+ 
+Answer:
+ 
+ 
+1.
+ 
+ 
+ 
+2.
+ 
+ 
+In R-system:
+ 
+ 
+We will first remove the permission from B and see where we need to cascade it to:
+ 
+ 
+ 
+
+ 
+Based on that all the outgoing permissions from B needs to be removed, we will now get the
+ 
+following graph:
+ 
+ 
+ 
+ 
+As we can see C did not have the D permission when it was granted to D at time 40, therefore it
+ 
+needs to be removed.
+ 
+ 
+The final result:
+ 
+ 
+ 
+ 
+In SQL:
+ 
+ 
+In SQL we ignore the times and cascade the revocation only if there are no more incoming
+ 
+granting arrows.
+ 
+ 
+Again we will remove the grants to B and to from B to the others, getting the result:
+ 
+ 
+
+And this is also the final result.
+ 
+ 
+3.
+ 
+ 
+Based on the policy we can have the following:
+ 
+ 
+If the policy is that a user does not directly have the role/group permission, but instead those are
+ 
+allowed in runtime based on the users being a member of the group/role.
+ 
+ 
+1.
+If we perform “revoke I from R”, all R members including A itself will lose the permission
+ 
+I. This includes B as well.
+ 
+ 
+2.
+If we perform “revoke I from A” the more likely scenario is that we ignore the command,
+ 
+since I was not granted directly to A it cannot be revoked from A and as long as A
+ 
+belongs to the R role it will have all the permissions within the role.
+ 
+ 
+If the policy is that a user gets the permissions from the role as soon as he/she is granted the
+ 
+role:
+ 
+1.
+If we perform “revoke I from R”, no change will be made to A and B since the
+ 
+permissions were already inherited to them. Only future users which will be granted the
+ 
+R role will not get the I permission
+ 
+2.
+If we perform “revoke I from A” then:
+ 
+a.
+If we chose “strict” it will fail since A already granted B that permission
+ 
+b.
+If we chose “cascade”, both A and B will lose the permission I
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+Answer:
+ 
+ 
+1.
+ 
+ 
+Before running the program X,Y,Z are all binary meaning their entropy is 1 bit for each. Meaning
+ 
+all of them has the entropy of 3 (together)
+ 
+ 
+2.
+ 
+ 
+We will calculate the table of possible values after the program runs:
+ 
+ 
+ 
+X
+ 
+Y
+ 
+Z
+ 
+W
+ 
+0
+ 
+0
+ 
+0
+ 
+0
+ 
+1
+ 
+0
+ 
+0
+ 
+0
+ 
+0
+ 
+1
+ 
+0
+ 
+0
+ 
+1
+ 
+1
+ 
+0
+ 
+0
+ 
+0
+ 
+0
+ 
+1
+ 
+0
+ 
+1
+ 
+0
+ 
+1
+ 
+1
+ 
+0
+ 
+1
+ 
+1
+ 
+1
+ 
+1
+ 
+1
+ 
+1
+ 
+0
+ 
+ 
+If W=0 then we know that out of the 8 possible values we started with only 6 are valid.
+ 
+The new entropy is:
+ 
+ 
+log_2(6) = 2.58
+ 
+ 
+So the amount of information that leaked is 3-2.58 = 0.42 bits
+ 
+ 
+3.
+ 
+ 
+If W=1 then we know that out of the 8 possible values we started with only 2 are valid.
+ 
+Meaning the new entropy is 1.
+ 
+ 
+The amount of information that was leaked is 2 bytes.
+ 
+ 
+4.
+ 
+ 
+If the value of W is unknown no information will be leaked.
+ 
+ 
+If we want to know the amount of leaked information potential on both cases (knowing the
+ 
+general information flow from knowing the value of W) then the result is:
+ 
+ 
+H(W=1)*P(W=1) + H(W=0)*P(W=0)
+ 
+2.58*6/8 + 1*2/8 = 2.185
+ 
+ 
+ 
+5.
+ 
+ 
+For a compile based protection, the compiler will need to verify that l(W)>=max(l(x),l(y),l(z)
+ 
+otherwise the program should not compile and should give the developer an error about
+ 
+information leakage.
+ 
+ 
+6.
+ 
+ 
+W=0
+ 
+ 
+If (l(w)>=max(l(x),l(y),l(z)) then
+ 
+If (Z == 1) then
+ 
+W = X xor Y
+ 
+Display W
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+ 
+ 
+1.
+ 
+ 
+Since we got the specific value of Y and it is larger than 0 we know the index in the array and
+ 
+since S[i]=i that index is the value of Y, meaning all 8 bytes have been leaked (answer is 5)
+ 
+ 
+2.
+ 
+Now we know that Y=0 so at least we know the following values are not possible
+ 
+a=64
+ 
+a=32
+ 
+a=16
+ 
+a=8
+ 
+a=4
+ 
+a=2
+ 
+a=1
+ 
+ 
+Also
+ 
+a=48
+ 
+a=...
+ 
+ 
+And we know that all values where a>128 are possible (7 bits of entropy).
+ 
+So the result is that X is between 0 and 1 (option 2)
+ 
+ 
+ 
+B.
+ 
+ 
+Input (a)
+ 
+If l(Y)>=l(a) && l(Y)>=l(S)
+ 
+Y = BinSearch(S,a)
+ 
+ 
+ 
+C.
+ 
+ 
+For there will be no illegal information leakage Y level needs to be higher or equals to a (and S).
+ 
+For example if l(a)=secret and l(Y)=top secret there will be no issue with the security check
+ 
+during compilation.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+Answer:
+ 
+ 
+1.
+ 
+ 
+Let’s convert the the word “RELAX” to it’s binary representation (on a 0 base)
+ 
+ 
+ 
+R
+ 
+E
+ 
+L
+ 
+A
+ 
+X
+ 
+17
+ 
+4
+ 
+11
+ 
+0
+ 
+23
+ 
+10001
+ 
+00100
+ 
+01011
+ 
+00000
+ 
+10111
+ 
+ 
+ 
+Now we will convert the first 5 chars of the key
+ 
+ 
+ 
+I
+ 
+Y
+ 
+T
+ 
+B
+ 
+G
+ 
+6
+ 
+24
+ 
+19
+ 
+1
+ 
+6
+ 
+00110
+ 
+11000
+ 
+10011
+ 
+00001
+ 
+00110
+ 
+ 
+ 
+Now we will show the XOR result:
+ 
+ 
+10111
+ 
+11100
+ 
+11000
+ 
+00001
+ 
+10001
+ 
+ 
+ 
+Decrypting it is just XORing it again with the key with returns the original value
+ 
+ 
+2.
+ 
+ 
+First the full entropy of a character in the message is log_2(26) = 4.7
+ 
+ 
+ 
+Let’s assume that |M|=1 (M is a 1 char message)
+ 
+We will show that H(M | C) < H(M)
+ 
+ 
+Let’s assume that C>16 meaning that the MSB of C is on
+ 
+That means that either one of the lines in this  table is a valid option:
+ 
+ 
+MSB(M)=1
+ 
+MSB(C)=0
+ 
+M>=q (10 chars)
+ 
+C<q (16 chars)
+ 
+P=0.5 *
+ 
+MSB(M)=0
+ 
+MSB(C)=1
+ 
+M<q (16 chars)
+ 
+C>=q (10 chars)
+ 
+P=0.5 *
+ 
+ 
+* The reason that P=0.5 is that the amount of possible combinations for both options is 10*16
+ 
+ 
+So H(M | C) = H(M|C=0)*P(C=0) + H(M|C=1)*P(C=1)
+ 
+ 
+H(M|C=0) = log_2(10) = 0.3
+ 
+H(M|C=1) = log_2(16) = 4
+ 
+ 
+H(M | C) = 2.15
+ 
+ 
+As we can see this is a significantly smaller amount of bits.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+ 
+Access Matrix:
+ 
+ 
+ 
+Subjects/
+Objects
+ 
+A
+ 
+B
+ 
+C
+ 
+D
+ 
+E
+ 
+F
+ 
+G
+ 
+A
+ 
+-
+ 
+ 
+ 
+g
+ 
+ 
+ 
+r
+ 
+B
+ 
+t
+ 
+-
+ 
+r
+ 
+ 
+ 
+ 
+ 
+C
+ 
+ 
+ 
+-
+ 
+ 
+ 
+ 
+ 
+D
+ 
+ 
+ 
+ 
+-
+ 
+e
+ 
+ 
+ 
+E
+ 
+ 
+ 
+ 
+ 
+-
+ 
+w
+ 
+ 
+F
+ 
+ 
+ 
+ 
+ 
+ 
+-
+ 
+ 
+G
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+-
+ 
+ 
+B.
+ 
+ 
+Command take (subject_A, subject_B, permission, object)
+ 
+If “t” in M(subject_A, subject_B) and permission in M(subject_B, object)
+ 
+Then enter permission in M(subject_A, object)
+ 
+ 
+ 
+If B executed the command (let’s assume that B performed a take from A on his permission r on
+ 
+G, then B will now have r on G as well, and the matrix will look like:
+ 
+ 
+Subjects/
+Objects
+ 
+A
+ 
+B
+ 
+C
+ 
+D
+ 
+E
+ 
+F
+ 
+G
+ 
+A
+ 
+-
+ 
+ 
+ 
+g
+ 
+ 
+ 
+r
+ 
+B
+ 
+t
+ 
+-
+ 
+r
+ 
+ 
+ 
+ 
+r
+ 
+C
+ 
+ 
+ 
+-
+ 
+ 
+ 
+ 
+ 
+D
+ 
+ 
+ 
+ 
+-
+ 
+e
+ 
+ 
+ 
+E
+ 
+ 
+ 
+ 
+ 
+-
+ 
+w
+ 
+ 
+F
+ 
+ 
+ 
+ 
+ 
+ 
+-
+ 
+ 
+G
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+-
+ 
+ 
+ 
+C.
+ 
+ 
+I will show now how this is possible:
+ 
+1.
+D creates a new object D’ with the permissions (gt on D)
+ 
+2.
+D grants (g on D’) to E
+ 
+3.
+E grants (w on F) to D’
+ 
+4.
+D takes (w on F) from D’
+ 
+5.
+D deleted D’
+ 
+6.
+A creates a new object A’ with permission (gt on A)
+ 
+7.
+A grants (g on A’) to E
+ 
+8.
+E grants (w on F) to A’
+ 
+9.
+A takes (w on F) from A’
+ 
+10.
+A deletes A’
+ 
+11.
+B takes (w on F) from A
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+
+ 
+Answer:
+ 
+ 
+A.
+ 
+ 
+1.
+ 
+ 
+This is incorrect.
+ 
+We will take the following:
+ 
+H(x) = x
+ 
+ 
+Now it is clear the aren’t x!=y in which h(x)=h(y) but still it is very easy to find h(x) for every x
+ 
+ 
+2.
+ 
+ 
+This is incorrect.
+ 
+Same example as #1
+ 
+ 
+3.
+ 
+ 
+This is incorrect.
+ 
+Same example as #1
+ 
+ 
+The right answer is that all of those are wrong. Answer (4).
+ 
+ 
+Preimage Resistance:
+ 
+A hash function is preimage resistant if, given a hash value h, it is hard to find any message m
+ 
+such that h = hash(k, m), where k is the hash key.
+ 
+Collision Resistance
+ 
+A hash function is collision resistant if, given two messages m1 and m2, it is hard to find a hash
+ 
+h such that h = hash(k, m1) = hash(k, m2), where k is the hash key.
+ 
+Second Preimage Resistance
+ 
+A hash function is second preimage resistant if given a message m1, it is hard to find a different
+ 
+message m2 such that hash(k, m1) = hash(k, m2), where k is the hash key.
+ 
+ 
+ 
+ 
+ 
+ניתן שתי פונק
+  'Hash
+ 
+ 
+1. H(x) = 0
+ 
+ 
+Preimage  - V
+ 
+ 
+second preimage  - X
+ 
+ 
+Collution detection - X
+ 
+ 
+ 
+2. H(x) = x
+ 
+ 
+    Preimage  - X
+ 
+second preimage  - V
+ 
+Collution detection - V
+ 
+ 
+ 
+ 
+2. H(x) = x^2
+ 
+ 
+Preimage  - X
+ 
+second preimage  - X
+ 
+Collution detection - X
+ 
+ 
+ 
+B.
+ 
+ 
+In windows the ACEs for deny are usually before the ACEs of approve (if done by the UI) so I
+ 
+will assume this is the case as well here.
+ 
+Windows usually checks the list from beginning to end and if there is an ACE that matches the
+ 
+required permission level which was required by the operation it will stop the scan and will
+ 
+return the result based on that.
+ 
+ 
+Aya:
+ 
+Aya belongs to the Students group and therefore will have the group SID in her profile. Windows
+ 
+will scan the ACEs and the first one (students, no access) will mean deny all so any operation to
+ 
+create a file will fail.
+ 
+ 
+Boaz:
+ 
+Same as Aya
+ 
+ 
+Gadi:
+ 
+Gadi belongs to the Staff group, and therefore will receive the change permission since it is the
+ 
+first ACE that matches Gadi. According to that permission, Gabi should be able to write files to
+ 
+the directory
+ 
+ 
+So the right answer is (3)
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+Answer:
+ 
+ 
+Another way to create a blind signature is as following:
+ 
+1.
+Client hashes the message, and sends the hash to the server
+ 
+2.
+Server signs the hash
+ 
+3.
+Client sends the message, together with the signed hash
+ 
+ 
+In this way, the server did not have any exposure to the message itself, and yet the message is
+ 
+signed by the server.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+Answer:
+ 
+ 
+Scenario #1
+ 
+ 
+1.
+ 
+ 
+I would say the answer for ACL is no.
+ 
+While it is possible to create an access list that reflects those permissions, those lists will have
+ 
+to be maintained all the time. If someone new joins the company or someone changes a group
+ 
+(like to the office mate of Ken or to other departments from being his office mate) the
+ 
+permissions will need to be updated manually.
+ 
+ 
+2.
+ 
+ 
+ 
+No, C-list contains only approved access. There is no way to deny a specific group access while
+ 
+permitting everyone in c-list. The only option is to maintain the specific individuals access on the
+ 
+list.
+ 
+3.
+ 
+ 
+ 
+Yes. I will show how.
+ 
+Let’s assume Ken and his mates share the group “OFFICE”.
+ 
+Ken will execute the following chmod on the directory of his files:
+ 
+ 
+Chown -r ken:office [DIR]
+ 
+Chmod -r 704 [DIR]
+ 
+ 
+This will cause all the file to be in the group of the users office and that the users will not have
+ 
+permission to read it while all the others does have that permission.
+ 
+This will only work if the only group the office mates of ken belongs to is “office” otherwise they
+ 
+can use the command newgrp to elevate their permissions.
+ 
+ 
+4.
+ 
+Yes, in Windows all Ken needs to do is add the ACE to the DACL in the SD of the files that
+ 
+points to the “Office” group, and add deny on read.
+ 
+Since he is the owner he should still have access.
+ 
+ 
+Scenario #2
+ 
+ 
+1.
+ 
+Yes, Mitch and Steave should be defined to be defined to have RW access inside those files
+ 
+ACL while all the rest of the system users should have no access
+ 
+ 
+2.
+ 
+Yes, Mitch and Steave should have the capabilities of RW on those secret files, while all the rest
+ 
+of the users should have no access.
+ 
+ 
+3.
+ 
+Yes, Mitch and Steave can be in a shared group and the files could be defined as 770 giving
+ 
+only them full access while all the rest should not have any access. They can even switch to
+ 
+that group using the newgrp command each time they want access.
+ 
+ 
+4.
+ 
+Yes, The DACL for those files should contain ACE for each of Mitch and Steave giving them
+ 
+access.
+ 
+ 
+ 
+ 
+Scenario #3
+ 
+ 
+ 
+1.
+ 
+ 
+Not easy, like scenario #1 it requires specifying the specific access to all users in the system
+ 
+and requires maintenance.
+ 
+ 
+2.
+ 
+Same as #1
+ 
+ 
+3.
+ 
+Yes, same example as the office mates.
+ 
+ 
+4.
+ 
+Yes, same example as the office mates.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+1.
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+2.
+ 
+ 
+R-system:
+ 
+We will start by revoking the permission from B:
+ 
+ 
+ 
+ 
+Now based on the permissions B has, the permissions granted from him to C and D has to be
+ 
+revoked as well
+ 
+ 
+ 
+Now as we can see C only had R,D on time 40 and therefore the I permission that was granted
+ 
+to D was to be revoked as well. The final result is:
+ 
+ 
+ 
+ 
+SQL:
+ 
+ 
+In SQL we will cascade the revocation of the permissions, unless an incoming grant still exists in
+ 
+the graph regardless of the time.
+ 
+In this case all the steps until the one before the last are the same:
+ 
+ 
+ 
+ 
+Now, we can see that C does have R,I,D but has grant only on R,D and therefore again I need
+ 
+to be revoked. The result is then the same:
+ 
+ 
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+Answer:
+ 
+ 
+1.
+ 
+If both Yosi and Ruth are on the same group, Yosi can grant R access to everyone but make
+ 
+sure that the group members do not have access.
+ 
+This is done by the following command:
+ 
+Chmod 704 [FILE]
+ 
+ 
+* we will note that this will only work if Ruth has only one group membership otherwise she will
+ 
+be able to use the newgrp command to change the group assignment in runtime and to gain
+ 
+read access to the file.
+ 
+ 
+2.
+ 
+No, this is impossible in linux. Yosi will need to be with Ruth and Ilana on the same group and
+ 
+then make the changes so the file will be in this group as well, and execute the command I
+ 
+showed on #1.
+ 
+ 
+3.
+ 
+Yes, In Windows you have the ability to add ACE to the file DACL.
+ 
+All Yossi needs to do is add an ACE that denies Ilana access.
+ 
+ 
+4.
+ 
+ 
+Unix/Linux:
+ 
+Depends on how the program has been developed. I believe each access to “popen” will check
+ 
+the permissions, but as long as the handle to the file is already open, the permission is not
+ 
+checked again.
+ 
+ 
+Windows:
+ 
+ 
+No, due to the complexity of the DACL, the permission check result is cached by the Kernel.
+ 
+ 
+Capabilities:
+ 
+Most c-list systems will use the c-list as tokens for access. Once a user has those capabilities it
+ 
+is hard to revoke those tokens on runtime
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+ 
+I will show how a clever attacker can break this protocol:
+ 
+1.
+Attacker performs a MitM attack and masquerade as the bank
+ 
+2.
+User sends ID to the attacker
+ 
+3.
+Attacker sends ID to the bank
+ 
+4.
+Bank sends R to the attacker
+ 
+5.
+Attacker sends R to the User
+ 
+6.
+User sends back E(R,K_C) to the attacker
+ 
+7.
+Attacker simulate a state in which the verification failed and sends R+1 to the user
+ 
+8.
+User sends back E(R+1,K_C) to the attacker
+ 
+9.
+Attacker sends E(R_K_C) to the bank
+ 
+10.
+Bank approves the connection
+ 
+11.
+Since the attacker has E(R+1, K_C) and this is the key for the communication, the
+ 
+attacker can now send the bank his own commands
+ 
+ 
+B.
+ 
+ 
+A way to ensure the message integrity is using signature on the message.
+ 
+1.
+Each message will be hashed using a secure hashing algorithm.
+ 
+2.
+If PKI exists and both bank and user has private/public keys they can use their private
+ 
+key to sign the hash
+ 
+3.
+If not, another key should be shared, and used for the verification of the message (i.e.
+ 
+E(hash, K_HASH) will be sent with each message
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+Answer:
+ 
+ 
+1.
+ 
+ 
+A certificate will usually have:
+ 
+1.
+The name (e.g. DNS name) of the subject of the certificate
+ 
+2.
+Some details like the company, OU, country…
+ 
+3.
+Issue date
+ 
+4.
+Expiry date
+ 
+5.
+The public key
+ 
+6.
+A signature over the certificate signed by the CA
+ 
+7.
+The chain of trust
+ 
+a.
+For each intermintate CA the certificate of that CA (signed by the next CA)
+ 
+ 
+For verification usually:
+ 
+1.
+The certificate name is matched to the expected name (I.E. the domain the user visited)
+ 
+2.
+The expiry date is checked to make sure the certificate is valid
+ 
+3.
+The root signing authority is verified against the local repository and the entire chain of
+ 
+certificates is verified
+ 
+4.
+If possible, the online revocation list is checked to make sure the certificate is valid
+ 
+ 
+2.
+ 
+ 
+If I understand this correctly, Microsoft will want the existing certificates issued by Verisign to be
+ 
+valid, but not allow any new certificates to be issued.
+ 
+ 
+In this case the easiest way is probably to set a restriction on the issue date in the local Trusted
+ 
+CA registry so that all certificates issued after that date will be invalid.
+ 
+ 
+However, the downside of this approach is that it enables Verisign to still issue new certificates
+ 
+if they spoof the issue date.
+ 
+ 
+The normal procedure in the industry is to set a time period in which certificates from the vendor
+ 
+(Verisign) will be still valid, but after that period all certificates become invalid.
+ 
+This is done to allow existing customers to issue new certificates.
+ 
+ 
+3.
+ 
+ 
+I will explain how two SSL servers can act as VPN gateways (Site to Site):
+ 
+a.
+Both needs to be defined as a local gateway (each should be assigned a specific subnet
+ 
+mask and routing table should be updated accordingly)
+ 
+b.
+Both should support IPV4 routing option
+ 
+c.
+A vpn packet will contain all the headers starting with the IP layers and above encrypted
+ 
+as normal SSL packet
+ 
+d.
+Each gateway upon receiving the packet, decrypt it, and forwards it inside the network to
+ 
+the designated target
+ 
+e.
+The result is a VPN network between the two peers.
+ 
+ 
+There is also the option to (User to Site) using an SSL VPN. This is done almost the same
+ 
+except one of the peers (the user’s) is configured as local only and does not forward or receive
+ 
+remote traffic.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+Answer:
+ 
+1.
+In Unix this is possible if both Yossi and Dani are in the same group. For example using
+ 
+the permissions mask 770 they can make sure only the owner and the group members
+ 
+has (full in this case) access to the file, while nobody else have access
+ 
+In Windows this is even easier. All they need to make sure is that the ACE allowing
+ 
+access for each one of them is added to the DACL of the file. If no other ACE records
+ 
+exists Windows should forbid anybody else access (as long as Dani/Yossi are the
+ 
+owners of the file)
+ 
+2.
+In Unix, Yes, this is possible. Dani needs to add himself and Ruth to another group, use
+ 
+the newgrp command to enter this group in runtime and then chmod 770 on that file to
+ 
+give him and this specific group access to the file. If there is however only one group per
+ 
+user this is impossible in Unix!
+ 
+In Windows, again this is very easy with defining just the right ACE entries for both Yossi
+ 
+and Ruth on this new file
+ 
+3.
+Below
+ 
+a.
+To implement this in Unix I will
+ 
+i.
+Make sure that Yossi is the owner of the folder
+ 
+ii.
+Make sure that Yossi and Dani, belongs to the same group
+ 
+iii.
+Make the permission mask on the folder: 340. This will give Yossi write
+ 
+and execute of the folder, and give Dani read only (which permits just
+ 
+getting the file names)
+ 
+b.
+I would implement this as following:
+ 
+i.
+I would encode the data as BASE64 (each byte is 2 chars)
+ 
+ii.
+I will transmit the data as the file names (Yossi will split the data into
+ 
+chunks of 250 chars, and for each chunk create an empty file in which the
+ 
+filename represents the data)
+ 
+iii.
+I will use the first 5 chars to represent the HEX representation of the
+ 
+chunk number (giving me a total of 80 chunks = 10,000 bytes of data)
+ 
+iv.
+If more data is needed I can change the ratio between chunk index - data
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+Answer:
+ 
+ 
+1.
+ 
+a.
+We assume there is an agreed q and a for the protocol between the parties
+ 
+b.
+Step 1: A selects X_A, calculate Y_A= a^X_A and sends in to B
+ 
+c.
+Step 2: B selects X_B, calculate Y_B=a^X_B and sends it to A
+ 
+d.
+Step 3: A selects a random i and sends it to B
+ 
+e.
+Step 4: B selects a random j and sends it to A
+ 
+f.
+A will calculate (Y_B * (a^j)) ^ (X_A + i)
+ 
+g.
+B will calculate (Y_A * (a^i)) ^ (X_B + j)
+ 
+ 
+2.
+ 
+ 
+There is no effect in this changes in term of the MitM attack, I will show why:
+ 
+ 
+ 
+A
+ 
+Attacker
+ 
+B
+ 
+Y_A ->
+ 
+ 
+ 
+ 
+Y_A’ ->
+ 
+ 
+ 
+ 
+<- Y_B
+ 
+ 
+<- Y_B’
+ 
+ 
+i ->
+ 
+ 
+ 
+ 
+i’ ->
+ 
+ 
+ 
+ 
+<- j
+ 
+ 
+<- j’
+ 
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+If we allow user to create FK constraints having only the SELECT permission the following
+ 
+scenario may happen:
+ 
+ 
+1.
+Let’s assume user A wants to give B permission to SELECT data from his table TAB. A
+ 
+grants SELECT on TAB to B
+ 
+2.
+B creates a new table and adds FK constraint to the table TAB
+ 
+3.
+When user A attempts to delete records from TAB he is blocked with FK constraint
+ 
+violation errors, meaning that his ability to control the data on the table TAB was
+ 
+changed by B
+ 
+ 
+B.
+ 
+ 
+A private tracker is a set of questions that while each one does not track down information on an
+ 
+individual, together they can leak information about him.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+ 
+I would implement this in the Kernel of the OS (let’s assume Linux for example).
+ 
+1.
+Each object can be assigned to a dataset (DS). for example this can be done by adding
+ 
+an additional protected file with the dataset of each file (path or inode)
+ 
+2.
+An additional file will contain the CI list. Each entry in the file will contain a list of DS
+ 
+names in which they are in conflict
+ 
+3.
+Rule #1 (Basic security role)
+ 
+a.
+On runtime each user session is assigned with a list of DS (which starts empty)
+ 
+b.
+Access to read a file is granted if
+ 
+i.
+The file belongs to a DS already in the user session
+ 
+ii.
+The file belongs to a DS which is not in the user session, but does not
+ 
+belong to any CI with the existing DS list of the user session
+ 
+iii.
+When access is granted the DS of the file is added to the user session if
+ 
+not already there
+ 
+4.
+Role #2 (*-property)
+ 
+a.
+When a user requests to write a file, it is granted if
+ 
+i.
+User can read the file according to the basic role
+ 
+ii.
+The User has access to read only from within one DS
+ 
+ 
+B.
+ 
+ 
+On scenario #1, the user of the system is responsible for sending his certificate to other users
+ 
+whom he wishes to communicate securely with.
+ 
+The main risk with this approach is the theft of a certificate, which will grant the attacker the
+ 
+option to use that certificate in the name of the legitimate user.
+ 
+To overcome this risk (without CRL) the validity period of the certificates needs to be kept to
+ 
+minimum which will require the legitimate user to re-generate a new certificate on a frequent
+ 
+interval.
+ 
+ 
+On scenario #2, the public certificates are managed by a central repository. Any user/system
+ 
+which wishes to validate the authenticity of the party trying to communicate with them can check
+ 
+that repository.
+ 
+In this scenario if a certificate is reported stolen, the legitimate user can easily get the certificate
+ 
+replaced with a new one and all the other parties will not access the old certificate (since the
+ 
+cross reference with the central repository will fail).
+ 
+The downsides with this approach is that it requires direct communication from all parties to that
+ 
+central repository, the certificate validation is less efficient (since it requires network work) and it
+ 
+the central repository is down the entire company network will be down as well.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+Answer:
+ 
+ 
+In CBC the decryption of each block is dependent on C_N, C_N-1 and K
+ 
+Assuming one block was lost or corrupted, this will mean that two blocks of the original message
+ 
+will be unrecoverable but all the rest can be recovered.
+ 
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+Answer:
+ 
+ 
+The rest of the RSA algorithm should remain the same. The selection of e and d and encryption
+ 
+and decryption are the same.
+ 
+ 
+The improvement here is that in order to break the encryption the attacker will need to factorize
+ 
+n into 3 prime numbers which should be much more complicated than 2 numbers.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+ 
+Answer:
+ 
+ 
+Fingerprinting - if the systems handle this case differently an attacker may be able to detect the
+ 
+type of the system (firewall, OS,...) by sending this mix and by analyzing the result
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+A.
+ 
+ 
+Allow all except TCP:
+ 
+Rule
+ 
+In/Out
+ 
+Protocol
+ 
+SRC
+ 
+add
+ 
+DST
+ 
+add
+ 
+SRC
+ 
+port
+ 
+DST
+ 
+port
+ 
+flag
+ 
+action
+ 
+BLOCK
+_Telnet
+_1
+ 
+out
+ 
+TCP
+ 
+*
+ 
+*
+ 
+*
+ 
+23
+ 
+any
+ 
+DENY
+ 
+BLOCK
+_Telnet
+_2
+ 
+in
+ 
+TCP
+ 
+*
+ 
+*
+ 
+23
+ 
+*
+ 
+ant
+ 
+DENY
+ 
+ALL-out
+ 
+out
+ 
+TCP
+ 
+*
+ 
+*
+ 
+*
+ 
+*
+ 
+syn
+ 
+ALLOW
+ 
+ALL-in
+ 
+in
+ 
+TCP
+ 
+*
+ 
+*
+ 
+*
+ 
+*
+ 
+ack
+ 
+ALLOW
+ 
+ALL_ud
+p
+ 
+out
+ 
+UDP
+ 
+*
+ 
+*
+ 
+*
+ 
+*
+ 
+ 
+ALLOW
+ 
+ 
+ 
+Allow all TCP communication from the organization out:
+ 
+ 
+ 
+Rule
+ 
+In/Out
+ 
+Protocol
+ 
+SRC
+ 
+add
+ 
+DST
+ 
+add
+ 
+SRC
+ 
+port
+ 
+DST
+ 
+port
+ 
+flag
+ 
+action
+ 
+ALL-out
+ 
+out
+ 
+TCP
+ 
+*
+ 
+*
+ 
+*
+ 
+*
+ 
+syn
+ 
+ALLOW
+ 
+ALL-in
+ 
+in
+ 
+TCP
+ 
+ 
+*
+ 
+*
+ 
+*
+ 
+*
+ 
+ack
+ 
+ALLOW
+ 
+ 
+ 
+Allow SMTP in:
+ 
+ 
+ 
+Rule
+ 
+In/Out
+ 
+Protocol
+ 
+SRC
+ 
+add
+ 
+DST
+ 
+add
+ 
+SRC
+ 
+port
+ 
+DST
+ 
+port
+ 
+flag
+ 
+action
+ 
+SMTP_i
+n
+ 
+in
+ 
+TCP
+ 
+*
+ 
+SMTP_
+SRV
+ 
+*
+ 
+25
+ 
+syn
+ 
+ALLOW
+ 
+SMTP_
+out
+ 
+in
+ 
+TCP
+ 
+ 
+SMTP_
+SRV
+ 
+*
+ 
+25
+ 
+*
+ 
+ack
+ 
+ALLOW
+ 
+ 
+ 
+Allow HTTP and HTTPS in:
+ 
+Rule
+ 
+In/Out
+ 
+Protocol
+ 
+SRC
+ 
+add
+ 
+DST
+ 
+add
+ 
+SRC
+ 
+port
+ 
+DST
+ 
+port
+ 
+flag
+ 
+action
+ 
+HTTP_i
+n
+ 
+in
+ 
+TCP
+ 
+*
+ 
+WEB_S
+RV
+ 
+*
+ 
+80
+ 
+syn
+ 
+ALLOW
+ 
+HTTP_o
+ut
+ 
+in
+ 
+TCP
+ 
+ 
+WEB_S
+RV
+ 
+*
+ 
+80
+ 
+*
+ 
+ack
+ 
+ALLOW
+ 
+HTTPS
+_in
+ 
+in
+ 
+TCP
+ 
+*
+ 
+WEB_S
+RV
+ 
+*
+ 
+443
+ 
+syn
+ 
+ALLOW
+ 
+HTTPS
+_out
+ 
+in
+ 
+TCP
+ 
+ 
+WEB_S
+RV
+ 
+*
+ 
+443
+ 
+*
+ 
+ack
+ 
+ALLOW
+ 
+ 
+ 
+Allow SSH in:
+ 
+ 
+ 
+Rule
+ 
+In/Out
+ 
+Protocol
+ 
+SRC
+ 
+add
+ 
+DST
+ 
+add
+ 
+SRC
+ 
+port
+ 
+DST
+ 
+port
+ 
+flag
+ 
+action
+ 
+SSH_in
+ 
+in
+ 
+TCP
+ 
+*
+ 
+SSH_S
+RV
+ 
+*
+ 
+22
+ 
+syn
+ 
+ALLOW
+ 
+SSH_ou
+t
+ 
+in
+ 
+TCP
+ 
+ 
+SSH_S
+RV
+ 
+*
+ 
+22
+ 
+*
+ 
+ack
+ 
+ALLOW
+ 
+ 
+B.
+ 
+ 
+No, the details about the message itself is in the application layer of the packet.
+ 
+Both stateless and stateful PF will not be able to perform this.
+ 
+Only stateful inspection PF is able to analyze the data within the packet (this is also called DPI).
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+Answers:
+ 
+ 
+Sticky bit
+ 
+In Unix systems if a user is given permission to modify a folder he is able to add and delete files
+ 
+from that folder.
+ 
+That creates a challenge if you want to enable users adding files to a folder, but not deleting
+ 
+other users files.
+ 
+For that end, a sticky bit was added allowing users only to delete the files which they own
+ 
+(owner of the folder is not affected)
+ 
+ 
+Permission elevation in Windows
+ 
+ 
+In windows a mechanism called UAC was introduced to enable users to run on a low security
+ 
+level even if the user has higher security rights.
+ 
+The user, when performing an administrative action can elevate their permission temporarily
+ 
+using the UAC mechanism.
+ 
+ 
+Permission elevation in Unix/Linux
+ 
+In Unix/Linux SUID, SGUID are used to allow users to run processes which requires elevated
+ 
+permissions.
+ 
+The process once executed, will run under the owner privileges.
+ 
+ 
+RM (Reference Moinitor)
+ 
+Reference monitor is the component which bridges between the subjects and objects. It is
+ 
+responsible to check permissions and grant or deny access and also to invoke the auditing
+ 
+system to audit the operation.
+ 
+ 
+TOCTOU
+ 
+Time of check, Time of use.
+ 
+The concept of when the permission is checked and when the operation is performed.
+ 
+Some attacks utilize the difference between the two to perform an operation they are not
+ 
+supposed to be allowed to do.
+ 
+This is also called a critical section issue, because the mechanism that is responsible for the
+ 
+check is granting the access but then something changes before it can re-evaluate and the
+ 
+attacker performs the action.
+ 
+ 
+Least Privileged
+ 
+The concept dictates that each participant in a system will be granted the minimal permissions
+ 
+required for that participant to perform his duties but nothing more.
+ 
+In linux systems there are a few limitations to make following this very challenging:
+ 
+1.
+The root user is granted access for everything. For example this contradicts this because
+ 
+the root user should administrator the system but not have access to sensitive user data
+ 
+2.
+The file permissions in linux are configured as [user] [group] [other] making it very
+ 
+inflexible fine tuning the permissions to reach a state of least privilege.
+ 
+3.
+Most linux OS services runs under root privileges granting them full control of the system
+ 
+4.
+The linux Kernel is one monolite therefore all the code in the Kernel has full access to
+ 
+everything
+ 
+ 
+ 
+Capability
+ 
+A capability is like a permission only represented as a “token to do something”. Unlike in ACL, a
+ 
+capability can be easily delegated to someone else.
+ 
+ 
+Capability List Adv. over ACL
+ 
+When using Cap list there are a few benefits:
+ 
+1.
+Checking the permissions is easy, so the permission can be checked every time it is
+ 
+required
+ 
+2.
+Delegating permissions is easy
+ 
+ 
+3.
+Delegating just a subset of the permissions is also easy
+ 
+ 
+High Water Mark
+ 
+High water mark is a concept best suited for runtime validation. The access level is determined
+ 
+as the maximum level of all the data accessed during the specific session.
+ 
+Since OS needs to read and write to both critical files, and low risk files, if we implement the
+ 
+concept of high-water  mark in compilation time for the OS, all the files will be deemed critical
+ 
+making this unusable.
+ 
+ 
+TCB
+ 
+TCP is the collection of all the mechanisms in the operating system that enforces the security of
+ 
+the system.
+ 
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+1.
+IDS without false negatives is possible but most likely will contain many false positives.
+ 
+For example in theory we can have the IDS spot everything as an attack so no real
+ 
+attack will be missed
+ 
+2.
+IDS based on anomaly is more suitable for detecting new kinds of attacks
+ 
+3.
+Network based IDS is easier to maintain because usually it will be centralized. In
+ 
+host-based IDS each host (machine) in the system will need to be configured and
+ 
+monitored.
+ 
+4.
+An IDS can detect the signature of known attack packets if using a signature based
+ 
+approach. To overcome this an attacker can pad the packets with random information, or
+ 
+change the packet layout in a way that will not influence the application handling of that
+ 
+packet, but will fool the IDS
+ 
+5.
+No, since DDOS can originate from multiple (if not billions) of IP addresses, blocking the
+ 
+most significant IP sources in terms of traffic will most likely be ineffective protecting
+ 
+against this kind of attack.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+Answer:
+ 
+ 
+1.
+It is true that as there are more vulnerable computers it will ease the infection rate of the
+ 
+worm but the startup is still going to be slow. Hitlist usually increases it dramatically, so it
+ 
+may be possible that a worm with hitlist will reach the 100,000 infected machines much
+ 
+faster than a word with more widespread vulnerability but with random scanning.
+ 
+2.
+Not true, worms can use other vulnerabilities. For example the Mirai botnet infected
+ 
+machines via default credentials
+ 
+3.
+Infection rate is one of the most important things for a worm, but also how stealth it is,
+ 
+the worm abilities, and how easy it is to eradicate it once it is detected
+ 
+4.
+On the large scheme of things, this may be true, as Viruses requires manual actions, it
+ 
+may not infect “all the internet”, but for a specific machine Virus can be more destructive
+ 
+than a worm depends what they do
+ 
+5.
+Virus can infect via scanning IP addresses but may also have a pre-defined hitlist to
+ 
+infect
+ 
+6.
+Not ture. Trojan horse is a malware masquerading as a legitimate program, usually
+ 
+providing the intended functionality but has a malicious covert activity. Backdoor is a
+ 
+vulnerability left open by the program/system creator. Both has no relation to fishing
+ 
+attacks.
+ 
+7.
+Captcha helps to prevent bots interacting with systems. It can help prevent online brute
+ 
+force attacks for example. It is not related to viruses and It will not usually prevent worms
+ 
+as those usually will infect systems using a vulnerability.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+Answer:
+ 
+ 
+Tor is a decentralized network consisting of a collection of servers called "Nodes". The user
+ 
+data will flow from an entry node, a minimum of one middle node (or more) and finally an exit
+ 
+node. As the route selected randomly on a diverse network, tracking a specific user becomes
+ 
+almost impossible. Tor protects the identity and location of the user, the traffic destination and
+ 
+the traffic itself.
+ 
+Tor highly depends on encryption as the bases for the anonymity it provides. Encryption is
+ 
+utilized at every layer.While the data traverse from each node to the next, a layer of encryption
+ 
+is decrypted and removed. Each node can decrypt only one layer of defense and not the full
+ 
+stack of layers, protecting the core message. It is up to the exit node to peel the last layer of
+ 
+encryption and to hand the core message to the destination. Tor can provide service to clients
+ 
+using the Tor browser, a project based on Mozilla firefox codebase or by other means or
+ 
+software components. Tor also provides services to host web services via hidden addresses
+ 
+called onion addresses, many of them associated with the DarkWeb.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+Answer:
+ 
+ 
+In two-factor authentication we try to utilize two means to identify a user. An example is
+ 
+identifying a user by a password (something he knows) and by an SMS sent to his phone
+ 
+(something he has).
+ 
+ 
+This does add another layer of security, and the main reason is that if one of the authentication
+ 
+mechanisms is compromised (for example the user password is intercepted or stolen) it still
+ 
+cannot be used to gain access without the other authentication mechanism.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+Answer:
+ 
+A.
+ 
+ 
+1.
+ 
+Not secure.
+ 
+A mail is usually not encrypted, any passive attacker with capability to sniff one of the sides of
+ 
+the communication can intercept it and get the keys.
+ 
+However if only public keys are exchanged the only problem is the ability of an attacker to
+ 
+actively spoof one of the sides and providing his own key instead.
+ 
+ 
+2.
+ 
+I would assume here that this is a symmetric key exchange.
+ 
+Partially secure.
+ 
+This cannot be compromised by a passive attacker.
+ 
+However an active attacker may be able to replace the mails on one of the sides, and therefore
+ 
+establish himself as a man in the middle (as we have seen in DH).
+ 
+ 
+ 
+3.
+ 
+In this case this is fully secure.
+ 
+The attacker should have access to the public keys, but that will not give them any ability to
+ 
+intercept or spoof the encrypted communication.
+ 
+ 
+ 
+B.
+ 
+If Alice and Bob want to have non-repudiation in their communication they should make sure
+ 
+each message is digitally signed by each party. For example using a signature over a secure
+ 
+hash for each message that is being sent.
+ 
+ 
+This proves that each correspondence originated from them (as long as their private key is
+ 
+secured).
+ 
+ 
+In this example each one should send the other party the signed contract with their signature
+ 
+over the contract hash.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+Answer:
+ 
+ 
+1.
+ 
+A file of the required type should start with the following sequence of bytes:
+ 
+a.
+The first byte should have the value FF
+ 
+b.
+The second byte should have the value D8
+ 
+c.
+An additional 4 bytes of arbitrary data
+ 
+d.
+5 bytes with the value ‘JFIF’ and finally a null(0) termination byte
+ 
+ 
+2.
+ 
+The code suffers from stack buffer overflow vulnerability.
+ 
+If the file that is examined contains the first 2 bytes as expected but starting with the 6th byte a
+ 
+long char sequence without any null termination, the strcpy command will overflow the buffer
+ 
+“buff” causing a stack buffer overflow.
+ 
+ 
+3.
+ 
+Continuing from #2 a file containing those 2 bytes with a long byte sequence starting at byte 6
+ 
+with no null termination would perform a stack smashing attack and will overwrite the return
+ 
+address. This will crash the system.
+ 
+ 
+4.
+ 
+Means to protect against it:
+ 
+1.
+This code does not need to perform the strcpy, instead the strcmp can use [p+6] directly.
+ 
+We will note that this will expose a new information disclosure vulnerability.
+ 
+2.
+Instead of strcpy the developer can choose to use strncpy with 5 as parameter.
+ 
+3.
+A more generic means can be used to mitigate this but will not prevent the vulnerability
+ 
+completely:
+ 
+a.
+Using stack canaries on compile-time may cause the system to detect and crash
+ 
+the process. This will not prevent the crashing but will prevent the remote code
+ 
+execution (or at least making it harder)
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+
+ 
+Answer:
+ 
+ 
+A.
+ 
+To determine if SALT was used I will cross reference the hashes with a big rainbow table of
+ 
+common passwords. If the passwords are salted most chances are I will not find any matches.
+ 
+ 
+B.
+ 
+Yes, if the password is not SALTed we can try to match it with a rainbow table. If the boss used
+ 
+a short password or a common password most chances it will be found in a pre-processed
+ 
+rainbow table. Also, if the password was not salted a simple bruteforce may do the trick
+ 
+depending on the entropy of the password.
+ 
+ 
+C.
+ 
+Yes, if the passwords are not salted we can perform the following:
+ 
+1.
+Calculate (or download) a pre-caclulated hash table of all common passwords or
+ 
+passwords up to the maximum number of characters the site permits or at least up to the
+ 
+length we expect 50% of the users to remember
+ 
+2.
+Match the passwords
+ 
+ 
+D.
+ 
+Yes, this is called credentials stuffing attack.
+ 
+If the passwords from LinkedIn are not salted an attacker may be able to recover the original
+ 
+passwords if plaintext (using the method we described above) and use them to login to other
+ 
+sites.
+ 
+In this case Yahoo should check their accounts owners against the leaked database (usually the
+ 
+usernames are emails) and automatically notify those accounts to change their passwords.
+ 
+There are some services that provide a notification of a leak like “have i been pwned” and
+ 
+“firefox monitor”
+ 
+ 
+E.
+ 
+To enhance the security Linked In can:
+ 
+1.
+Use a very large SALT
+ 
+2.
+Use an hashing algorithm with larger entropy (for example SHA512 instead of MD5)
+ 
+3.
+Perform more rounds of hashing (for example performing 100 rounds of hashing). This
+ 
+makes the computation of calculating a single hash significantly more expensive so
+ 
+computing a full rainbow table improbable.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+Confidentiality:
+ 
+Since the key is retrievable only for those who have the private key of Aya and Bob, it is secure
+ 
+and cannot be intercepted even if someone got the message in the way.
+ 
+The OTP over the key ensures full secrecy
+ 
+ 
+Integrity:
+ 
+There is no way that Bob can establish that the message was sent from Aya. In fact anyone can
+ 
+spoof and send Bob a message as if they were Aya.
+ 
+ 
+Repudiation:
+ 
+Since Aya is the only one that can encrypt the first part, it is in fact proof that Aya sent it,
+ 
+however, without disclosing her private key Aya cannot prove that that is the value that was
+ 
+stored inside, so she can claim she wasn’t the one that sent the message.
+ 
+ 
+B.
+ 
+ 
+Same as A.
+ 
+ 
+C.
+ 
+ 
+Since the message was encrypted with the private key of Aya no one except Aya can read it(not
+ 
+Bob), so this method is useless.
+ 
+ 
+D.
+ 
+ 
+Confidentiality:
+ 
+ 
+Since the message was encrypted with the public key of Bob, only Bob can open it with his
+ 
+private key (assuming the message is long enough so it is sufficient entropy to prevent
+ 
+bruteforce)
+ 
+ 
+Integrity:
+ 
+Since there was no hashing there is a method for attacker to spoof a message and signature
+ 
+pair, so the message can be replaced by someone else
+ 
+ 
+Repudiation:
+ 
+No protection, someone can spoof the message.
+ 
+ 
+E.
+ 
+ 
+Confidentiality:
+ 
+ 
+Since the message was encrypted with the public key of Bob, only Bob can open it with his
+ 
+private key (assuming the message is long enough so it is sufficient entropy to prevent
+ 
+bruteforce)
+ 
+ 
+Integrity:
+ 
+Since only the hash is sent unencrypted anyone can send a message to Bob and Bob wouldn’t
+ 
+know if the message really originated from Aya. As a result someone can intercept the message
+ 
+on the way and change it.
+ 
+ 
+Repudiation:
+ 
+No protection, anyone can send the message
+ 
+ 
+ 
+F.
+ 
+ 
+Confidentiality:
+ 
+ 
+Since the message was encrypted with the public key of Bob, only Bob can open it with his
+ 
+private key (assuming the message is long enough so it is sufficient entropy to prevent
+ 
+bruteforce)
+ 
+ 
+Integrity:
+ 
+Since the message hash is signed using Aya’s private key, it protects from someone else
+ 
+changing the message, sending a message in the name of Aya, and it provides repudiation
+ 
+protection as well.
+ 
+ 
+Repudiation:
+ 
+Fully secure, only Aya can send a message like that
+ 
+ 
+G.
+ 
+ 
+Confidentiality:
+ 
+The use of one key over time, can expose the key to the attacker allowing that attacker to spoof
+ 
+messages.
+ 
+ 
+Once the key is exposed the attacker can spoof messages, or decode the message content
+ 
+ 
+Integrity:
+ 
+Same as above
+ 
+ 
+Repudiation:
+ 
+No protection, Bob can send himself the message saying Aya sent it
+ 
+ 
+H.
+ 
+ 
+Confidentiality:
+ 
+Since the key is encrypted with the public key of Aya and Bob, only Aya and Bob can decrypt it.
+ 
+Using AES here is sufficient and since the key was used only once we can assume the
+ 
+message is secure against disclosure.
+ 
+ 
+Integrity:
+ 
+In a first look since the signature is on the key no one else can spoof it, but because it is on the
+ 
+key itself someone can spoof a pair that matches the signature, and therefore generating his
+ 
+own key. And spoofing the communication.
+ 
+ 
+Repudiation:
+ 
+Since the spoofing is possible, there is no reputation protection. Also the signature is only in the
+ 
+random key and not on the message, so someone can change the message on the way (even if
+ 
+it is not readable) so Aya can claim she did not send it.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+Captcha protects against bots interacting with the system by trying to perform a turing test (A
+ 
+test that only humans are able to successfully perform). Usually those tests involve sight
+ 
+challenges.
+ 
+Over the years attackers established ways to overcome it such as using machine learning to
+ 
+perform advanced machine sight tasks and successfully answer the challenges.
+ 
+This caused the developers of the systems to enhance and make the challenges more complex
+ 
+making them difficult even for humans, which in turn can be a significant usability issue.
+ 
+Since the use of a complex Captcha is difficult for the user, it is most common 
+​
+not
+​
+ to use
+ 
+Captcha for every login, but instead, use it when the behavioral analysis of the user indicates a
+ 
+risk of a bot being the end user.
+ 
+ 
+B.
+ 
+ 
+Using IDS as an additional layer of secure on top of using a firewall is recommended.
+ 
+The reason being that a firewall usually only analyzes common information on the lower layers
+ 
+of the network, while an IDS can analyze much more detailed information, signatures of
+ 
+application layer packets, and even employ anomaly detection algorithms.
+ 
+Another reason IDS is useful is that we may allow a higher rate of false positives when using
+ 
+IDS, while in Firewall and IPS systems such false positives may harm the system.
+ 
+Nowadays firewalls may have IDS and IPS functionality already built in.
+ 
+ 
+Utilizing both signature and anomaly based detections in IDS is beneficial. The first will detect
+ 
+known vulnerabilities and may have lower rate of false positives but higher rate of false
+ 
+negatives (especially when it comes to 0-days).
+ 
+The behavioral IDS will detect 0-days more efficiently but will have more false positives then the
+ 
+signature based and requires more configuration and fine-tuning.
+ 
+ 
+C.
+ 
+ 
+1.
+Not true. Even without BO worms will still exist. Some worms can utilize other
+ 
+vulnerabilities to spread (for example the Mirai Botnet used default passwords)
+ 
+2.
+Not true. Viruses can use other means such as changing the machine instructions in a
+ 
+way the end results does not change to become polyformic (to avoid signature based
+ 
+detection)
+ 
+3.
+True. Some malwares were able to cause physical damage in the past. An example for
+ 
+that is the STAXnet malware that caused significant damages to the Iranian atomic
+ 
+development center.
+ 
+4.
+Yes, to configure such a role the outgoing role should allow “any” flags while the
+ 
+incoming role should allow only if the “ack” flag is on. This however is not bulletproof as
+ 
+attackers will be able to send a packet with the “ack” flag on directly without the internal
+ 
+machines originating the session.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+ 
+Having access to both the encrypted file, the attacker can now start performing offline attacks.
+ 
+He is now not limited by the amount of tries, so bruteforce attack is a possibility.
+ 
+The amount of the tries per second can be increased depending on the access he has to
+ 
+physical machines.
+ 
+For better results he may choose to perform a dictionary based attack.
+ 
+ 
+To make the encryption more complex the system should derive the key from the password by
+ 
+performing a securing hashing algorithm on it.
+ 
+The reason is that passwords tend to have a small entropy due to the requirement to remember
+ 
+them which result in shorter passwords or passwords with known and common words.
+ 
+Hashing it will increase the entropy of the key to the maximum.
+ 
+ 
+B.
+ 
+ 
+Yes, this increases the entropy of the resulting hash. The increase however comes with a price
+ 
+that some hashes will be easier to break (because of low number of rounds) so it is
+ 
+recommended to have a minimal number of rounds. Also the entropy increase in this case is
+ 
+logarithmic to the round parameter bit size, unlike an increase in the salt which will give better
+ 
+results.
+ 
+ 
+C.
+ 
+ 
+A valid user entering an invalid password may need to wait some time before realizing. In fact
+ 
+the only way of such a way to detect it is by waiting too long.
+ 
+An offline attack will now need to perform the same, try to increase the number of hash rounds
+ 
+after failure to detect the password on a lower number of rounds.
+ 
+This is extremely useful since the offline attack program will have to scan the full range of
+ 
+passwords before increasing the amount of rounds, and each increase of number of rounds will
+ 
+cause the algorithm to be much slower.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+ 
+Command take(destination_subject, src_subject, destination_object, permission)
+ 
+If “t” in M[destination_subject, src_subject] and
+ 
+   permission in M[src_subject, destination_object] then
+ 
+enter permission in M[destination_subject, destination_object]
+ 
+Endif
+ 
+End
+ 
+ 
+Command grant(src_subject, destination_subject, destination_object, permission)
+ 
+If “g” in M[src_subject, destination_subject] and
+ 
+Permission in M[src_subject, destination_object] then
+ 
+enter permission in M[destination_subject, destination_object]
+ 
+Endif
+ 
+End
+ 
+ 
+B.
+ 
+1.
+ 
+Matrix:
+ 
+ 
+Subject\Object
+ 
+F1
+ 
+F2
+ 
+F3
+ 
+F4
+ 
+U1
+ 
+RW
+ 
+R
+ 
+R
+ 
+R
+ 
+U2
+ 
+R
+ 
+RW
+ 
+R
+ 
+RW
+ 
+U3
+ 
+R
+ 
+W
+ 
+RW
+ 
+W
+ 
+ 
+2.
+ 
+ACL:
+ 
+F1: U1(RW), U2(R), U3(R)
+ 
+F2: U1(R), U2(RW), U3(W)
+ 
+F3: U1(R), U2(R), U3(RW)
+ 
+F4: U1(R), U2(RW), U3(W)
+ 
+ 
+Capability-list:
+ 
+U1: F1(RW), F2(R), F3(R), F4(R)
+ 
+U2: F1(R), F2(RW), F3(R), F4(RW)
+ 
+U3: F1(R), F2(W), F3(RW), F4(W)
+ 
+ 
+3.
+ 
+ 
+Yes, I will show how:
+ 
+I will assume here that a user has only one group.
+ 
+User U1 belongs to the group U1
+ 
+Users U2 and U3 belongs to the group U2_U3
+ 
+The files permissions are going to be:
+ 
+ 
+File name
+ 
+Owner
+ 
+Group
+ 
+Mask
+ 
+F1
+ 
+U1
+ 
+U1
+ 
+644
+ 
+F2
+ 
+U2
+ 
+U2_U3
+ 
+624
+ 
+F3
+ 
+U3
+ 
+U2_U3
+ 
+644
+ 
+F4
+ 
+U2
+ 
+U2_U3
+ 
+624
+ 
+ 
+4.
+ 
+ 
+F1 - SD:
+ 
+Owner: U1
+ 
+DACL:
+ 
+ACE (user=”U1”, permission=”RW”, operation=”ALLOW”)
+ 
+ACE(user=”U2”, permission=”R”, operation=”ALLOW”)
+ 
+ACE(user=”U3”, permission=”R”, operation=”ALLOW”)
+ 
+ 
+ 
+5.
+ 
+Yes, I will show such a flow:
+ 
+User U3 should not have read access from F4, but I will show how information from that file can
+ 
+flow to him.
+ 
+1.
+User U1 reads the content of F4 and write it to F1
+ 
+2.
+User U3 reads the content of F1
+ 
+ 
+6.
+ 
+ 
+The system does not have a BLP model. As we seen in #5 there is an information leakage and
+ 
+therefore a BLP model cannot be created.
+ 
+ 
+U1 can read write from F1
+ 
+l(u1)=l(f1)
+ 
+U1 can read from F4
+ 
+l(u1)<=l(f4)
+ 
+ 
+U3 can read from F1
+ 
+l(u3)>=l(f1)
+ 
+ 
+U3 can not read from F4
+ 
+l(u3)<l(f4)
+ 
+ 
+And we got:
+ 
+l(f4)>l(u3)<=l(f4)
+ 
+Which is a conflict
+ 
+ 
+7.
+ 
+ 
+Covert channel depends on other mechanisms in which users can communicate with each
+ 
+other, for example by creating and deleting file, manipulating filename, manipulating metadata
+ 
+and more.
+ 
+ 
+Let’s assume that for example all the users can read the metadata of the files (like the size of
+ 
+the file).
+ 
+If a user wants to signal 0 they can just clear the content of a file, and to signal 1 add some text
+ 
+so the length is bigger than 0.
+ 
+The sync interval can be pre-agreed.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+Answer:
+ 
+A.
+ 
+ 
+Question number 1: All males (4 results)
+ 
+Question number 2: All males which are not located in NY (3 results)
+ 
+ 
+The private tracker in this case is the part of Q1 which is not also in the results of Q2
+ 
+ 
+This is the way to get Jones salary
+ 
+ 
+Sum(sex=’M’, sal) - Sum(sex=’M’ and loc!=’NY’, sal)
+ 
+ 
+B.
+ 
+ 
+Jones will see the table as if the salary column is empty (null). A user with C level will see the
+ 
+full table as presented in the question.
+ 
+ 
+If Jones update her salary to 22 and the database supports polyinstantiation,
+ 
+ 
+The record of jones will be cloned, and the new record will show the salary as 22 (but the salary
+ 
+column will now have a U classifier). Since this record now has only U level attributes the
+ 
+classifier for the row will be U as well.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+In multilevel databases polyinstantiation allows creating multiple rows under the same
+ 
+identification, which expose different information to different sensitivity classes. This
+ 
+approach allows minimizing the information flow to lower sensitivity class users.
+ 
+B.
+If a statistical database has query size limitation, a user may be able to workaround that
+ 
+to track individuals using the private tracker concept however this involves executing
+ 
+multiple queries. Limiting the number of queries will limit this ability.
+ 
+C.
+Limiting the query size will limit the ability to execute a query which disclose a specific
+ 
+individual information. Without it someone can create a query which will fetch the
+ 
+information of specific individual (assuming he has some information prehand about that
+ 
+individual)
+ 
+D.
+Let’s assume that SELECT was enough to allow FK constraint. Now let’s assume user A
+ 
+wants to give access to user B to read data from his table. So A grants select to B. B
+ 
+creates a new table with FK to A’s table, thus limiting A’s ability to delete data from the
+ 
+table.
+ 
+E.
+If a query parameters are concatenated and not validated, it can be used for SQL
+ 
+injection. The SQL statement can be altered to bypass security measures, disclose
+ 
+information, change data, delete or destroy data or even be the bases to complete
+ 
+database extraction by the attacker
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+A, B, C -> on questions from above.
+ 
+ 
+D.
+ 
+ 
+I would no the following:
+ 
+1.
+Write down all the vertices that has direct “r” to “G” -> denote as G_START
+ 
+2.
+Erase all edges which are not “g” or “t”
+ 
+3.
+Make any “g” arrow , “t” arrow and reverse the arrow head
+ 
+4.
+Start from any vertex that have “r” arrow pointed at “G” (G_START):
+ 
+a.
+Perform a graph scan marking all the reachable vertices. Those can get access.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+ 
+Char 1 - numerix - 10
+ 
+Char 2-8 - numeric + char + special = 7*(10+26*2+32) = 7*94=658
+ 
+Char 9-12 - numeric + char + special + non-existing = 4*95 = 380
+ 
+ 
+Overall possible values = 10*658*380 = 2,500,400
+ 
+Entropy = log_2(2,500,400)= ~21
+ 
+ 
+ 
+B.
+ 
+ 
+Most user will use a password of 8 characters that will:
+ 
+1.
+Start with one numeric value like requested
+ 
+2.
+Will have 1-2 words (of 6 chars)
+ 
+3.
+Will end with a special character
+ 
+ 
+Based on that the entropy is going to be:
+ 
+log_2(10 * 6*2*26 * 32) = log_2(99,840) = 16.6
+ 
+ 
+C.
+ 
+ 
+To securely save the passwords the server will need to:
+ 
+1.
+Salt the hash using a salt with high entropy
+ 
+2.
+Hash the passwords using a secure hash with high entropy (like SHA512)
+ 
+3.
+Perform a big number of rounds so that the calculation of a single hash will be expensive
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+Answer:
+ 
+A.
+ 
+ 
+1.
+ 
+The server:
+ 
+1.
+Decrypts R1 and R2 using his private key
+ 
+2.
+Validates the value C xor R1
+ 
+3.
+Hashes the password P and validates the value hash(P) xor R1 xor R2
+ 
+ 
+2.
+ 
+ 
+An attacker can perform the following attacks:
+ 
+1.
+Allow the negotiation to happen, but hijack the communication afterwards. To overcome
+ 
+this the R1 needs to be used for symmetric encryption of the rest of the communication
+ 
+2.
+Having capturing the token an attacker can later spoof the client using the following
+ 
+method
+ 
+a.
+The attacker can calculate R2 (XOR again with C)
+ 
+b.
+The attacker can calculate hash(P) xor R1 (by xor again with R2)
+ 
+c.
+The attacker connects to the server, the server sends C attacker performs the
+ 
+following:
+ 
+i.
+Sends the original captured EKU(R1)
+ 
+ii.
+Choose R2=0 and sends EKU(R2)
+ 
+iii.
+Sends the calculated hash(P) xor R1 (because xor with 0 does not
+ 
+change the value)
+ 
+iv.
+Send C (because it is the same as C xor 0)
+ 
+To protect against it I would encrypt the entire sequence with EKU (not sure why it was
+ 
+not done so)
+ 
+ 
+B.
+ 
+On the other questions.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+I would assume here that there was a pre-shared secret shared between Alice and Bob in order
+ 
+for the MAC processing.
+ 
+In this improvement, a MitM attacker will not be able to spoof or change the keys on the fly
+ 
+without having access to the MAC key. This protocol however is vulnerable to a reply attack.
+ 
+The key of the MAC can be attacked using a known plaintext attack.
+ 
+Another issue is over-time an attacker can break g^a, g^b and EW, and then he can become
+ 
+MitM.
+ 
+ 
+B.
+ 
+In this protocol the attacker cannot change the tamper with the keys, without having the private
+ 
+shared password.
+ 
+However over time the attacker may be able to break the key, allowing him to assume the
+ 
+identities of both Alice and Bob and perform a MitM attack.
+ 
+ 
+C.
+ 
+An attacker can capture g^a and SRA(...) and attempt to discover a (may take a while). After
+ 
+that the attacker can assume the identity of Alice. Same goes for the packets he got from Bob.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+ 
+When the user clicks on the link on the malicious site, the site sends a request to another site.
+ 
+Since the user is already logged into this site, he must have a session cookie. The browser will
+ 
+attach that session cookie, and therefore the identification to the second site will work.
+ 
+Same-origin policy will not work in mitigating this attack, because the policy is only checked after
+ 
+the response is sent from the server. That means that the operation that was intended may
+ 
+already happened.
+ 
+Usually to overcome CSRF every GET operation generates a CSRF token which must be sent
+ 
+back to the server when an action (POST) is performed.
+ 
+ 
+ 
+B.
+ 
+ 
+Let’s look at all the protections:
+ 
+ 
+Canary: will protect against overflowing to the return address (because the canary is before the
+ 
+return address)
+ 
+ 
+DEP: protects against running code from the stack
+ 
+ 
+ASLR: protects against running known library gadgets by their address
+ 
+ 
+STACK Randomization: Randomizing the location in which the stack starts ad the memory
+ 
+address space of the process
+ 
+ 
+None of those will protect against a simple attack in which the user enters a large enough
+ 
+password that overflows the pwd buffer and overwrites 1 into the auth variable without going to
+ 
+perform code execution.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+Answer:
+ 
+A.
+ 
+ 
+The query result for sex=’male’ which does not include the population of the query sex=’male’
+ 
+and lev<>57 is a private tracker for Katz.
+ 
+ 
+= sum(sex=’male’, sal) - sum(sex=’male’ and lev<>57, sal)
+ 
+ 
+This will disclose the salary of Katz
+ 
+ 
+B.
+ 
+ 
+Select sal from emp where name=’${name_param}’ and lev<60
+ 
+Confidentiality:
+ 
+name_param = WOND’ or ‘1’=’1
+ 
+ 
+Integrity:
+ 
+name_param = WOND’; delete * from emp where ‘1’=’1’ or ‘1’=’1
+ 
+ 
+Availability:
+ 
+Name_param = WOND’; drop table emp --
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+ 
+Matrix:
+ 
+ 
+ 
+Subject\Object
+ 
+F1
+ 
+F2
+ 
+F3
+ 
+F4
+ 
+U1
+ 
+R
+ 
+W
+ 
+W
+ 
+W
+ 
+U2
+ 
+R
+ 
+RW
+ 
+R
+ 
+RW
+ 
+U3
+ 
+R
+ 
+W
+ 
+RW
+ 
+W
+ 
+ 
+B.
+ 
+ 
+ACL:
+ 
+F1: U1(R), U2(R), U3(R)
+ 
+F2: U1(W), U2(RW), U3(W)
+ 
+F3: U1(W), U2(R), U3(RW)
+ 
+F3: U1(W), U2(RW), U3(W)
+ 
+ 
+C-list:
+ 
+U1: F1(R), F2(W), F3(W), F4(W)
+ 
+U2: F1(R), F2(RW), F3(R), F4(RW)
+ 
+U3: F1(R), F2(W), F3(RW), F4(W)
+ 
+ 
+C:
+ 
+Yes, I will show how.
+ 
+ 
+We will assume U1 and U3 share the same group U1_U3
+ 
+ 
+ 
+File
+ 
+Owner
+ 
+Group
+ 
+Mask
+ 
+F1
+ 
+U1
+ 
+U1_U3
+ 
+444
+ 
+F2
+ 
+U2
+ 
+U2
+ 
+622
+ 
+F3
+ 
+U3
+ 
+U1_U3
+ 
+624
+ 
+F4
+ 
+U2
+ 
+U2
+ 
+622
+ 
+ 
+* We will note that other users of the systems may have permissions on the files as well.
+ 
+ 
+D.
+ 
+ 
+Yes, we can have the following DACL for each file:
+ 
+ 
+F1: (U1, R), (U2, R), (U3, R)
+ 
+…
+ 
+Same as ACL
+ 
+ 
+E.
+ 
+ 
+No, there is no possible leak of information.
+ 
+We can look at it file by file:
+ 
+1.
+F1 - everybody can read it, so no leak of information
+ 
+2.
+F2 - Only U2 can read and U2 can write back only to F4 but he is the only one that has
+ 
+access…
+ 
+3.
+F3 - Only U1 does not have access, and U1 can only read F1 which no one else can
+ 
+read so no one can pass him information.
+ 
+4.
+F4 - Same as F2
+ 
+ 
+F.
+ 
+ 
+I defined the BLP model here with 4 levels (0-3):
+ 
+ 
+Subject\Obje
+ct
+ 
+F1
+ 
+F3
+ 
+F2
+ 
+F4
+ 
+Subject Level
+ 
+U1
+ 
+R
+ 
+W
+ 
+W
+ 
+W
+ 
+1
+ 
+U2
+ 
+R
+ 
+R
+ 
+RW
+ 
+RW
+ 
+3
+ 
+U3
+ 
+R
+ 
+RW
+ 
+W
+ 
+W
+ 
+2
+ 
+Object Level
+ 
+0
+ 
+2
+ 
+3
+ 
+3
+ 
+ 
+ 
+G.
+ 
+ 
+Covert channel:
+ 
+Some information is missing to answer this. A covert channel may be available if there is some
+ 
+metadata which is not shown on the table. For example if all users can read the file length, this
+ 
+can be used for covert channels. For example, let's assume user U2 wants to disclose the
+ 
+content of F2 to U1. The user will read the file byte by byte and then fill in the necessary amount
+ 
+of data to F4 so that the file length will match that byte. User U1, being able to read file lengths
+ 
+will be able to get that byte. Next, based on a pre-agreed time sync U2 will move to the next
+ 
+byte and so on.
+ 
+ 
+H.
+ 
+ 
+Yes, attaching a policy that forbids writing files to user U1 will make him unable to do so even if
+ 
+the DAC should alone allow it.
+ 
+ 
+I.
+ 
+ 
+No, the SELinux permissions will be checked together with the DAC controls. Since the DAC
+ 
+controls forbid user U1 from reading some files, the SELinux won’t be able to grant that.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+ 
+Bob will calculate M’=S^e mod n and will check that M’=M
+ 
+ 
+B.
+ 
+ 
+1.
+This will work because 1^(unknown number) = 1 so for any key d it is always known that
+ 
+1^d mod n = 1
+ 
+2.
+The attacker will choose S=R random number and will send M=R^e mod n
+ 
+ 
+C.
+ 
+ 
+We know that the public key of Alice is 3.
+ 
+ 
+(x*C)^3 = x^3*C^3
+ 
+ 
+Now we know that M=C^3 so we just need to find a number such that x^3 = 8.
+ 
+Since x=2 then the attacker will just need to send (8*M, 2*C)
+ 
+ 
+ 
+D.
+ 
+ 
+ 
+The methods described in B and C will not work if Alice signs the hash of the message.
+ 
+ 
+The reason is that a secure hash
+ 
+ 
+1.
+provides a large entropy
+ 
+2.
+In method in #B the attacker needed to find the M for a specific R, this should be
+ 
+impossible for a secure hash (preimage resistance)
+ 
+3.
+Same goes for #C, due to the pre-image resistance and collision resistance this should
+ 
+be impossible
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+ 
+1.
+ 
+ 
+Username = ‘ OR ‘1’=’1
+ 
+Password = ‘) OR SHA256(‘1’=’1
+ 
+ 
+2.
+ 
+Username = ‘)); delete * from Users--
+ 
+Password =
+ 
+ 
+3.
+ 
+To prevent such attack:
+ 
+1.
+It is required to validate the user inputs, making sure to sanitize of prevent any special
+ 
+character
+ 
+2.
+It is better to perform the query using bind variables in a prepared statement (if
+ 
+supported). This will eliminate this vulnerability
+ 
+ 
+4.
+ 
+The passwords are not secure. They are vulnerable to attack via rainbow table (pre-calculated
+ 
+hashes of short or common passwords).
+ 
+To make this more secure, high entropy salting required, and if possible adding more rounds of
+ 
+hashing.
+ 
+ 
+B.
+ 
+ 
+1.
+ 
+ 
+The conditions are:
+ 
+size(dst)>=n+start_at
+ 
+size(src)>=n
+ 
+ 
+2.
+ 
+ 
+If those conditions are not met.
+ 
+Let’s split the issues into two:
+ 
+ 
+If size(src)<n then we may have an information disclosure issue. In that case depending on the
+ 
+target memory, memory boundaries may protect if the user is actually trying to retrieve
+ 
+information from other processes' memory spaces.
+ 
+ 
+If size(dst)<n+start_at then we will have a stack buffer overflow on our hands.
+ 
+In that case:
+ 
+Stack Canaries - may be able to prevent the ability to alter the return address
+ 
+DEP(NX) - Will disable the attacker from injecting executable code to the stack
+ 
+ASLR - Will make it more difficult to use gadgets within the system libraries to achieve code
+ 
+execution.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+A.
+ 
+ 
+If the communication was done using SSL the password of the user was encrypted using the
+ 
+symmetric encryption which was negotiated.
+ 
+A passive attacker which has sniffing capabilities may be able to obtain the packet in which that
+ 
+information was sent.
+ 
+That attacker will be able to use offline mechanisms to attack the encryption of that packet
+ 
+(using brute force on the key of the encryption for example), but the success of the attack
+ 
+depends on the complexity of the encryption algorithm and the entropy of the key and not the
+ 
+complexity of the user password.
+ 
+ 
+B.
+ 
+ 
+Kerberos is vulnerable to offline attack.
+ 
+The scenario is as following:
+ 
+1.
+Attacker masquerading as user A sends a request for the ticket-granting-ticket to the AS
+ 
+identifying himself as A
+ 
+2.
+AS sends back the ticket-granting-ticket encrypted with the user password
+ 
+3.
+The attacker ends the communication at this point
+ 
+4.
+The attacker can now perform offline attacks on the token such as brute force, or trying
+ 
+common password
+ 
+ 
+This attack success is influenced by the complexity (i.e. entropy) of the user’s password.
+ 
+A pre-auth stage can be introduced to mitigate this attack, but still, a passive attacker with
+ 
+sniffing capabilities may be able to sniff the ticket-granting-ticket when a user authenticates and
+ 
+perform this offline attack.
+ 
+ 
+C.
+ 
+ 
+I will show how an attacker who sniffed the communication can attack the captured
+ 
+communication to obtain the password (in offline).
+ 
+ 
+1.
+Step 1 - depends on the security of the symmetric encryption used in the last stage of
+ 
+the communication, and the amount of message an attacker can attempt to discover the
+ 
+key K.
+ 
+2.
+Having K the attacker can try to discovers pairs of x, y which are based of K (i.e.
+ 
+K=g^x^y)
+ 
+3.
+Having g^x and g^y and enc(g^x) and enc(g^y) the attacker can perform a known
+ 
+plaintext attack to try to discover the encryption key. This part can be considered the
+ 
+password offline attack.
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+ 
+ 
+ 
+Subject\Obje
+ct
+ 
+F1
+ 
+F2
+ 
+F3
+ 
+F4
+ 
+Subject Level
+ 
+S1
+ 
+RW
+ 
+W
+ 
+W
+ 
+W
+ 
+L1
+ 
+S2
+ 
+R
+ 
+RW
+ 
+W
+ 
+W
+ 
+L2
+ 
+S3
+ 
+R
+ 
+R
+ 
+RW
+ 
+W
+ 
+L3
+ 
+S4
+ 
+R
+ 
+R
+ 
+R
+ 
+RW
+ 
+L4
+ 
+Object Level
+ 
+L1
+ 
+L2
+ 
+L3
+ 
+L4
+ 
+ 
+ 
+ 
+B.
+ 
+ 
+Unix:
+ 
+ 
+ 
+File
+ 
+Owner
+ 
+Group
+ 
+Mask
+ 
+F1
+ 
+S1
+ 
+S1
+ 
+604
+ 
+F2
+ 
+S2
+ 
+S1_S2
+ 
+624
+ 
+F3
+ 
+S3
+ 
+S1_S2_S3
+ 
+624
+ 
+F4
+ 
+S4
+ 
+S4
+ 
+602
+ 
+ 
+ 
+Windows:
+ 
+ 
+ 
+F1: DACL S1(RW,allow), S2(R,allow), S3(R,allow), S4(R,allow)
+ 
+F2: DACL S1(W,allow), S2(RW,allow), S3(R,allow), S4(R,allow)
+ 
+F3: DACL S1(W,allow), S2(W,allow), S3(RW,allow), S4(R,allow)
+ 
+F4: DACL S1(W,allow), S2(W,allow), S3(W,allow), S4(RW,allow)
+ 
+ 
+C.
+ 
+ 
+ 
+Subject\Object
+ 
+F1
+ 
+F2
+ 
+F3
+ 
+F4
+ 
+S1
+ 
+RW
+ 
+W
+ 
+W
+ 
+W
+ 
+S2
+ 
+R
+ 
+RW
+ 
+W
+ 
+W
+ 
+S3
+ 
+R
+ 
+R
+ 
+RW
+ 
+W
+ 
+S4
+ 
+R
+ 
+R
+ 
+R
+ 
+RW
+ 
+P
+ 
+RW
+ 
+RW
+ 
+RW
+ 
+RW
+ 
+ 
+Clearly the BLP model cannot exist with such a table.
+ 
+P can read from any level of files, and write to any other.
+ 
+So information disclosure is possible.
+ 
+ 
+D.
+ 
+ 
+Subject\Obje
+ct
+ 
+F1
+ 
+F2
+ 
+F3
+ 
+F4
+ 
+P
+ 
+S1
+ 
+RW
+ 
+W
+ 
+W
+ 
+W
+ 
+E
+ 
+S2
+ 
+R
+ 
+RW
+ 
+W
+ 
+W
+ 
+ 
+S3
+ 
+R
+ 
+R
+ 
+RW
+ 
+W
+ 
+ 
+S4
+ 
+R
+ 
+R
+ 
+R
+ 
+RW
+ 
+ 
+P
+ 
+RW
+ 
+RW
+ 
+RW
+ 
+RW
+ 
+ 
+ 
+E.
+ 
+ 
+Yes, S3 can use F4 as a covert channel to S2.
+ 
+Let’s assume that the system has a lock mechanism so both users cannot write at the same
+ 
+time.
+ 
+S3 can lock the file when wanting to signal 1 and release the lock when wanting to signal 0.
+ 
+This requires a time sync between them but it is possible.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+A.
+ 
+True.
+ 
+Risk analysis helps by scoring risks. Each risk can be analyzed and scored by the probability
+ 
+and criticality. After that the mitigating factors can be examined by cost and effectiveness to
+ 
+decide on the right direction.
+ 
+ 
+B.
+ 
+False.
+ 
+Salt is used to protect the passwords from offline attacks. Salt makes the process of using
+ 
+rainbow tables inefficient.
+ 
+ 
+C.
+ 
+False.
+ 
+Two factor authentication is a way of authenticating the user by two mechanisms from the family
+ 
+of something he has, he is, he knows or he can do. Salt is not related to this.
+ 
+ 
+D.
+ 
+False.
+ 
+Private tracker on a statistical database usually requires knowledge about the attributes of that
+ 
+individual to distinguish him from the rest.
+ 
+ 
+E.
+ 
+False.
+ 
+Anti-virus can employ heuristics to detect unknown viruses
+ 
+ 
+F.
+ 
+True.
+ 
+A worm can cause damage.
+ 
+An example of that is STAXnet.
+ 
+Another example is the Mirai botnet worm that was used to perform a DDOS attack on the Dyn
+ 
+DNS provider.
+ 
+ 
+G.
+ 
+False.
+ 
+Firewalls usually work on lower layers of the network protocol. A IDS may examine the
+ 
+application layer data as well.
+ 
+ 
+Firewalls will usually allow only approved (whitelisted) traffic while IDS is working on detecting
+ 
+incidents and as such will have a larger ratio of false positives.
+ 
+In recent years modern firewalls do support DPI (deep packet inspection) to employ IDS\IPS
+ 
+techniques which are similar to NIDS.
+ 
+ 
+H.
+ 
+True.
+ 
+After execution of that statement. The value Y does provide information on the value X meaning
+ 
+that the entropy of X given Y is less than the entropy of X not knowing it.
+ 
+ 
+I.
+ 
+True.
+ 
+PGP is based on a chain of trust concept.
+ 
+Instead of a centralized CA, a decentralized chain of trust between the users determines the
+ 
+amount of trust they have on PGP certs.
+ 
+ 
+J.
+ 
+False.
+ 
+XSS utilizes the ability to manipulate the site HTML/JS code so that other users of the system
+ 
+sees the site differently, or the code that is executed when they access the site. It does not use
+ 
+BO. XSS may utilize parameters sent from the client and embedded to the displayed page
+ 
+(transient XSS), data sent by users and saved to the DB (persistent XSS), or data from the URL
+ 
+the client accesses (DOM XSS).
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+ 
+A -> Z (syn-ack packet)
+ 
+Z -> A (rst with the current ID)
+ 
+ 
+A saves the ID and waits 1 min.
+ 
+ 
+A -> Z (syn-ack packet)
+ 
+Z -> A (rst with the current ID)
+ 
+ 
+A compares the ID with the saved one, if the value is larger than 1 Z communicated with other
+ 
+servers as well.
+ 
+ 
+B.
+ 
+ 
+Step 1 - capture current ID for Z
+ 
+ 
+A -> Z (syn-ack packet)
+ 
+Z -> A (rst with the current ID)
+ 
+ 
+Step  2 - Scan server T
+ 
+ 
+A -> T (syn with the port to scan and the src=Z)
+ 
+ 
+Now, if the port was open T will send Z the syn-ack packet and Z will send back RST packet
+ 
+(increasing the counter)
+ 
+ 
+If the port was closed T will send an RST packet to Z and Z will ignore it.
+ 
+ 
+Step 3 - Obtain the ID for Z again
+ 
+ 
+ 
+A -> Z (syn-ack packet)
+ 
+Z -> A (rst with the current ID)
+ 
+ 
+Step 4 - compare values to determine if the port was open
+ 
+ 
+C.
+ 
+ 
+To prevent such an attack without a firewall:
+ 
+1.
+Do not use global ID, instead use per-communication ID so no information about the
+ 
+server will be disclosed
+ 
+2.
+Randomize the ID instead of increasing it by 1. Use secure random generator
+ 
+ 
+To prevent such an attack with firewall:
+ 
+1.
+Drop (instead of block that sends RST) packets on closed ports
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+In other questions
+ 
+ 
+B.
+ 
+a.
+No, if the system has information leakage scenario it will not have a BLP  model
+ 
+b.
+Yes, it requires M ACL (each ACL list for specific object(file) containing a list of the
+ 
+subjects with their permissions
+ 
+c.
+Yes, it requires N c-lists (each C-list for a specific user containing a list of the objects
+ 
+with the permissions
+ 
+d.
+No, in case more than 3 level of security are required for an object this cannot be
+ 
+described using a 9 bit 3 domains linux access bit mask
+ 
+e.
+Yes, Windows DACL can contain (similar to ACL) the ACE entries matching each user
+ 
+with the specific granted permissions for each of them
+ 
+f.
+Depending on the system covert channel may exist (for example using lock files to signal
+ 
+bytes or using metadata which is available to all users). If the system is fully segregated
+ 
+it may be possible to avoid having covert channels but it is extremely difficult.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+1.
+ 
+ 
+The entropy is log_2(10*5) = log_2(50) = 5.64
+ 
+ 
+2.
+ 
+The student will write a simple loop that goes over all the numbers and tries to decrypt the file
+ 
+(50 possibilities).
+ 
+ 
+3.
+ 
+50 possibilities * 100 milliseconds = 5000 milliseconds = 5 seconds max
+ 
+So the average time will be ~2.5 seconds and the max will be 5 seconds
+ 
+ 
+4.
+ 
+Let’s compare the two options:
+ 
+Option 1 - 7 digits - 70 possibilities - 7000 milliseconds = 7 seconds max
+ 
+Option 2 - 5 digits - 10 second per try - 500 seconds max
+ 
+ 
+We can see option 2 is better but still allows a max of 8.3 minutes to break time.
+ 
+ 
+B.
+ 
+ 
+On other questions
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+The issue is that it takes a long time for computers to perform updates. Some computers are not
+ 
+defined to even perform updates or may run old Windows systems that don’t even have support
+ 
+for updates (for example the WannaCry attack mainly hurt windows XP users).
+ 
+ 
+B.
+ 
+Since the computer identification together with the key encrypted with the public key was sent to
+ 
+the server, the server owners can use their private key to decrypt it and to send it back to the
+ 
+paying customer/victim. The victim may use that key to decrypt the content of the drive.
+ 
+ 
+C.
+ 
+No, the code of the malware contains only the public key which was used to decrypt the AES
+ 
+key but it won’t help decrypting that key. Some crypto-malware were broken because they did
+ 
+not secure number generators for the encryptions, or may left traces of the symmetric key that
+ 
+was used inside the victim machine.
+ 
+ 
+D.
+ 
+Yes, depending on how the malware attempted to infect other systems IDS systems may be
+ 
+able to detect it. An updated signature based IDS may be able to detect the payload that
+ 
+bypasses the security of the SMB system and alert on it, and an anomaly based IDS may be
+ 
+able to detect the suspicious network activity originating from the infected machines.
+ 
+ 
+E.
+ 
+ 
+Here is the rule (based on the direction of the communication on the firewall):
+ 
+This will deny any incoming communication destined to port 445
+ 
+ 
+Rule
+ 
+In/out
+ 
+Src
+ 
+Dst
+ 
+Src port
+ 
+Dst port
+ 
+Tcp flag
+ 
+action
+ 
+Deny
+ 
+incoming
+ 
+SMB
+ 
+in
+ 
+*
+ 
+*
+ 
+*
+ 
+445
+ 
+*
+ 
+deny
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+False.
+ 
+Polyinstantiation allows protection against information disclosure in a multi-level database.
+ 
+ 
+B.
+ 
+False.
+ 
+Query size limits have been proven to be not effective against individual data retrieval using
+ 
+private trackers.
+ 
+ 
+C.
+ 
+True.
+ 
+Some statistical databases may employ some fuzzing on the results to avoid disclosure of
+ 
+sensitive data.
+ 
+ 
+D.
+ 
+True.
+ 
+FK constraint allows locking the table rows against deletion. There is a special permission in
+ 
+SQL databases called REFERENCE that allows FK constraints
+ 
+ 
+E.
+ 
+True.
+ 
+In the R-system the revocation is always in “cascade” mode and based on the time of grant.
+ 
+In SQL-92 the revocation can be either “cascade” or “restrict”.
+ 
+The cascading is done without taking the time of grant as a factor.
+ 
+ 
+F.
+ 
+False.
+ 
+Sql injection is caused by insecure concatenation of the query parameters into the query and
+ 
+has nothing to do with XSS.
+ 
+ 
+G.
+ 
+False.
+ 
+The passwords that are saved in the DB requires both hashing and salting to make it harder for
+ 
+someone that extracted the table to reverse engineer the original password
+ 
+ 
+H.
+ 
+False.
+ 
+The username is not considered a factor just the identification of the user which we want to
+ 
+identify into. Factors are something we have, know, are or can do.
+ 
+ 
+I.
+ 
+True.
+ 
+Each party in IPSec contains the SAD, a database in which contains the SA, which is
+ 
+information about how to communicate securely.
+ 
+ 
+J.
+ 
+False.
+ 
+RBAC is not related to multi-layer databases.
+ 
+RBAC allows assigning users to rules, and assigning the permissions to rules.
+ 
+SQL-99 supports RBAC and is not a multi-layer database.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+Answer:
+ 
+ 
+A.
+ 
+Without the certificate validation anyone can prevent a certificate and be approved as valid.
+ 
+Let’s assume a client will want to communication with the bank, and someone attacks that client
+ 
+by performing mitm attack:
+ 
+ 
+Client -> Bank(Attacker) - opens SSL connection
+ 
+Attacker -> Client - shows invalid certificate claiming that he is the bank
+ 
+Client - Approves the certificate - and the communication continues
+ 
+ 
+The scenario shows the risk in certificate validation issue.
+ 
+ 
+B.
+ 
+ 
+This is not a vulnerability within the protocol but misuse/misconfiguration when the
+ 
+implementation libraries are being used by developers.
+ 
+The statement claims (rightfully so in my opinion) that the libraries responsible for the SSL
+ 
+communication are too complicated which leads to developers' mistakes causing them to
+ 
+release unsafe and insecure applications due to those errors.
+ 
+ 
+C.
+ 
+ 
+Let’s assume the attacker gains mitm capabilities (either by arp poisoning or dns manipulation).
+ 
+ 
+Client -> Server (Start TLS connection)
+ 
+ 
+Attacker intercepts the message and performs instead:
+ 
+Attacker -> Server (Start TLS connection with certificate length = 512)
+ 
+Server -> Attacker (Sends the certificate)
+ 
+ 
+Now the attacker breaks the certificate (calculates the primes of n) which takes a few minutes
+ 
+(in the meantime the client may retry the connection and assume he has a router issue).
+ 
+ 
+Once the attacker has the primes he can derive the private key, and result to become a full
+ 
+mitm.
+ 
+ 
+Client -> Attacker (Start TLS connection)
+ 
+Attacker -> Client (Shows the 512 bit certificate)
+ 
+Client -> Attacker (SSL handshake…)
+ 
+ 
+And in the same time
+ 
+ 
+Attacker -> Server (Open TLS connection)
+ 
+ 
+Now every message from the client the attacker will decode and encode back and send to the
+ 
+server, and same goes for the way back.
+ 
+ 
+D.
+ 
+ 
+If it takes 24 hours, then the attacker will need to know which server to spoof. The attacker will
+ 
+request the SSL certificate from the server (the 512 bit one) 24 hours before starting the attack.
+ 
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+Answer:
+ 
+ 
+A.
+ 
+ 
+True,
+ 
+An effective captcha prevents the use of automation such as a bot to interact with the system,
+ 
+and therefore attackers will have to manually create accounts limiting the amount of accounts.
+ 
+ 
+B.
+ 
+False,
+ 
+Phishing attack tries to fool someone by presenting itself as a legitimate message. Most
+ 
+phishing attacks require the users to click a link but others may try to convince users to do
+ 
+something else (like performing a wire-transfer).
+ 
+ 
+C.
+ 
+True,
+ 
+TLS connections allow making a secure connection, even if the network is considered insecure.
+ 
+ 
+D.
+ 
+False,
+ 
+A firewall usually will not be able to distinguish between legitimate users or DOS attacks.
+ 
+ 
+E.
+ 
+False,
+ 
+Based on the pigeonhole principal, after a certain amount of tries a conflict will occur, In fact
+ 
+based on the birthday paradox it is expected to happen after sqrt(n) tries, where n is 2^entropy
+ 
+of the hash function.
+ 
+ 
+F.
+ 
+True,
+ 
+CBC-MAC uses the last block as a message signature
+ 
+ 
+G.
+ 
+False,
+ 
+The CA signs the public certificate, and has no access to the private certificate.
+ 
+ 
+H.
+ 
+True,
+ 
+A worm will infect in an exponential manner which may be slow until a certain mass point (unlike
+ 
+hitlist) and toughout the end will fail to be efficient in finding the remaining victim (unlike the
+ 
+branching mode)
+ 
+ 
+I.
+ 
+False,
+ 
+The java compiler generates a bytecode which in turn is used by the java runtime to translate
+ 
+during runtime to machine code.
+ 
+ 
+J.
+ 
+True,
+ 
+Canary support requires re-compilation of the application.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+Answer:
+ 
+ 
+A.
+ 
+The entropy is log_2((letters + numbers + special chars)^length) =
+ 
+log_2((26+10+5)^8) = 42.8
+ 
+ 
+B.
+ 
+Based on some facts:
+ 
+1.
+Humans will prefer to have a password of known words only with no letters and no
+ 
+special characters unless forced to
+ 
+2.
+We will assume that even only 6 letter will be sufficient for most users
+ 
+ 
+So the entropy is log_2(26^6)= 28.2
+ 
+ 
+C.
+ 
+ 
+Let’s assume that the server reports that the issue was a mismatch on the user password  (if
+ 
+this is not true it is still possible just to check the amount of operations and assume that the
+ 
+amount increased only if the password is of right length)
+ 
+To detect the length of the password, Zina can just start from length 1 and increase by 1 until
+ 
+she does not get that error.
+ 
+Meaning the amount of tries will be (if Aya’s password is of length n) up to n tries.
+ 
+ 
+D.
+ 
+Now to detect a successful char Zina needs to check the amount of operations done. She will
+ 
+see an increase each time she has a successful char. Meaning up to [num of possible
+ 
+chars]*[password length] tries to detect the entire password.
+ 
+ 
+Assuming a full range.
+ 
+[26+10+5]*8 = 328 tries
+ 
+ 
+E.
+ 
+ 
+-
+Length - the same, nothing changed
+ 
+-
+Detecting all chars - this time a full brute-force is required. Measuring the amount of
+ 
+instructions should have no meaning, since the algorithm compares all chars anyway. In
+ 
+that case this sums up to [num of possible chars]^[password length] tries = 41^8 =
+ 
+7,984,925,229,121
+ 
+ 
+F.
+ 
+ 
+To increase the security of the system I would suggest:
+ 
+1.
+Increase the complexity of the passwords. Modern complexity standards require at least
+ 
+10 chars and require a mix of chars and numbers.
+ 
+2.
+Make sure that the users passwords are not compromised (e.g. using
+ 
+have_i_been_pawned service to check online when user creates a password)
+ 
+3.
+Storing the passwords in a salted hash secure format
+ 
+4.
+Using a secure hash with high entropy (such as SHA512)
+ 
+5.
+Hash for a big number of rounds so that the calculation of each hash will be expensive
+ 
+6.
+Using salt with high enough entropy
+ 
+7.
+Do not give troubleshooting information on errors (such as login errors). Respond to any
+ 
+login error attempt with the same response no matter what was the cause (bad
+ 
+username, bad password length, …)
+ 
+8.
+Employ MFA for user authentication if possible
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+ 
+The attacker will not be able to execute the code supplied by the payload because that code will
+ 
+be inserted to the stack and usually the stack will be marked as non-executable.
+ 
+ 
+B.
+ 
+ 
+To overcome the issue of NX the attacker will need to employ a technique called ROP. ROP
+ 
+works by utilizing gadgets (pieces of code) within the application memory and libraries.
+ 
+However, ASLR randomizes the location in which libraries are loaded to make it extremely
+ 
+difficult to use ROP.
+ 
+ 
+C.
+ 
+ 
+Some OS/compilers require compiling the application with specific flags to enable it to use the
+ 
+ASLR feature on runtime.
+ 
+ 
+D.
+ 
+ 
+The attacker discovered that the ASLR in this system may only be randomizing the last octec (4
+ 
+bits) of the memory address.
+ 
+That means that the entropy is very low and the chance of success is high when launching the
+ 
+attack.
+ 
+ 
+E.
+ 
+ 
+If we assume that 2^4 is the range of possibilities, the chance of success is 1/(2^4) meaning
+ 
+1/16
+ 
+ 
+F.
+ 
+ 
+Let’s assume that the attack does not crash the process, so re-randomization does not happen
+ 
+between each attack.
+ 
+The attacker will need an average of 16/2 = 8 attacks for a successful attack.
+ 
+ 
+G.
+ 
+ 
+The attacker will just need to perform a command injection attack.
+ 
+He will need to execute “prog dontcare; rm -r /”
+ 
+The program will then execute ls -l dontcare; rm -r / which will execute both commands.
+ 
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+To generate a shared secret together the server and the client uses the DH (Diffi-Helman) key
+ 
+exchange protocol.
+ 
+ 
+B.
+ 
+Depends,
+ 
+If the SSL protocol expects a CA chain and a proper validation of the trust of the server identity.
+ 
+If the server identity is not vetted correctly by the client, a MitM attacker can spoof the server
+ 
+and establish himself in the middle. The attacker can then negotiate the DH keys with both
+ 
+sides.
+ 
+ 
+C.
+ 
+No, the entire security depends on the fact that you cannot ascertain x from g^x. In this case
+ 
+both x and g^x will be 1 and therefore also y and g^y and eventually the negotiated key will
+ 
+always be 1.
+ 
+ 
+D.
+ 
+No, since we know that C=M^e (mod n) but because e=1 then C=M (mod n). So the passive
+ 
+listener can decrypt all the messages on the handshake. However! Since the DH is used for key
+ 
+exchange after that negotiation, the communication will be secure (assuming the attacker is only
+ 
+passive)
+ 
+ 
+E.
+ 
+The password will be sent inside an encrypted packet.
+ 
+It is not vulnerable to offline password attacks because those attacks involve the use of
+ 
+knowledge of password factors (such as common passwords, or password entropy) to break the
+ 
+password.
+ 
+However, it is vulnerable to offline bruteforce of the encryption key used for the symmetric
+ 
+encryption schema.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+ 
+ 
+Subjects\Obj
+ects
+ 
+F1
+ 
+F2
+ 
+F3
+ 
+F4
+ 
+Subject Level
+ 
+U1
+ 
+W
+ 
+RW
+ 
+R
+ 
+R
+ 
+S
+ 
+U2
+ 
+RW
+ 
+R
+ 
+R
+ 
+R
+ 
+TS
+ 
+U3
+ 
+W
+ 
+W
+ 
+W
+ 
+RW
+ 
+U
+ 
+U4
+ 
+W
+ 
+W
+ 
+RW
+ 
+R
+ 
+C
+ 
+Object Level
+ 
+TS
+ 
+S
+ 
+C
+ 
+U
+ 
+ 
+ 
+ 
+B.
+ 
+ 
+ACL:
+ 
+ 
+F1: U1(W), U2(RW), U3(W), U4(W)
+ 
+F2: U1(RW), U2(R), U3(W), U4(RW)
+ 
+F3: U1(R), U2(R), U3(W), U4(RW)
+ 
+F4: U1(R), U2(R), U3(RW), U4(R)
+ 
+ 
+C-List
+ 
+ 
+U1: F1(W), F2(RW), F3(R), F4(R)
+ 
+U2: F1(RW), F2(R), F3(R), F4(R)
+ 
+U3: F1(W), F2(W), F3(W), F4(RW)
+ 
+U4: F1(W), F2(W), F3(RW), F4(R)
+ 
+ 
+ 
+C.
+ 
+ 
+Yes, since there are 3 permissions domains for each file (R,RW,W) this matrix can be
+ 
+represented in linux systems
+ 
+ 
+ 
+File
+ 
+Owner
+ 
+Group
+ 
+ 
+Permission Mask
+ 
+F1
+ 
+U2
+ 
+U1_U2
+ 
+622
+ 
+F2
+ 
+U1
+ 
+U1_U2
+ 
+642
+ 
+F3
+ 
+U4
+ 
+U3_U4
+ 
+624
+ 
+F4
+ 
+U3
+ 
+U3_U4
+ 
+644
+ 
+ 
+* I assume here that each user can be in only one group. Group name here consist of their
+ 
+members
+ 
+ 
+D.
+ 
+ 
+Yes, no reason to not be able to, since Windows is more flexible.
+ 
+I will show each file DACL list (I assume here that all the files are owned by someone else which
+ 
+is the system administrator, since the owner in windows has more permissions then included
+ 
+here)
+ 
+ 
+F1: DACL: ACE(U1,W,allow), ACE(U2,RW,allow), ACE(U3, W,allow), ACE(U4, W,allow)
+ 
+F2: DACL: ACE(U1,RW,allow), ACE(U2,RW,allow), ACE(U3, W,allow), ACE(U4, RW,allow)
+ 
+F3: DACL: ACE(U1,R,allow), ACE(U2,R,allow), ACE(U3, W,allow), ACE(U4, RW,allow)
+ 
+F4: DACL: ACE(U1,R,allow), ACE(U2,R,allow), ACE(U3, RW,allow), ACE(U4, R,allow)
+ 
+ 
+E.
+ 
+Yes:
+ 
+1.
+If the administrator wants he can use the policies for the users to grant them specific
+ 
+access and permissions to specific files (since SELinux is MAC)
+ 
+2.
+SELinux also supports MLS, and since the input was levels of security, this is also
+ 
+possible
+ 
+ 
+F.
+ 
+Since this matrix is BLP compatible and follows the 1th and 2th rules of BLP, it shouldn’t be
+ 
+possible to have information disclosure flow without covert channels.
+ 
+ 
+G.
+ 
+Yes, covert channels may happen in this system.
+ 
+For example let’s take the following assumption:
+ 
+If two users can write to a file, only one can open it at the same time. The other one will get an
+ 
+exception while trying to open the file
+ 
+ 
+Now I will show how user U2 can leak the information of F2 to user U3:
+ 
+1.
+I assume there is a time sync mechanism which they agreed in advance (for example
+ 
+starts at 10:00 a bit for every minute....)
+ 
+2.
+U2 reads the information from F2 bit by bit, and for every bit
+ 
+a.
+If the information is 1 - U2 opens F1 for write
+ 
+b.
+If the information is 0 - U2 does nothing
+ 
+c.
+User F2 waits one minute and release the lock on the file if it was open
+ 
+3.
+On the same time U3 does the following:
+ 
+a.
+Every minute try to open the file F1 for write
+ 
+i.
+If the file opening was successful - write down 0 - and release the lock
+ 
+ii.
+Otherwise - write down 1
+ 
+ 
+H.
+ 
+If our system supports high-water mark we can allow this option as long as U2 did not read data
+ 
+from any files in a security level higher than the level of F4 in the same session. In this case F4
+ 
+is the only unclassified file so as long as F4 didn’t read from any file (other than F4) we can
+ 
+allow him to write to it without the risk of information disclosure (ignoring possibilities of saving
+ 
+data between sessions on a covert channel).
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+False.
+ 
+Captcha allows filtering non-human users and it’s not effective against any kind of offline
+ 
+attacks.
+ 
+ 
+B.
+ 
+True.
+ 
+A passive attacker with sniffing capabilities can capture the ticket-granting-ticket server
+ 
+response. The response is encrypted with the user password, so it is vulnerable to a dictionary
+ 
+attack.
+ 
+ 
+C.
+ 
+True.
+ 
+Assuming the chain of trust is kept (i.e. that the client verifies the certificate via a local trusted
+ 
+CA store), an attacker will not be able to decrypt or alter the communication.
+ 
+ 
+D.
+ 
+False.
+ 
+While we can assume it is hard to manually create a collision on a cryptographic safe hash
+ 
+algorithm, such collision should happen eventually (Pigeonhole principle)
+ 
+ 
+E.
+ 
+False.
+ 
+In ECB each block stands by itself. If the last block is used for MAC, it only verifies the integrity
+ 
+of the last block.
+ 
+ 
+F.
+ 
+False.
+ 
+CA signs the public key of the certificate holder. It does not have the access to the private key at
+ 
+any stage, so it should not be able to decrypt the communication.
+ 
+ 
+G.
+ 
+False.
+ 
+Usually a private tracker takes into consideration knowledge about the individual in order to filter
+ 
+the rest out.
+ 
+ 
+H.
+ 
+False.
+ 
+A worm using random scan will start at slow speed (comparing to hitlist), and will suffer from
+ 
+slowness in obtaining new victims throughout the end (comparing to permutation scanning)
+ 
+ 
+I.
+ 
+True.
+ 
+Anomaly based detection, does not use known characteristics of known attacks, but instead
+ 
+detects the anomaly in the behavior thus allowing it to detect new unknown attacks.
+ 
+ 
+J.
+ 
+True.
+ 
+Using Canary requires recompiling the application using the necessary compilation flags to
+ 
+allow canary support.
+ 
+In recent years, there has been development allowing instrumentation of canaries in runtime
+ 
+without recompiling the code.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+ 
+Answer:
+ 
+ 
+A.
+ 
+The entropy is log_2( ( lower + higher + digits + special ) ^ 10  ) =
+ 
+log_2( (26+26+10+3)^10) = 60
+ 
+ 
+B.
+ 
+I will assume the following:
+ 
+Most users given this choice will probably select a password from all lower case letters so it will
+ 
+be easier to remember.
+ 
+The entropy in such a case will be
+ 
+log_2(26^10) = 47
+ 
+ 
+I will note that most users will probably select meaningful words for their password which
+ 
+reduces the entropy much further.
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+Answer:
+ 
+ 
+C.
+ 
+ 
+For the client:
+ 
+x=H(s||pass)
+ 
+K=H((C-g^x)^(a+x) mod q)
+ 
+ 
+For the server:
+ 
+K=H((g^a*v)^b mod q)
+ 
+ 
+To show that they are the same we need to show that
+ 
+(C-g^x)^(a+x) = (g^a*v)^b
+ 
+ 
+C = (v+g^b) mod q
+ 
+ 
+(C-g^x)^(a+x)=((v+g^b)-g^x)^(a+x)=
+ 
+(v+g^b - g^x)^(a+x)=
+ 
+(g^x + g^b - g^x)^(a+x)=
+ 
+g^b^(a+x)
+ 
+ 
+From the other side:
+ 
+ 
+(g^a*v)^b=
+ 
+(g^a*g^x)^b=
+ 
+(g^(a+x))^b=
+ 
+g^b^(a+x)
+ 
+ 
+D.
+ 
+S is needed in the system so that the server will only store H and it will make it harder for an
+ 
+attacker with access to pre-image the hash value to the original password using dictionary or
+ 
+rainbow table attacks.
+ 
+s is needed in the communication because the server only have the stored hashes of the
+ 
+hashed passwords, so that the server can only know H(s||pass)
+ 
+ 
+E.
+ 
+No, it does not look like the communication is vulnerable to offline attack. I will explain why:
+ 
+ 
+Packet 1 - contains only information about u and g^a (so no information about the password)
+ 
+Packet 2 -
+ 
+ 
+Discloses the s (salt)
+ 
+ 
+Now let’s assume an attacker has a password and wishes to match it with packet 2, but since
+ 
+the attacker does not know the g^b value, he is unable to match it even if he has a suspected
+ 
+password.
+ 
+ 
+Packet 3 -
+ 
+If an attacker has a suspected password (and the salt from packet 2), he still does not have a
+ 
+and we assume he cannot get it from knowing the g^x. As a result he cannot calculate the (a+x)
+ 
+required for this packet matching
+ 
+ 
+Packet 4 -
+ 
+Although the attacker has D and we already showed that he cannot calculate K to match it, he
+ 
+cannot calculate H(D||K) to match it.
+ 
+ 
+F.
+ 
+If the password file was exposed then the answer is yes. The attacker can have the salt from
+ 
+packet 2 and afterwards can start matching with the password file the hashes calculated from
+ 
+each dictionary entry together with this salt.
+ 
+ 
+G.
+ 
+If the attacker has access to the password file he has x (which is stored in the file directly), in
+ 
+that case with packet number 2 (C value), knowing x and knowing a the key is a simple
+ 
+calculation
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+ 
+Answer:
+ 
+1.
+The user should just submit a query with the following name parameter:
+ 
+name=’ OR ‘1’=’1
+ 
+2.
+To protect from this:
+ 
+a.
+Option 1: the server should verify and sanitize the input, meaning to check that
+ 
+there are no special characters in the query parameter
+ 
+b.
+Option 2: A better option is to use a mechanism called prepared statement with
+ 
+bind variables. This completely close this vulnerability
+ 
+ 
+ 
+------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+ 
+ 
+ 

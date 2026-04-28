@@ -1,0 +1,503 @@
+I.B -CompSec 1 המצגתהינה לשימוש פנימי בלבד 
+אין לצלם או לעשות שימוש שלא במסגרת הקורסאבטחת סייבר
+(אבטחת מערכות מידע /מחשבים /מערכות ממוחשבות /...)
+
+I.B -CompSec 2נושאי הקורס
+ סכנות ושיטות הגנה
+ מודלים ומדיניות
+  הצפנהופרוטוקולים 
+ אימות זיהוי
+ בקרת גישה
+   הגנה בחומרה
+ובמערכות הפעלה הגנה בבסיסי נתונים
+ וירוסים, תולעים, 
+ודומיהם
+ תכנות בטוח
+  הגנהברשתות   
+תקשורתוב- WWW
+ועוד, ככל שירשה לנו  
+הזמן
+I.B -CompSec 3Key Security Concepts
+
+Computer Security Challenges
+1.not simple
+2.must consider potential attacks
+3.procedures used counter -intuitive
+4.involve algorithms and secret info
+5.must decide where to deploy mechanisms
+6.battle of wits between attacker / admin
+7.not perceived on benefit until fails
+8.requires regular monitoring
+9.too often an after -thought
+10.regarded as impediment to using system
+4 I.B -CompSec
+Some common terms
+•Vulnerability
+•Threat
+•Threat vs. Vulnerability (or Being Vulnerable 
+to the Threat of Confusing Threats with 
+Vulnerabilities)
+•Threat :  Adversaries might install malware in the 
+computers in our Personnel Department so they can 
+steal social security numbers for purposes of 
+identity theft
+•Vulnerability :  The computers in the Personnel 
+Department do not have up to date virus definitions 
+for their anti -malware software
+I.B -CompSec 5
+Some common terms
+•Attack: An attempt by an adversary to 
+cause harm to valuable assets
+•Attack vector: a path or means of an 
+adversary to enable them to exploit system 
+vulnerabilities (including the human 
+element).
+•e.g. viruses, e -mail attachments, deception, …
+•Threat model –usually means what threats 
+or attacks we protect against
+I.B -CompSec 6
+Vulnerabilities and Attacks
+system resource with vulnerabilities may
+be corrupted (loss of integrity)
+become leaky (loss of confidentiality)
+become unavailable (loss of availability)
+attacks are threats carried out and may be
+passive
+active
+insider
+outsider
+warfare / espionage / etc.–
+7 I.B -CompSec
+I.B -CompSecMethods of Attacks
+Bypassing authentication 
+(e.g. guessing password)
+Using Authority dishonestly 
+(e.g. System people )
+Utilizing human error or carelessness
+Utilizing “holes” in Software
+Bypassing access control
+Using Viruses
+Use Inference from authorized access  
+8
+Defense vs. Offense
+•Attackers need to succeed only once
+•Defenders must succeed every time!
+BUT
+•Attackers must pass through a chain 
+of defenses
+•Defenders only need to succeed in 
+one link!
+I.B -CompSec 9
+Major threats
+•Stolen passwords
+•Malware \Spyware
+•Phishing
+•Social Engineering
+•DDOS
+•Rogue SSL certificates
+•Web exploiting (SQL injection, XSS, …)
+•…
+I.B -CompSec 10
+11הצפנה
+  דיברנו על"פרימיטיבים " של הצפנה ואימות –
+אבני בניין שישמשו אותנו לפי הצורך
+ הצפנה סימטרית/אסימטרית  ( AES,RSA )
+  אימות הודעות(MAC , חתימה דיגיטלית)
+  החלפת מפתחות(תעודות , DHE)
+I.B -CompSec
+I.B -CompSec 12תזכורת
+
+I.B -CompSec 13תזכורת
+
+I.B -CompSec 14תזכורת
+
+I.B -CompSec 15תזכורת
+
+User Authentication
+Something you know
+password, PIN, answers to prearranged questions
+Something you have
+smartcard, electronic keycard, physical key
+Something you are (static)
+Fingerprint, retina, face
+Something you do (dynamic)
+voice pattern, handwriting, typing rhythm (ABV-Activity -based Verification )
+16
+can use alone or combined 
+(multi factor authentication)
+all can provide user authentication
+all have issues
+I.B -CompSec
+I.B -CompSec 17Authentication Using Passwords
+The use of salt to defeat pre -computation of encrypted 
+passwords
+Salt Password
+I.B -CompSec 18
+Authentication Using a Physical Object
+Magnetic cards
+magnetic stripe cards
+chip cards: stored value cards, smart cards
+Biometrics -parameters to consider
+Accuracy
+Intrusiveness
+Cost
+Time to process
+19
+ I.B -CompSec
+Passwords: Text vs Graphical
+20 I.B -CompSec
+21Needham -Schroeder Protocol
+AnBA,, 1.
+)),( ,,,(  2. AKEKBnEab K ab A Kbs as
+),(  3. AKEab Kbs
+S
+A B
+)(  4.B KnE
+ab
+)1 (  5. B KnE
+ab
+I.B -CompSec
+22Denning -Sacco Attack
+The NS protocol achieves its goals under the 
+(standard) assumption that the long term keys Kas
+and Kbsare not compromised.
+Denning & Sacco discovered an attack where the 
+adversary Cimpersonates Are-using a 
+compromised session key Kab:
+),( .3 AKEab Kbs
+C B
+)( .4B KnE
+ab
+)1 ( .5 B KnE
+abfrom original protocol run
+I.B -CompSec
+Kerberos -Overview
+23
+ I.B -CompSec
+Kerberos Realms
+24 I.B -CompSec
+Access Control Principles
+25 I.B -CompSec
+Multiple Access Control Policies
+26DAC
+Entity can 
+enable 
+another 
+entity to 
+access some 
+resources
+RBAC -(Roles and rules defined in 
+the sytem controls the accessMAC
+Entity cannot 
+enable 
+another entity 
+to access 
+some 
+resources
+I.B -CompSec
+DAC, Access Matrix, ACLs C -Lists
+27•(b) ACLs = Access Control Lists
+– Per columns = per object
+•(c) Capability list (ticket)
+– Per row= per subject (user \system)
+– Can also contain default \public entry
+I.B -CompSec
+RBAC -Access Control Matrix
+28
+•Assigning Users to Roles:
+•More Users than Roles
+•User Can be assigned to multiple roles
+•Roles can b e assigned to multiple users
+•Assigning Roles to Objects:
+•More Objects than Roles
+•Role can be treated as an object –for 
+role hierarchies definition.
+I.B -CompSec
+29The Information Flow Problem of DAC (II)
+Information Flow
+User: Alicer: Alice; w: Alice
+User: Bobr: Bob; r,w: Alice
+User Bob can read contents of the file A
+copied to file BFile A
+File BPgm X
+THRea
+d
+Write
+I.B -CompSec
+Bell-LaPadula (BLP) Confidentiality 
+Model ( 1973 )
+By David Bell and Leonard LaPadula
+Hierarchical
+Addresses the confidentiality of information in a system
+Mandatory access control
+Formalize the U.S. Department of Defense (DoD) 
+multilevel security (MLS) policy; the basis for the Orange Book
+Simple security property –read capability only
+A subject can read information at or below his level of secrecy ,
+but cannot read any information above his level of secrecy
+(no read up)
+Star property –write capability only
+A subject can write information at or above his level of secrecy, 
+but cannot read any information above his level of secrecy
+(no write down)Assigned level
+Lower secrecy levelHigher secrecy level
+30 I.B -CompSec
+31Problems of BLP
+1. The need for a Trusted subject (to write non -
+secret info.) 
+Solution :  high watermark ! –get the sensitivity 
+level of the highest level accessed object 
+during the program execution so far …
+2. The problem of covert channels.
+3. No access -control when all subjects and all 
+objects are at the same level. 
+I.B -CompSec
+Example: UNIX File Access Control
+Inode (Index node) = control structure 
+needed for OS for particular file. Contains:
+Each user has unique user identification 
+number (user ID)
+Each user is a member of a primary group 
+identified by a group ID
+Each user belongs to a specific group
+12 protection bits
+specify read, write, and execute permission for 
+the owner of the file, members of the group 
+and all other users
+First 9 bits include authorization to 
+USER,GROUP and other.
+the owner ID, group ID, and protection bits 
+are part of the file ’s inode32
+ I.B -CompSec
+Traditional UNIX File Access Control
+Last 3 bits, specify additional behaviors:
+“set user ID ”(SetUID ) / “set group ID ”(SetGID )
+system temporarily uses rights of the file owner / group in addition to the real 
+user’s rights when making access control decisions
+enables privileged programs to access files / resources not generally accessible
+sticky bit 
+when applied to a directory it specifies that only the owner of any file in the 
+directory can rename, move, or delete that file
+superuser
+is exempt from usual access control restrictions
+has system -wide access
+33 I.B -CompSec
+Kernel vs User Space
+Kernel space
+refers to memory used by the Linux kernel and its 
+loadable modules (e.g., device drivers)
+User space
+refers to memory used by all other processes
+since kernel enforces Linux DAC and security 
+critical to isolate kernel from user
+so kernel space never swapped to disk
+only root may load and unload kernel modules
+34 I.B -CompSec
+Linux System Hardening
+consider how to mitigate Linux security risks at system 
+and application levels
+first look at OS -level security tools and techniques that 
+protect the entire system
+35 I.B -CompSec
+OS Installation
+security begins with O/S installationespecially what software is run
+since unused applications liable to be left in default, 
+un-hardened and un -patched stategenerally should not run:
+X Window system, RPC services, R -services, inetd, 
+SMTP daemons, telnet etcalso have some initial system s/w configuration:
+setting root password
+creating a non -root user account
+setting an overall system security level ( usually initial file -
+permission settings )
+enabling a simple host -based firewall policy
+Using extended ACLs
+enabling SELinux (Mandatory access control)
+36 I.B -CompSec
+Windows Access Control
+Access control in Windows applies to objects : 
+files, registry keys, Active Directory objects, …More complex than access control in a file 
+system.Access rights beyond read and write .
+two forms of access control list (ACL):Discretionary ACL (DACL) 
+grants or denies access to protected resources 
+such as files, shared memory, named pipes etcSystem ACL (SACL)
+used for auditing and to enforce mandatory 
+integrity policy 37 I.B -CompSec
+Security Descriptor (SD)
+data structure with object owner, DACL, & SACL
+e.g.
+Owner: CORP \Blake 
+ACE[0]: Allow CORP \Paige Full Control 
+ACE[1]: Allow Administrators Full Control 
+ACE[2]: Allow CORP \Cheryl Read, Write and Delete
+have no implied access, if there is no ACE for 
+requesting user, then access is denied
+applications must request correct type of access
+if just request “all access ” when need less (e.g. read) 
+some user ’s who should have access will be denied
+38 I.B -CompSec
+Windows System Hardening
+process of shoring up defenses, reducing 
+exposed functionality, disabling features
+known as attack surface reduction
+use 80/20 rule on features
+not always achievable
+e.g. requiring RPC authentication in XP SP 2
+e.g. strip mobile code support on servers
+servers easier to harden:
+1.are used for very specific and controlled purposes
+2.perceive server users are administrators with better 
+computer configuration skills than typical users
+39 I.B -CompSec
+Vulnerabilities
+40 I.B -CompSec
+41
+ I.B -CompSec
+42
+ I.B -CompSec
+43
+ I.B -CompSec
+44Vulnerabilities –Buffer Overflow
+(a) Situation when main program is running
+(b) After program Acalled
+(c) Buffer overflow shown in gray
+I.B -CompSec
+BO Defenses
+Safe coding
+Canary
+NX / DEP / XD
+prevent code executing in data segments
+Stack Randomization
+Image Randomization (ASLR)
+makes O/S less predictable for attackers
+Service Restart Policy (Windows)
+45 I.B -CompSec
+Vulnerabilities –Others
+OWASP (The Open Web Application 
+Security Project ) Top 10
+XSS, SQLI, …
+Others
+CSRF
+ROP
+Row hammer, Spectre /Meltdown
+46 I.B -CompSec
+47Malicious code
+Viruses –A virus is a program that attaches itself to 
+another program, propagates, and usually causes some 
+data destruction. 
+Discussed virus -antivirus coevolution
+Detection strategies 
+Worms —A worm is a program that propagates itself 
+without infecting the host .
+Discussed knows worms: Morris, Code -Red, Slammer, Stuxnet
+Scanning strategies
+Trojan Horses —A Trojan Horse is an apparently useful 
+program that has hidden functions, usually harmful. 
+I.B -CompSec
+I.B -CompSec 48מודל רשת ה- Internet 
+Application
+TCP ( תובלה) 
+IP ( רשת) 
+MAC ( פיזית) 
+בשל המורכבות העבודה מתחלקת בין שכבות.
+כל שכבה מתקשרת פיזית עם השכבות הסמוכות לה, ולוגית עם השכבה המקבילה לה.
+I.B -CompSec 49מודל רשת ה- Internet
+ מושגים במודל שצריך להכיר(רשימה חלקית ):
+TCP –Connection oriented, Reliable
+UDP –Connectionless, Unreliable 
+TCP 3-way handshake (SYN, SYN -ACK, ACK)
+Gateways
+Ports
+Sockets
+I.B -CompSec 50התקפות ב- Internet
+ Sniffing
+ SynAttack
+ DNS Poisoning
+ IP Spoofing
+ Port scan
+ זיהוי אפליקציות רצות על השרת
+...
+I.B -CompSec 51הגנות ברשת
+ ניתן לסווג את בעיות האבטחה לשני תתי-סוגים :
+ בעיות הנובעות מחשיפת המחשב לעולם
+  בעיות הנובעות מארכיטקטורת הרשת(מודל השכבות )
+ לפיכך, ניתן לדבר על שני סוגי הגנה:
+ Firewalls/ IDS/IPS - לצמצום החשיפה לעולם
+ פרוטוקולי אבטחה-להגנה על כל שכבה בנפרד 
+I.B -CompSec 52Firewall
+ ניתן לחלק לשלשה סוגים:
+ (stateless) Packet Filter -   מסנן את החבילות לפי כללים
+סטאטיים
+ Stateful PF-  משתמש בכללים דינאמיים העוקבים אחרי מצב
+ההתקשרות
+ Proxy servers-   התערבות אקטיבית בין המשתמש לשרת
+המרוחק
+Security Intrusion & Detection
+Security Intrusion
+a security event, or combination of multiple security 
+events, that constitutes a security incident in which 
+an intruder gains, or attempts to gain, access to a 
+system (or system resource) without having 
+authorization to do so.
+Intrusion Detection
+a security service that monitors and analyzes system 
+events for the purpose of finding, and providing real -
+time or near real -time warning of attempts to access 
+system resources in an unauthorized manner.
+I.B -CompSec 53
+Intrusion Detection Systems
+classify intrusion detection systems (IDSs) as:
+Host -based IDS: monitor single host activity
+Network -based IDS: monitor network traffic
+logical components:
+sensors -collect data
+analyzers -determine if intrusion has occurred
+user interface -manage / direct / view IDS
+I.B -CompSec 54
+Intrusion Prevention Systems (IPS)
+recent addition to security products which
+inline net/host -based IDS that can block 
+traffic
+functional addition to firewall that adds IDS 
+capabilities
+can block traffic like a firewall
+using IDS algorithms
+may be network or host based
+I.B -CompSec 55
+I.B -CompSec 56פרוטוקולי אבטחה
+באיזו שכבה להוסיף  
+שירותי אבטחה?
+הגדרה: נאמר  
+שפרוטוקול אבטחה  
+עובד ברמה x  אם הוא
+מגן על המידע של 
+השכבות שמעל x .
+לדוגמא, הוספת הגנה 
+ברמת הרשת:Application
+TCP ( תובלה) 
+IPsec
+IP ( רשת) 
+MAC ( פיזית) 
+I.B -CompSec 57IPSec- אבטחה ברמת הרשת
+ IPSec מכיל את הפרוטוקולים הבאים
+  שני פרוטוקולים לאבטחת תעבורתIP:
+ESP– מספק הצפנה ו/או אימות 
+AH– מספק אימות בלבד
+  פרוטוקול לניהול והחלפת מפתחותIKE.
+ ניתן להשתמש ב- IPSec בשני אופנים:
+- Transport Mode- בין מחשבי קצה
+- Tunnel Mode-  באופן שקוף למשתמש(למשל ליצירת  VPN)
+SSL Handshake Protocol
+I.B -CompSec 58
+I.B -CompSec 59אבטחה ברמת האפליקציה
+
+I.B -CompSec 60PGP- דוגמה למחזיק מפתחות
+
+נושאי העשרה
+ ביטקוין
+ בלוקצ'יין
+כרייה
+ השפעת מיחשוב קוואנטי על הצפנה
+ פירוק לגורמים
+ הצפנותחסינות  קוואנטום
+ הצפנה קוואנטית
+I.B -CompSec 61

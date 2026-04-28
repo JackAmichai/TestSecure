@@ -1,0 +1,1559 @@
+Computer Security: 
+Principles and Practice
+Based on lecture slides by Lawrie Brown
+Chapter 
+ 2 
+–
+Cryptographic Tools
+Cryptographic Tools
+
+cryptographic algorithms important 
+element in security services
+
+review various types of elements
+
+symmetric encryption
+
+public
+ -
+key (asymmetric) encryption
+
+digital signatures and key management
+
+secure hash functions
+
+example is use to encrypt stored data
+Cryptography
+
+Is
+
+a powerful tool
+
+the basis for many security mechanisms
+
+mostly based on Math's, logics and Statistics
+
+Is not
+
+the solution to all security problems
+
+reliable unless implemented properly
+
+reliable unless used properly
+3
+Cryptography
+4 The Enigma
+
+Turing Vs Nobel
+5
+
+Goals
+
+Goal 
+ 1
+: secure communication
+
+Goal 
+ 2
+: protect files
+
+Goal 
+ 3
+: secure cloud computing
+6
+Cryptography techniques 
+ -
+history
+
+Manual
+
+Mechanical
+
+Electro
+ -
+mechanical
+
+Electronic
+
+Quantum cryptography
+(
+based 
+ on Physical rules, uncertainty theorem 
+ etc
+)
+7
+Cryptography 
+ -
+goals
+
+Confidentiality
+
+Integrity
+
+Authenticity
+
+Non
+-
+repudiation
+
+Access control
+
+Make attacks difficult
+8
+Definitions
+
+Cryptology
+
+Cryptography (
+ Kryptos
+ = hidden, 
+ Graphia
+ = writing)
+
+Cryptanalysis
+
+Input/plain text
+
+Cryptosystem
+
+Algorithm
+
+Key/Key space
+
+Output/
+ Ciphertext
+
+In 
+practice, 
+ the 
+challenging 
+ part is building 
+ and sharing strong 
+key/s 
+ rather than sophisticated algorithm that is known.
+9
+Auguste
+ Kerckhoffs
+ (
+1835
+ )
+"
+The system should be, if not theoretically 
+unbreakable, unbreakable in practice
+ "
+
+Kerckhoffs
+ principle: a cryptosystem 
+should be secure even if everything about 
+the system, except the secret key, is 
+public knowledge
+10
+
+“
+Classic
+ ” 
+Crypto
+
+Substitution cipher (confusion)
+
+Transposition (diffusion)
+
+“
+Modern
+ ” 
+Crypto
+
+Symmetric (confusion & 
+ diffusion
+ )
+
+Asymmetric (number theory)
+11
+Cryptosystems
+ ’ 
+Main Categories
+Cryptosystems
+ ’ 
+Main Categories
+12Substitution Transpositi
+onOne time 
+PadSymmetric
+(Single Key)
+(Convention
+al)Asymmetric
+(Two Keys)
+(PKE)
+Mono alphabetic
+(Ceaser Cipher)Scytale Rod Vernum Cipher Block Cipher
+(DES, Triple 
+DES, AES, 
+RC5, RC6)RSA, 
+Diffie –Helman
+DSS
+ECC
+Poly alphabetic
+(Vigenere cipher)Basic 
+TranspositionStream Cipher
+(RC4)
+
+Basic cryptosystems 
+ -
+Substitution
+
+Caesar cipher
+
+Mono
+ -
+alphabetic cipher
+
+Key = The offset.
+
+Simple to crack.
+
+The frequency of the letters appears in the 
+cipher 
+ is constant.
+13
+Basic cryptosystems 
+ -
+Substitution
+
+Vigenere
+ cipher (
+ 1586
+ ) 
+–
+polyalphabetic cipher
+
+Key = 
+ boy (X axis)
+
+Plaintext = 
+ hello (Y axis)
+
+Cipher = 
+ isjmc
+
+More complicated to Crack
+•
+The frequency of the letters 
+appears in the cipher is different.
+14
+Monoalphabetic Substitution
+
+So 
+26
+! ~= 
+4 
+x 
+10
+26 
+possible mappings
+
+Testing 
+ 10
+6
+/sec would take 
+ 10
+13 
+years
+
+Is it secure?
+
+All natural languages have statistical 
+properties (most common letters, 
+ digrams
+ , 
+trigrams, word endings, doubled letters, 
+words)
+15
+Letter Frequency
+Letter % Letter %
+E 13.0 A 7.3
+T 9.3 S 6.3
+N 7.8 D 4.4
+R 7.7 H 3.5
+I 7.4 L 3.5
+O 7.4 C 3.0
+16
+Frequency of Usage
+•th 
+•he 
+•at 
+•st 
+•an 
+•in 
+•ea 
+•nd 
+•er 
+•en 
+•re 
+•nt 
+•to 
+•es 
+•on 
+•ed 
+•ti•the 
+•and 
+•tha 
+•hat 
+•ent 
+•ion 
+•for 
+•tio 
+•has 
+•edt 
+•tis 
+•ers 
+•res 
+•ter 
+•con 
+•ing 
+•men•ll 
+•tt 
+•ss 
+•ee 
+•pp 
+•oo 
+•rr 
+•ff 
+•cc 
+•dd 
+•nnDigrams Trigrams Doubles
+•e 
+•t 
+•s 
+•d 
+•n 
+•r 
+•yEndings Words
+•the 
+•of 
+•are 
+•I 
+•and 
+•you 
+•a 
+•can 
+•to 
+•he 
+•her 
+•that 
+•in 
+•was 
+•is 
+•has 
+•it 
+•him 
+•his
+17
+Breaking 
+ a Substitution Cipher
+
+Count relative frequency of letters, 
+ digrams
+ , 
+trigrams, endings, doubles, and words in the 
+ciphertext
+(
+  ראו למשל סודות ההצפנה עמודים
+101
+ עד
+114
+ )
+
+If you have enough encrypted text, it can be 
+analyzed and broken by high
+ -
+speed computers
+
+But must have a body of encrypted text of 
+sufficient size to permit analysis
+18
+Transposition Ciphers
+
+repeated letters in the plaintext
+
+results in repeated letters in the ciphertext
+
+Need to break the repetition relationship 
+between letters in the plaintext and the 
+cipher.
+
+
+transposition cipher
+19
+Basic cryptosystems 
+ -
+Transposition
+
+Scytale
+ Rod 
+ (Sparta 
+ 400
+BC)
+
+The
+ancient Greeks
+ , and the
+ Spartans
+ used this cipher during
+ wars.
+
+Key = Both sender and receiver use rod with the same diameter.
+
+The plaintext and the 
+ cipher 
+ were written on the same leather.
+20
+?
+Basic cryptosystems 
+ -
+Transposition
+21
+
+Breaking 
+ a 
+Transposition 
+ Cipher
+
+Count relative frequency 
+ of 
+digrams
+ , trigrams, 
+endings, doubles, and words in the 
+ ciphertext
+(
+  ראו למשל סודות ההצפנה עמודים
+471
+ עד
+473
+ )
+
+If you have enough encrypted text, it can be 
+analyzed and broken by high
+ -
+speed 
+computers
+
+But must have a body of encrypted text of 
+sufficient size to permit analysis
+22
+One
+-
+Time Pad
+
+Vernam
+ cipher (Gilbert 
+ Vernam
+ ), 
+1917
+
+Mathematically 
+ unbreakable 
+ –
+
+has a property termed perfect secrecy;
+
+ciphertext gives absolutely no additional 
+information about the plaintext
+
+Generated randomly
+
+Same length as the plaintext
+
+Never reused
+23
+One
+-
+Time Pad
+key=‘cat’= 01100011 01100001 01110100
+P=‘dog’=
+‘d’=10010=011001002
+‘o’=11110=011011112
+‘g’=10310=011001112Cipher=01100100 01100100 01100111
+00000111 00000101 00010011
+24
+
+One
+-
+Time Pad
+
+Choose a random bit string as a key
+
+Convert plaintext into 
+ bitstring
+
+Compute exclusive
+ -
+or of the two strings
+
+Ciphertext contains no redundancy information because every 
+combination is equally likely
+
+Key must be at least as long as message
+ -
+overhead
+
+Key can not be memorized (too long)
+
+Difficulties to create natural Random
+25
+Secure cryptosystem
+
+Problems
+
+Statistical patterns
+
+Redundancies
+
+Key smaller than 
+plaintext
+
+Key reused
+
+Solutions 
+ -
+h
+iding
+patterns by 
+
+substitutions
+
+Transposition
+
+Compression
+
+Expansion
+
+Padding
+
+Key mixing
+
+Initialization vector (IV)
+26
+Symmetric Encryption
+
+Attacking Symmetric 
+Encryption
+
+cryptanalysis
+
+rely on nature of the algorithm 
+
+plus some knowledge of plaintext 
+characteristics
+
+even some sample plaintext
+ -
+ciphertext pairs
+
+exploits characteristics of algorithm to deduce 
+specific plaintext or key
+
+brute
+ -
+force attack
+
+try all possible keys on some ciphertext until 
+get an intelligible translation into plaintext
+Exhaustive Key Search
+
+Symmetric Encryption 
+Algorithms
+
+DES and Triple
+ -
+DES
+
+Data Encryption Standard (DES) is the 
+most widely used encryption scheme
+
+uses 
+ 64 
+bit plaintext block and 
+ 56 
+bit key to 
+produce a 
+ 64 
+bit ciphertext block
+
+concerns about algorithm & use of 
+ 56
+-
+bit key
+
+Triple
+ -
+DES
+
+repeats basic DES algorithm three times
+
+using either two or three unique keys
+
+much more secure but also much slower
+How does DES work? (
+ Feistel
+ Network) 
+ [
+597
+]
+
+Plaintext is a block of length 
+ 2
+w bits
+
+K is the Key (seed) from which the subkeys 
+ ki
+are being 
+generated using a generation algorithm.
+
+Plaintext is divided into two halves of length w: L
+ 0 
+and R
+ 0
+.
+
+F is a function that combines between 
+ R
+i
+and K
+ i
+
+N 
+–
+rounds, and the steps are:
+32
+
+Advanced Encryption 
+Standard (AES)
+
+needed a better replacement for DES
+
+NIST called for proposals in 
+ 1997
+
+selected 
+ Rijndael
+ in Nov 
+ 2001
+
+published as FIPS 
+ 197
+
+symmetric block cipher
+
+uses 
+ 128 
+bit data & 
+ 128
+/
+192
+/
+256 
+bit keys
+
+now widely available commercially
+Advanced Encryption 
+Standard (AES)
+
+Advanced Encryption 
+Standard (AES)
+
+Nice guide: 
+http://www.moserware.com/
+ 2009
+ /
+09
+/stick
+ -
+figure
+ -
+guide
+ -
+to
+-
+advanced.html
+
+Modes of Operation
+
+block ciphers process data in blocks
+
+e.g. 
+64
+-
+bits (DES, 
+ 3
+DES) or 
+ 128
+/
+256
+-
+bits 
+(AES)
+
+for longer messages must break up
+
+and possibly pad end to 
+ blocksize
+ multiple
+
+have 
+ several 
+ modes 
+ of operation
+ for this
+
+defined in NIST SP 
+ 800
+-
+38
+A and updated
+
+modes are: ECB, CBC, CFB, OFB, 
+ CTR
+…
+Electronic Codebook (ECB)
+
+simplest mode
+
+split plaintext into blocks
+
+encrypt each block using the same key
+
+“
+codebook
+ ” 
+because have unique 
+ciphertext value for each plaintext block
+
+not secure for long messages since repeated 
+plaintext is seen in repeated ciphertext
+Cipher Block Chaining (CBC)
+
+Block 
+verses 
+Stream 
+Ciphers
+
+Cipher Feedback (CFB)
+
+Key Distribution
+
+symmetric crypto needs a shared key:
+
+two parties A & B can achieve this by:
+
+A selects key, physically delivers to B
+
+3
+rd party select keys, physically delivers to A, B
+•
+reasonable for link crypto, bad for large no
+ ’
+s users
+
+A selects new key, sends encrypted using 
+previous old key to B
+•
+good for either, but security fails if any key discovered
+
+3
+rd party C selects key, sends encrypted to 
+each of A & B using existing key with each
+•
+best for end
+ -
+to
+-
+end encryption
+Key Distribution
+
+Public Key Encryption
+
+Public Key Requirements
+1.
+computationally easy to create key pairs
+2.
+computationally easy for sender knowing 
+public key to encrypt messages
+3.
+computationally easy for receiver knowing 
+private key to decrypt ciphertext
+4.
+computationally infeasible for opponent to 
+determine private key from public key
+5.
+computationally infeasible for opponent to 
+otherwise recover original message
+6.
+useful if either key can be used for each role
+Public Key Algorithms
+
+RSA (
+ Rivest
+ , Shamir, 
+ Adleman
+ )
+
+developed in 
+ 1977
+
+only widely accepted public
+ -
+key encryption 
+ alg
+
+given tech advances need 
+ 2048
+ + bit keys
+
+Diffie
+ -
+Hellman key exchange algorithm
+
+only allows exchange of a secret key
+
+Digital Signature Standard (DSS)
+
+provides only a digital signature function with SHA
+ -
+1
+
+based on El
+ -
+Gamal algorithm
+
+Elliptic curve cryptography (ECC)
+
+new, security like RSA, but with much smaller keys
+RSA Public
+ -
+Key Encryption
+
+by 
+Rivest
+ , Shamir & 
+ Adleman
+ of MIT in 
+ 1977 
+
+best known and widely used public
+ -
+key algorithm 
+
+uses exponentiation of integers modulo a prime
+
+encrypt:
+ C
+= 
+M
+e
+mod 
+ n
+
+decrypt:
+ M
+= 
+C
+d
+mod 
+ n
+= (
+M
+e
+)
+d
+mod 
+ n
+= 
+M
+
+both sender and receiver know values of 
+ n 
+and
+e
+
+only receiver knows value of 
+ d
+
+public
+ -
+key encryption algorithm with
+
+public key 
+ PU
+= {
+e
+, 
+n
+} and private key 
+ PR
+= {
+d
+, 
+n
+}. 
+RSA Algorithm 
+ [
+637
+\
+667
+]
+public key PU= {e, n}
+private key PR= {d, n}
+Φ(n) –Euler totient  function.
+Φ(n) counts the positive integers 
+less than or equal to nthat 
+arerelatively prime ton.
+
+RSA Example 
+ –
+Key Generation
+public key, PU= {e=7, n=187}                        PR= {d=23, n=187}, private key 
+
+RSA Example 
+ –
+Encryption
+ \
+Decryption
+public key PU= {e=7, n=187}                        PR= {d=23, n=187} private key 
+For encrypting Message M with plaintext = 88
+Attacks on RSA
+
+brute force
+
+trying all possible private keys
+
+use larger key, but then the process is slower
+
+mathematical attacks (factoring n)
+
+N = 
+pXq
+-
+> finding 
+ p,q
+enables to find 
+ Φ
+(n)  and finally d.
+
+currently 
+ 2048
+ + bit 
+ keys seem secure
+
+The threat still exists regarding to larger keys:
+•
+Increasing computing power
+•
+Refinement of factoring algorithms (QS, GNFS, SNFS)
+
+timing attacks (on implementation)
+
+Paul Kocher: possible to determine private key according to the time takes to decrypt 
+message
+
+Analogous 
+ to a burglar guessing a safe combination by observing how long it takes to turn 
+the dial from number to number
+
+Use to prevent:  constant time, random delays, blinding (multiply by random numbers)
+
+chosen ciphertext attacks (on RSA 
+ properties
+ )
+RSA padding
+
+Suppose we encrypt a simple yes/no answer 
+
+Can it be broken by a passive attacker 
+(eavesdropper)?
+
+What about symmetric encryption?
+
+Solution: 
+ “
+padding
+ ”
+. Usually with a random 
+scheme
+
+e
+.g. Optimal Asymmetric Encryption Padding 
+(OAEP)
+Message Authentication
+
+encryption 
+ protects against passive attack 
+(eavesdropping). 
+
+a
+uthentication protects against 
+ active
+attacks
+
+verifies received message is authentic
+
+contents unaltered
+
+from authentic source
+
+timely and in correct sequence
+
+s
+eparate and different from 
+ encryption
+
+append authentication tag to 
+ cleartext
+ message
+Message Authentication Codes
+MAC example: encrypt the message in cbc 
+mode and use the last block of ciphertext as the 
+codeNote the use of a secret key
+One
+-
+Way Hash Function
+56•One way since it is not reversible
+•M message with Variable length
+•H –one way hash function
+•H does not use a secret key.
+•H(M) –Fixed message digest that is 
+added to the original message.
+•We add to H(M) the length of the 
+original message in bits.
+•Hash is more lightweight than MAC
+–Sender authenticity is not guaranteed
+Can also be used to compute checksums on files & more
+Hash Functions example
+
+Hash Function Requirements
+applied to any size data
+H produces a fixed -length output.
+H(x) is relatively easy to compute for any given x
+one-way property 
+computationally infeasible to find xsuch that H( x) = h
+weak collision resistance 
+computationally infeasible to find y≠xsuch that
+H(y) = H( x)
+strong collision resistance 
+computationally infeasible to find any pair ( x, y) such 
+that H( x) = H( y)
+Hash Functions
+
+two attack approaches
+
+cryptanalysis
+•
+exploit logical weakness in alg
+
+brute
+ -
+force attack
+•
+trial many inputs
+•
+strength proportional to size of hash code (
+ 2
+n
+/
+2
+)
+
+SHA most widely used hash algorithm
+
+SHA
+-
+1 
+gives 
+ 160
+-
+bit hash
+
+more recent SHA
+ -
+256
+, SHA
+ -
+384
+, SHA
+ -
+512 
+provide improved size and security
+Hash Functions
+
+The 
+Birthday 
+ “
+Paradox
+ ”
+
+What is the probability that in this room 
+there are students have that celebrate 
+their birthday on the same day?
+
+How is that related to Hash function? 
+(a) we encrypt the digest only 
+using the symmetric key.
+(b) we encrypt the digest only 
+using our private key.
+-
+used as digital signature
+-
+no need for key distribution
+(c) we use secret value K that is 
+agreed on the sender and 
+receiver, the secret is not sent 
+therefore it is difficult for an 
+attacker to create H(m)
+61Message Authentication Using a One -Way Hash Function –HMAC
+(MD2,MD4,MD5, SHA -1(160)/256/512)[53]
+Using Public Key for 
+Authentication
+
+we encrypt the digest only using our private key.
+-
+used as digital signature
+-
+no need for key 
+ distribution
+63Digital Signatures
+Public Key Certificates
+64•The weakness of PKE: anyone can forge a publication of the 
+Bob’s public key –and by the time it is discovered he can read 
+messages aimed at Bob and pretend to be Bob as well. 
+•We need a trusted third party –certificate authority CA.
+Digital Envelopes
+
+protects a message without 
+needing to first arrange for sender 
+and receiver to have the same 
+secret key 
+
+equates to the same thing as a 
+sealed envelope containing an 
+unsigned letter
+
+The symmetric key is exchanged 
+through Asymmetric PKE
+
+The messages encrypted using the 
+encrypted symmetric key.
+
+Advantages:
+
+Short keys
+
+Symmetric 
+ -
+Fast encryption and 
+decryption of messages
+
+New symmetric keys in every session 
+–
+enhances confidentiality.
+66
+Encryption
+ Summary
+
+Confidentiality
+•
+Encryption
+
+Symmetric (requires key Exchange) [DES, 
+ 3
+DES, 
+ AES].
+
+Asymmetric = Public Key Encryption = PKE (requires Certificate) [RSA, 
+ others].
+•
+Symmetric Key exchange
+
+Digital 
+ Envelope
+
+Message authentication
+•
+Symmetric Encryption
+
+MAC (Message Authentication Code 
+ –
+Usually 
+ last block 
+ of the cipher encrypted using DES)
+
+One way Hash Function (Using Symmetric Key)
+•
+PKE
+
+Digital signature (DSS with SHA
+ -
+1
+)
+
+One way Hash Function (Using Private Key)
+
+Source 
+ authentication 
+•
+Certificate
+•
+Digital signature ( either Symmetric or Asymmetric Encryption)
+68
+Cryptography Classification
+
+type of operations used for transforming plaintext to 
+ciphertext
+
+substitution 
+ –
+each element in the plaintext is mapped into 
+another
+
+transposition 
+ –
+elements in plaintext are rearranged
+
+keys used
+
+symmetric
+
+Asymmetric
+
+the way in which the plaintext is processed
+
+block cipher 
+ –
+processes input one block of elements at a 
+time
+
+stream cipher 
+ –
+processes the input elements continuously
+69
+Cryptanalysis 
+type of attack known to cryptanalyst
+ -Least info = Brute Force on all possible 
+keys
+-Statistical tests + Prior  knowledge  
+about     plaintext ’s language ( Eng, Java 
+et..)  
+-Only weak Encryption algorithms fails.
+-More info –helps deducing the 
+encryption key
+-E.gEmail message has known format
+-Certain key words inside specific 
+locations in the file such as: “Bank 
+Acount ”, “Date ”
+-Probable -Word -attack
+-The attacker has an access to the 
+encryption system
+-Then can encrypt specific patterns that 
+will help him to reveal the structure of 
+the key.
+-Less common
+-The attacker has an access to the 
+encryption system
+-Then can decrypt chosen ciphertext 
+patterns that will help him to reveal the 
+structure of the key.
+-Less common
+-Combines both
+-1. Chosen plaintext
+-2. Chosen ciphertext
+70
+Symmetric Encryption 
+71
+Public
+ -
+Key Encryption 
+(Confidentiality) 
+72
+Public Key Certificates
+73•The weakness of PKE: anyone can forge a publication of the 
+Bob’s public key –and by the time it is discovered he can read 
+messages aimed at Bob and pretend to be Bob as well. 
+•We need a trusted third party –certificate authority CA.
+Pseudorandom verses 
+Random Numbers
+
+often use algorithmic technique to create 
+pseudorandom numbers
+
+which satisfy statistical randomness tests
+
+but likely to be predictable
+
+true random number generators use a 
+nondeterministic source
+
+e.g. radiation, gas discharge, leaky capacitors
+
+increasingly provided on modern processors 
+Practical Application: 
+Encryption of Stored Data
+
+common to encrypt transmitted data
+
+much less common for stored data
+
+which can be copied, backed up, recovered
+
+approaches to encrypt stored data:
+
+back
+ -
+end appliance
+
+library based tape encryption
+
+background laptop/PC data encryption
+Cryptographic Protocols
+
+Diffie
+ Hellman key exchange
+
+Man In The Middle (MITM) attack
+
+Mutual Authentication protocols
+Diffie
+ -
+Hellman Key Exchange
+
+first published public
+ -
+key algorithm 
+
+by 
+Diffie
+ and Hellman in 
+ 1976 
+ along with the 
+exposition of public key concepts
+
+used in a number of commercial products
+
+practical method to exchange a secret key 
+securely that can then be used for subsequent 
+encryption of messages
+
+security relies on difficulty of computing discrete 
+logarithms 
+Diffie
+ -
+Hellman
+ :
+Key
+ Exchange Algorithm
+α is Primitive root of q 
+–if α’s powers generate 
+all the integers from so 
+that
+The the numbers: 
+must be distinct and 
+between 1 to q-1
+αand q are not 
+confidential.
+Public keys are known to 
+everyone.
+
+Diffie
+ -
+Hellman
+ :
+Proof
+
+Primitive root
+
+Let p be a prime
+
+Then b is a primitive root for p if the powers of 
+b: 
+1
+, b, b^
+ 2
+, b^
+3
+, ... include all of the residue 
+classes mod p (except 
+ 0
+)
+
+If p=
+7
+, then 
+ 3 
+is a primitive root for p 
+1
+, 
+3
+, 
+9
+, 
+27
+, 
+81
+, 
+243 
+mod 
+ 7 
+= 
+1
+, 
+3
+, 
+2
+, 
+6
+, 
+4
+, 
+5
+11
+/
+15
+/
+2022
+ 80
+Diffie
+ -
+Hellman Example
+
+have
+
+prime number 
+ q
+= 
+353 
+
+primitive root 
+ 
+= 
+3
+
+X
+A = 
+97
+
+X
+B = 
+233
+
+A and B each compute their public keys
+
+A computes 
+ Y
+A
+= 
+3
+97
+mod 
+ 353 
+= 
+40
+
+B computes 
+ Y
+B
+= 
+3
+233
+mod 
+ 353 
+= 
+248
+
+then exchange and compute secret key:
+
+for A: 
+ K
+= (
+Y
+B
+)
+XA
+mod 
+ 353 
+= 
+248
+97
+mod 
+ 353 
+= 
+160
+
+for B: K
+ = (
+Y
+A
+)
+XB
+mod 
+ 353 
+= 
+40
+233
+mod 
+ 353 
+= 
+160
+
+attacker must solve:
+
+3
+Xa
+mod 
+ 353 
+= 
+40 
+, with brute force which is feasible (
+ 97
+).
+
+desired answer is 
+ 97
+, then compute key as B does
+
+Impractical to do it for large prime numbers (
+ 
+,
+q) 
+
+Since it is hard to calculate discrete logarithms.
+
+Key Exchange Protocols
+
+Man
+-
+in
+-
+the
+-
+Middle Attack
+Alice BobHello, I am Alice, KA
+Hello, I am Bob, KB
+Man
+-
+in
+-
+the
+-
+Middle Attack
+Alice BobHello, I am Alice
+KA
+Hello, I am Bob
+KBMattHello, I am Alice
+KAHello, I am Alice
+KA’
+Hello, I am Bob
+KBHello, I am Bob
+KB’
+Man
+-
+in
+-
+the
+-
+Middle Attack

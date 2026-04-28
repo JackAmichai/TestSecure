@@ -1,0 +1,526 @@
+1המצגת הינה לשימוש פנימי בלבד
+אין לצלם או לעשות שימוש שלא במסגרת הקורסאבטחת סייבר
+(אבטחת מידע /מחשבים /מערכות ממוחשבות /...)
+
+2בפעמים הקודמות
+  דיברנו על"פרימיטיבים " של הצפנה ואימות –
+אבני בניין שישמשו אותנו לפי הצורך
+ הצפנה סימטרית/אסימטרית  ( AES,RSA )
+  אימות הודעות(MAC , חתימה דיגיטלית)
+  החלפת מפתחות(תעודות )
+ דיברנו על בקרת כניסה
+( פירוט בהמשך)
+3היום
+ תזכורת
+ דוגמה לשימוש באבני בניין: SSL/TLS
+  פרוטוקולקרברוס 
+ בקרת גישה
+4תזכורת
+
+5תזכורת
+
+6תזכורת
+
+7תזכורת
+
+אזהרות
+8אין להשתמש בצופן ללא אימות של כתב הסתר!
+-במיוחד כאשר תוקף אקטיבי עלול להשתתף בפרוטוקול 
+-ובפרוטוקולים מורכבים , כגון פרוטוקלירשתות מחשבים 
+אזהרות
+9אין להשתמש באותו מפתח להצפנה ב-CBC ואימות ב- CBC-MACאין להשתמש בצופן ללא אימות של כתב הסתר!
+-במיוחד כאשר תוקף אקטיבי עלול להשתתף בפרוטוקול 
+-ובפרוטוקולים מורכבים , כגון פרוטוקלירשתות מחשבים 
+אזהרות
+10אין להשתמש ב-RSA  ללא PADDING(  למשל OAEP)אין להשתמש באותו מפתח להצפנה ב-CBC ואימות ב- CBC-MACאין להשתמש בצופן ללא אימות של כתב הסתר!
+-במיוחד כאשר תוקף אקטיבי עלול להשתתף בפרוטוקול 
+-ובפרוטוקולים מורכבים , כגון פרוטוקלירשתות מחשבים 
+אזהרות
+11אין להשתמש ב-RSA  ללא PADDING(  למשל OAEP)
+ אין לחתום על ההודעה המקורית(אלא על  HASH שלה)אין להשתמש באותו מפתח להצפנה ב-CBC ואימות ב- CBC-MACאין להשתמש בצופן ללא אימות של כתב הסתר!
+-במיוחד כאשר תוקף אקטיבי עלול להשתתף בפרוטוקול 
+-ובפרוטוקולים מורכבים , כגון פרוטוקלירשתות מחשבים 
+אזהרות
+12אין להשתמש ב-RSA  ללא PADDING(  למשל OAEP)
+ אין לחתום על ההודעה המקורית(אלא על  HASH שלה)
+אין להשתמש באותו מפתח להצפנה ב-RSA וחתימה ב-RSAאין להשתמש באותו מפתח להצפנה ב-CBC ואימות ב- CBC-MACאין להשתמש בצופן ללא אימות של כתב הסתר!
+-במיוחד כאשר תוקף אקטיבי עלול להשתתף בפרוטוקול 
+-ובפרוטוקולים מורכבים , כגון פרוטוקלירשתות מחשבים 
+Basic Comprehension Survey 
+1.Bob encrypts a message with symmetric key , and sends it to Alice, who owns this key as well, 
+what did he achieve?
+2.Bob encrypts a message with his private key , and sends it to Alice, 
+what did he achieve?
+3.Bob encrypts a message with his public key , and sends it to Alice, 
+what did he achieve?
+4.Bob encrypts message with Alice ’s public key , and sends it to Alice,
+what did he achieve?
+5.Bob encrypts message ’s hash code with his private key , and sends it to Alice with the message 
+itself encrypted with Alice ’s public key , 
+what did he achieve?
+6.Bob encrypts message ’s hash code with Alice ’s public key , and sends it to Alice
+what did he achieve?
+a.Confidentiality
+b.Message authentication (integrity of content and time)
+c.Source authentication
+d.Nothing13
+SSL/TLS Handshake Protocol
+•is used before any application data are 
+transmitted
+•allows server & client to:
+•authenticate each other
+•to negotiate encryption & MAC algorithms
+•to negotiate cryptographic keys to be used
+•comprises a series of messages in phases
+•Establish Security Capabilities
+•Server Authentication and Key Exchange
+•Client Authentication and Key Exchange
+•Finish 14
+15
+* *or use DHE
+rest of session is encrypted with session keyCipher suites example:
+TLS_RSA_WITH_AES_ 256_CBC_SHA 256
+TLS_ECDHE_ECDSA_WITH_AES_ 256_GCM_SHA 384
+SSL/TLS
+ תאורסכמטי 
+HTTPS (HTTP over SSL/TLS)
+•Combination of HTTP and SSL/TLS to 
+implement secure communication between 
+a Web browser and a Web server
+•built into all modern Web browsers
+•URL addresses begin with https ://
+•documented in RFC 2818, HTTP Over TLS
+16
+HTTPS (HTTP over SSL)
+17
+18
+
+X.509 Authentication Service 
+universally accepted standard for 
+formatting public -key certificates
+part of CCITT X. 500 directory service 
+standards
+uses public -key crypto & digital 
+signatures 
+19
+X.509 Certificates
+20
+Public Key Infrastructure
+21
+PKIX Management
+functions:
+registration
+initialization
+certification
+key pair recovery
+key pair update
+revocation request
+cross certification
+protocols: CMP, CMC
+22
+23בקרת כניסה/אימות זיהוי 
+בפעם הקודמת
+  סיסמאותואחסונם 
+ התקפות מילון, SALT,...
+ כרטיסים חכמים
+ אתגר-תגובה 
+ ביומטריה
+ שיקולי עלות-תועלת 
+ False-positive ,...
+ Multi factor authentication
+ סיסמאות גרפיות
+24היום
+  בקרת כניסה–המשך   
+  פרוטוקולאימות זיהוי הדדי 
+ KERBEROS
+  בקרת גישה( Access Control)
+Mutual Authentication
+KDC
+Shared key with KDC
+Time stamp
+Nonce
+Challenge -Response
+|| means concatenation
+25
+26Needham -Schroeder Protocol
+AnBA,, 1.
+)),( ,,,(  2. AKEKBnEab K ab A Kbs as
+),(  3. AKEab Kbs
+S
+A B
+)(  4.B KnE
+ab
+)1 (  5. B KnE
+ab
+27Denning -Sacco Attack
+The NS protocol achieves its goals under the 
+(standard) assumption that the long term keys Kas
+and Kbsare not compromised.
+Denning & Sacco discovered an attack where the 
+adversary Cimpersonates Are-using a 
+compromised session key Kab:
+),( .3 AKEab Kbs
+C B
+)( .4B KnE
+ab
+)1 ( .5 B KnE
+abfrom original protocol run
+28Denning ’s Protocol
+1. A   KDC: IDAIDB
+2. KDC   A: Eka[KSIDBTEKb[KSIDAT]]
+3. A   B: Ekb[KSIDAT]
+4. B   A: Eks[N1]
+5. A   B: Eks[f(N1)]
+•Use of time (T) prevents replaying old 
+messages
+•Requires synchronization of clocks
+Kerberos
+29
+
+Kerberos
+trusted key server system from MIT 
+provides centralised private -key third -party authentication 
+in a distributed network
+allows users access to services distributed through network
+without needing to trust all workstations
+rather all trust a central authentication server
+two versions in use: 4 & 5
+30
+Kerberos -Overview
+A secured, centralized network authentication protocol (N 
+users and M servers/services)
+Providing protection against replay, password guessing 
+and session hijacking
+Single -Sign-On (SSO)
+Based on symmetric cryptography
+Developed as part of Project Athena at MIT (late 1980s)
+Used in many systems, e.g., Windows 2000 and later as 
+default authentication protocol31
+Kerberos –Overview and Components
+Goal: 
+Allow secured and efficient work of many clients with many servers and systems usually 
+within organization
+Allow single sign on (SSO)
+Key Distribution Center (KDC)
+Users Database
+Tickets
+Kerberos server share secret key with each one of the Servers
+distributed physically and securely.
+User X logs in to the station with his password only once (SSO)
+User receive tickets
+used to prove authentication to each one of the desired servers for the daily work
+32
+Kerberos -Overview
+33
+
+34Kerberose Version 4
+(a) Authentication Service Exchange: 
+to obtain ticket -granting ticket
+(1) C   AS: IDCIDtgsTS1
+(2) AS   C:
+Ekc[IDCKc.tgsIDtgsTS2Lifetime2Tickettgs]
+Tickettgs= EKtgs[Kc.tgsIDCADCIDtgsTS2Lifetime2]
+(b) Ticket -Granting Service Service Exchange:
+to obtain service -granting ticket
+(3) C   TGS: IDVTickettgsAuthenticatorC
+(4) TGS   C: Ekc.tgs[Kc.VIDVTS4TicketV]
+Tickettgs= EKtgs[Kc.tgsIDCADCIDtgsTS2Lifetime2]
+TicketV= EKV[Kc.VIDCADCIDVTS4Lifetime4]
+AuthenticatorC= Ekc.tgs[IDCADCTS3]
+35(c) Client/Server Authentication Exchange: 
+to obtain service
+(5) C -> V: TicketVAuthenticatorC
+(6) V -> C: EkC.V[TS5+1] (for mutual authentication) 
+TicketV= EKV[KC.VIDCADCIDV||TS4Lifetime4]
+AuthenticatorC= EkC.V[IDCADCTS5]Kerberose Version 4, cont.
+Kerberos Realms
+a Kerberos environment consists of:
+a Kerberos server
+a number of clients, all registered with server
+application servers, sharing keys with server
+this is termed a realm
+typically a single administrative domain
+if have multiple realms, their Kerberos servers must share 
+keys and trust 
+36
+Kerberos Realms
+37
+Kerberos Version 5
+Kerberos v 5 is the most widely used version
+Developed in mid 1990’s
+specified as Internet standard RFC 1510
+provides improvements over v 4
+addresses environmental shortcomings
+encryption alg, network protocol, byte order, ticket 
+lifetime, authentication forwarding, inter -realm auth
+and technical deficiencies
+double encryption, non -stdmode of use, session 
+keys, password attacks
+38
+Kerberos -Advantages
+TGT (Ticket Granting Ticket) with the secret key of the user –thus user 
+authentications is guaranteed.
+AS provides the client a TGT (Ticket Granting Ticket) that is good for 
+TGS that can provide a key for every server.
+Using the Granting Ticket, the client can ask additional tickets for 
+additional servers, thus:
+We don ’t bother the userwith additional PSW requests
+Time-Stamp strengths the protocol against:
+replay attack.
+Reuse of tickets –they expire after predefined period ( e.g4 hours)
+Secured since integrates third party authentication entity:
+the tickets cannot be altered by users since encrypted with secret key of AS 
+and TGS.
+MITM is not feasible.
+39
+Kerberos -Drawback
+Single point of failure (AS)
+Requires online trusted third party: Kerberos server
+Security depends on tight clock synchronization
+Secret keys are temporarily stored on the users ’ workstation
+Password file can be exposed; dictionary attack
+Even without it, offline attack possible –how?
+40
+Access Control
+41
+Access Control
+ITU-T (International Telecommunication Union) 
+Recommendation X. 800 defines access 
+control as follows: 
+“The prevention of unauthorized use of a 
+resource, including the prevention of use of a 
+resource in an unauthorized manner. ”
+42
+Access Control Principles
+Authentication: 
+Verification that the claimed identity of a user or other system entity 
+are valid.
+Authorization: 
+The granting of a right or permission to a system entity to access a 
+system resource. 
+This function determines who is trusted for a given purpose.
+Audit: 
+An independent review and examination of system records and 
+activities 
+test for adequacy of system controls, to ensure compliance with 
+established policy and operational procedures, 
+detect breaches in security
+recommend any indicated changes in control, policy and procedures.
+43
+Access Control Principles
+44
+45Security Policies andmodels
+A security model is a formal definition of a 
+security policy
+46Example of university policies
+An instructor can look at all the information about the 
+course he is teaching.
+An instructor can change the grades of the students in 
+the course he is teaching
+A student may look at her grades in a course she is 
+taking
+The department head can add/delete course offerings
+The department head can add/delete students from 
+course offerings
+Faculty members can look at information about 
+themselves
+Examples for Authorization 
+specifications
+John has a Faculty type of access to course: 
+Operating Systems
+Bill has a student type of access to course; 
+Data Structures
+Mary (secretary) has a Read/write access to all 
+grades files
+47
+48Why Security Models?
+When we have implemented a security policy, do we know 
+that it will (and can) be enforced?
+E.g., if policies get too intricate, contradicting rules may 
+apply to a given access request.
+To prove that a policy will be enforced, the policy has to be 
+formally specified.
+Multiple Access Control Policies
+49DAC
+Entity can 
+enable 
+another 
+entity to 
+access some 
+resources
+RBAC -(Roles and rules defined in 
+the sytem controls the accessMAC
+Entity cannot 
+enable 
+another entity 
+to access 
+some 
+resources
+Access Control Requirements
+Reliable input (authenticated user, IP address …)Support for fine and coarse specificationsLeast privilegeSeparation of dutyOpen and closed policiesPolicy combinations and conflict resolutionAdministrative policiesDual controlAuthorization creep (e.g. when employee is 
+Terminated without removing their old access )Security domain –all resources and users that are 
+working under the same security policySingle -Sign-On (SSO)
+50
+Access Control Basic Elements
+subject –entity capable of accessing objects
+User or application gains access by process
+typically held accountable for the actions they initiate
+object –resource to which access is controlled
+entity used to contain and/or receive information
+protection depends on the environment in which access 
+control operates 
+access right –describes the way in which a 
+subject may access an object
+e.g. read, write, execute, delete, create, search
+51
+52
+Are stated in terms of a set of  
+  security objects,   security subjects, and   access privileges  
+ 
+Basic primitives:  
+ •Users can protect the data they  "own". 
+ •The owner may grant access to others.  
+ •The owner may define the type of access (read, write  execute, ...)   
+given to others.  
+ •Granting and revoking of access permission is under the discretion 
+of the users themselves.  Discretionary Access Control Model 
+(DAC)
+Discretionary Access Control Matrix 
+DAC is often provided using an access 
+matrix
+one dimension consists of identified subjects 
+that may attempt data access to the 
+resources
+the other dimension lists the objects that 
+may be accessed
+Each entry in the matrix indicates the 
+access rights of a particular subject for a 
+particular object
+53
+The Access Matrix Model
+Subjects
+-users, groups, applications, transactions …
+Objects
+-Files, programs,  databases, relations, URLs …
+Access -types
+-Read, write, create, copy, delete, execute, kill …
+May differ in different implementations
+Authorization commands
+-enter, remove, transfer …
+Authorizers
+-Owners, users, administrators …
+54
+Access Matrix
+55 Usually Sparse Matrix, why ?
+Example of Access Control Structures
+56•(b) ACLs = Access Control Lists
+– Per columns = per object
+•(c) Capability ticket
+– Per row= per subject (user \system)
+– Can also contain default \public entry
+
+Extended Access Control Matrix
+57
+Access Control Function
+58
+Access Control System Commands 
+59
+Example: UNIX File Access ControlInode (Index node) = control structure 
+needed for OS for particular file. Contains:
+Each user has unique user identification 
+number (user ID)
+Each user is a member of a primary group 
+identified by a group ID
+Each user belongs to a specific group
+12 protection bits
+specify read, write, and execute permission for 
+the owner of the file, members of the group 
+and all other users
+First 9 bits include authorization to 
+USER,GROUP and other.
+the owner ID, group ID, and protection bits 
+are part of the file ’s inode
+62
+
+Role-Based Access Control (RBAC)
+64 Aadvantage over DAC ?
+RBAC -Access Control 
+Matrix
+65
+•Assigning Users to Roles:
+•More Users than Roles
+•User Can be assigned to multiple roles
+•Roles can b e assigned to multiple users
+•Assigning Roles to Objects:
+•More Objects than Roles
+•Role can be treated as an object –for role 
+hierarchies definition.
+66Role-Based Models
+RBAC 0–Users, Roles, Permissions, 
+Sessions
+RBAC 1–RBAC 0 + Role -hierarchies
+RBAC 2 –RBAC 0 + Constraints
+RBAC 3–RBAC 0 + Role -hierarchies + 
+Constraints
+Example of Role Hierarchy –RBAC 1
+68
+69The Information Flow Problem of DAC (I)
+Users Rights
+User: Alicer: Alice; w: Alice
+User: Bobr: Bob; r,w: Alice
+User Bob cannot read the file A!File A
+File B
+70The Information Flow Problem of DAC (II)
+Information Flow
+User: Alicer: Alice; w: Alice
+User: Bobr: Bob; r,w: Alice
+User Bob can read contents of the file A
+copied to file BFile A
+File BPgm X
+THRea
+d
+Write
+Bell-LaPadula (BLP) Confidentiality Model 
+(1973 )
+By David Bell and Leonard LaPadula
+Hierarchical
+Addresses the confidentiality of information in a system
+Mandatory access control
+Formalize the U.S. Department of Defense (DoD) 
+multilevel security (MLS) policy; the basis for the Orange Book
+Simple security property –read capability only
+A subject can read information at or below his level of secrecy ,
+but cannot read any information above his level of secrecy
+(no read up)
+Star property –write capability only
+A subject can write information at or above his level of secrecy, 
+but cannot read any information above his level of secrecy
+(no write down)Assigned level
+Lower secrecy levelHigher secrecy level
+71
+Bell-LaPadula (BLP) Confidentiality Model 
+(1973 )
+72
+The *- property protects information from being ‚ written-down‘ along the hierarchy of
+sensitivity levels.
+‚Write‘ if no ‚read‘ to higher classified data!O1S1 O2O3S2O5
+O4(w)
+(r)(r)(r)(r)
+(w)(w)(w)
+lowhigh
+O S
+73Features
+A mandatory model (users are assigned to 
+classifications by administrators)
+Need trusted processes to perform 
+administrative functions 
+Typically use data labels to enforce security
+74Problems of BLP
+1. The need for a Trusted subject (to write non -
+secret info.) 
+Solution :  high water mark ! –get the 
+sensitivity level of the highest level accessed 
+object during the program execution so far …
+2. The problem of covert channels.
+3. No access -control when all subjects and all 
+objects are at the same level. 
