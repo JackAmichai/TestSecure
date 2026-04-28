@@ -2,123 +2,94 @@
 import json
 import random
 
-def generate_questions():
+def generate_mcqs(count):
     questions = []
-    
-    # Hebrew Exam-style templates based on "Software Security 20940"
-    scenarios = [
-        {
-            "topic": "בקרת גישה ומנגנוני יוניקס/ווינדוס",
-            "templates": [
-                {
-                    "q": "האם ניתן ליישם את מטריצת הגישה הבאה ביוניקס באמצעות הרשאות בסיסיות (UGO) בלבד ללא שימוש ב-ACL?\nמטריצה: משתמש א' (RW על קובץ1), משתמש ב' (R על קובץ1), משתמש ג' (ללא גישה לקובץ1).",
-                    "a": "לא, כיוון שהרשאות יוניקס בסיסיות תומכות רק בבעלים אחד ובקבוצה אחת. אם א' הוא הבעלים וב' בקבוצה, לא ניתן בקלות לתת לב' הרשאת R תוך חסימת ג' אם ג' שייך לאותה קטגוריית 'Other' או חולק קבוצות אחרות.",
-                    "o": [
-                        "כן, על ידי הגדרת הקובץ ל-640 והפיכת ב' לבעלים.",
-                        "כן, על ידי שימוש ב-Sticky Bit על קובץ1.",
-                        "לא, הרשאות בסיסיות מוגבלות לבעלים/קבוצה/אחרים; מתן הרשאות ספציפיות שונות למספר משתמשים דורש ACL או ניהול קבוצות מורכב מאוד."
-                    ],
-                    "explanation": "ביוניקס/לינוקס, לקובץ יש בעלים אחד וקבוצה אחת. כדי לתת למשתמש א' (RW) ולמשתמש ב' (R) הרשאות שונות תוך מניעת משתמש ג', נצטרך להפוך את א' לבעלים (640) ואת ב' לחבר בקבוצה של הקובץ. עם זאת, המודל מוגבל וברגע שיש דרישות למספר משתמשים עם הרשאות שונות, מודל ה-UGO נכשל במקום בו ACL מצליח."
-                },
-                {
-                    "q": "משתמש מריץ את הפקודה 'chmod 4755 script.sh'. מה המשמעות של הספרה '4' במיקום הראשון?",
-                    "a": "היא מגדירה את ביט ה-SUID (Set User ID), מה שאומר שהסקריפט ירוץ עם ההרשאות של בעל הקובץ.",
-                    "o": [
-                        "היא הופכת את הסקריפט לקריא עבור כולם.",
-                        "היא מגדירה את ה-Sticky Bit, המונע מאחרים למחוק את הקובץ.",
-                        "היא הופכת את הסקריפט לנסתר עבור משתמשים שאינם root."
-                    ],
-                    "explanation": "הספרה '4' במקום האלפים (4xxx) מייצגת את ביט ה-SUID. כאשר ביט זה מוגדר על קובץ הרצה, כל משתמש שיריץ אותו יגרום לתהליך להתבצע עם ההרשאות של בעל הקובץ (Owner). זה נפוץ בתוכניות כמו 'passwd' שצריכות לשנות קבצי מערכת."
-                }
-            ]
-        },
-        {
-            "topic": "מודלי אבטחה (BLP & Biba)",
-            "templates": [
-                {
-                    "q": "תחת מודל Bell-LaPadula (BLP), משתמש עם סיווג 'סודי' (Secret) מנסה לכתוב נתונים למסמך המסווג כ'שמור' (Confidential - רמה נמוכה יותר). האם הפעולה מותרת?",
-                    "a": "לא, זוהי הפרה של כלל ה-*-Property (Star Property).",
-                    "o": [
-                        "כן, משתמשים תמיד יכולים לכתוב לרמות נמוכות יותר.",
-                        "כן, זה מותר כל עוד הם לא קראו את הקובץ קודם.",
-                        "לא, בגלל כלל ה-Simple Security Property."
-                    ],
-                    "explanation": "מודל Bell-LaPadula תוכנן לשמירה על סודיות (Confidentiality). כלל ה-*-Property קובע 'No Write Down' כדי למנוע דליפת מידע מרמת אבטחה גבוהה לרמה נמוכה יותר. כלל ה-Simple Security Property הוא 'No Read Up'."
-                },
-                {
-                    "q": "במערכת הפועלת לפי מודל השלמות של Biba, איזו מהפעולות הבאות אסורה כדי להבטיח שמידע ברמת שלמות גבוהה לא יזוהם?",
-                    "a": "סובייקט ברמת שלמות גבוהה קורא אובייקט ברמת שלמות נמוכה (Simple Integrity Property).",
-                    "o": [
-                        "סובייקט ברמת שלמות גבוהה כותב לאובייקט ברמת שלמות נמוכה.",
-                        "סובייקט ברמת שלמות נמוכה קורא אובייקט ברמת שלמות גבוהה.",
-                        "משתמש משנה את הסיסמה של עצמו."
-                    ],
-                    "explanation": "מודל Biba הוא המודל ה'משלים' ל-BLP עבור שלמות (Integrity). כלל ה-Simple Integrity קובע 'No Read Down' (סובייקט ברמת שלמות גבוהה לא אמור לסמוך על/לקרוא מידע ברמת שלמות נמוכה). כלל ה-Star Integrity קובע 'No Write Up' (סובייקט ברמה נמוכה לא יכתוב/יזהם מידע ברמה גבוהה)."
-                }
-            ]
-        },
-        {
-            "topic": "קריפטוגרפיה ואימות",
-            "templates": [
-                {
-                    "q": "בחתימה דיגיטלית מבוססת RSA, על מה חותם השולח ובאיזה מפתח?",
-                    "a": "השולח חותם על ה-Hash של ההודעה באמצעות המפתח הפרטי שלו.",
-                    "o": [
-                        "השולח חותם על כל ההודעה עם המפתח הציבורי של הנמען.",
-                        "השולח חותם על ה-Hash עם המפתח הציבורי של הנמען.",
-                        "השולח חותם על ה-Hash עם מפתח AES סימטרי."
-                    ],
-                    "explanation": "חתימה דיגיטלית מספקת אימות (Authenticity) ושלמות (Integrity). השולח יוצר Hash להודעה (שלמות) ומצפין את ה-Hash עם המפתח הפרטי שלו (אימות/אי-התכחשות). כל מי שיש לו את המפתח הציבורי של השולח יכול לאמת את החתימה."
-                },
-                {
-                    "q": "מהי הפגיעות העיקרית בפרוטוקול 'Challenge-Response' פשוט המשתמש ב-E(R, K) כאשר R הוא Nonce ו-K הוא מפתח משותף, אם אותו מפתח K משמש גם להמשך התקשורת?",
-                    "a": "התקפת Reflection או Man-in-the-Middle עלולה להתרחש אם הפרוטוקול לא מבדיל בין היוזם למשיב.",
-                    "o": [
-                        "ניתן לנחש את ה-R אם הוא קטן מדי.",
-                        "ההצפנה E איטית מדי לשימוש בזמן אמת.",
-                        "אין פגיעות; הפרוטוקול מאובטח לחלוטין."
-                    ],
-                    "explanation": "כפי שניתן לראות בפתרונות מבחני עבר, פרוטוקולי challenge-response פשוטים פגיעים להתקפות MitM או Reflection. אם תוקף יכול לגרום למשתמש להצפין ערך שהתוקף צריך כדי לאמת את עצמו מול הבנק (או להיפך), המערכת נפרצת."
-                }
-            ]
-        },
-        {
-            "topic": "אבטחת תוכנה ופגיעויות",
-            "templates": [
-                {
-                    "q": "איזו מהטענות הבאות לגבי DEP (Data Execution Prevention) ו-ASLR (Address Space Layout Randomization) היא נכונה?",
-                    "a": "DEP מונע הרצת קוד מהמחסנית (Stack), בעוד ASLR מקשה על תוקפים למצוא את הכתובת של פונקציות כמו 'libc'.",
-                    "o": [
-                        "ASLR מונע מגלישות חוצץ (Buffer Overflows) להתרחש.",
-                        "DEP הופך את סדר הזיכרון ב-Heap לאקראי.",
-                        "שימוש ב-DEP ו-ASLR יחד הופך את המערכת לחסינה ב-100% לכל התקפות הזיכרון."
-                    ],
-                    "explanation": "DEP (ביט NX) מסמן אזורי זיכרון מסוימים כלא ניתנים להרצה (כמו ה-Stack וה-Heap), ובכך מונע הרצת 'shellcode'. ASLR הופך את הכתובות שבהן נטענים התוכנית, הספריות והמחסנית לאקראיות, מה שמכשיל התקפות 'return-to-libc' או ROP על ידי הפיכת הכתובות לבלתי צפויות."
-                }
-            ]
-        }
-    ]
+    subjects = ["אליס", "בוב", "משתמש א'", "משתמש ב'", "המנהל", "התוקף", "איב"]
+    objects = ["קובץ סודי", "תיקייה משותפת", "מסד נתונים", "קוד המקור", "יומן המערכת"]
+    levels = ["Top Secret", "Secret", "Confidential", "Unclassified"]
+    integ_levels = ["High", "Medium", "Low"]
 
-    for i in range(1000):
-        category = random.choice(scenarios)
-        template = random.choice(category["templates"])
-        
-        opts = [template["a"]] + template["o"]
+    for i in range(count):
+        # Choose template type
+        r = random.random()
+        if r < 0.25: # BLP
+            s, o = random.choice(subjects), random.choice(objects)
+            l1, l2 = random.choice(levels), random.choice(levels)
+            q_text = f"במודל BLP, האם {s} (סיווג {l1}) יכול לקרוא את {o} (סיווג {l2})?"
+            ans = "כן" if levels.index(l1) <= levels.index(l2) else "לא"
+            opts = ["כן", "לא", "רק עם הרשאת ROOT", "תלוי ב-ACL"]
+            topic = "מודל Bell-LaPadula"
+            exp = "לפי כלל ה-Simple Security (No Read Up), סובייקט יכול לקרוא רק אובייקט ברמה שלו או נמוכה ממנה."
+        elif r < 0.5: # Biba
+            s, o = random.choice(subjects), random.choice(objects)
+            i1, i2 = random.choice(integ_levels), random.choice(integ_levels)
+            q_text = f"במודל Biba, האם {s} (רמת שלמות {i1}) יכול לכתוב ל-{o} (רמת שלמות {i2})?"
+            ans = "כן" if integ_levels.index(i1) <= integ_levels.index(i2) else "לא"
+            opts = ["כן", "לא", "רק אם הוא הבעלים", "לא מוגדר במודל"]
+            topic = "מודל Biba"
+            exp = "לפי כלל ה-*-Integrity (No Write Up), סובייקט לא יכול לכתוב לאובייקט ברמת שלמות גבוהה משלו."
+        elif r < 0.75: # Unix Perms
+            perms = [755, 644, 700, 777, 400]
+            p = random.choice(perms)
+            q_text = f"נתון קובץ עם הרשאות {p}. האם משתמש שאינו הבעלים ואינו בקבוצה יכול לקרוא אותו?"
+            ans = "כן" if (p % 10) >= 4 else "לא"
+            opts = ["כן", "לא", "רק אם ה-Sticky Bit דלוק", "רק ב-Windows"]
+            topic = "הרשאות Unix"
+            exp = "הספרה האחרונה מייצגת את Others. ערך של 4 ומעלה כולל הרשאת קריאה."
+        else: # Crypto/General
+            crypto_q = [
+                ("איזה אלגוריתם הוא הצפנה סימטרית?", "AES", ["RSA", "SHA-256", "Diffie-Hellman"]),
+                ("מה היתרון של Salt?", "הגנה מפני Rainbow Tables", ["הצפנה מהירה יותר", "מניעת SQL Injection", "חתימה דיגיטלית"]),
+                ("מהו SUID?", "הרצת קובץ בהרשאות הבעלים", ["מחיקת קבצים של אחרים", "הצפנת הדיסק", "ניהול משימות"]),
+                ("מהו ASLR?", "הגרלת כתובות בזיכרון", ["מניעת גלישת חוצץ", "חתימת קוד", "סינון חומת אש"])
+            ]
+            q_data = random.choice(crypto_q)
+            q_text = q_data[0]
+            ans = q_data[1]
+            opts = [ans] + q_data[2]
+            topic = "אבטחה כללית"
+            exp = "זהו מושג ליבה באבטחת מערכות תוכנה."
+
         random.shuffle(opts)
-        
         questions.append({
             "id": i + 1,
-            "topic": category["topic"],
-            "question": template["q"],
+            "topic": topic,
+            "question": q_text,
             "options": opts,
-            "answer": template["a"],
-            "explanation": template["explanation"]
+            "answer": ans,
+            "explanation": exp
         })
-    
     return questions
 
+def generate_concepts(count):
+    concepts = []
+    pool = [
+        ("ASLR", "מנגנון המגריל את כתובות הזיכרון של התוכנית כדי למנוע ניצול פגיעויות זיכרון."),
+        ("DEP", "מנגנון המסמן אזורי זיכרון כלא-ניתנים-להרצה (NX) כדי למנוע הרצת קוד זדוני מה-Stack."),
+        ("SUID", "ביט הרשאה המאפשר הרצת קובץ עם הרשאות הבעלים שלו."),
+        ("Salt", "מחרוזת אקראית המתווספת לסיסמה לפני ה-Hashing כדי למנוע התקפות Rainbow Tables."),
+        ("RSA", "אלגוריתם הצפנה אסימטרי המבוסס על הקושי בפירוק מספרים גדולים לגורמים ראשוניים."),
+        ("Perfect Forward Secrecy", "תכונה המבטיחה שפריצה למפתח הפרטי הקבוע לא תחשוף מפתחות הצפנה של שיחות עבר."),
+        ("Man-in-the-Middle", "התקפה שבה התוקף מצותת או משנה את התקשורת בין שני צדדים בלי שהם ידעו.")
+    ]
+    
+    for i in range(count):
+        item = random.choice(pool)
+        is_tf = random.random() > 0.5
+        concepts.append({
+            "type": "נכון / לא נכון" if is_tf else "הגדר מושג",
+            "q": item[0] if not is_tf else f"האם {item[0]} משמש ל-{item[1][:30]}...",
+            "a": item[1]
+        })
+    return concepts
+
 if __name__ == "__main__":
-    qs = generate_questions()
+    mcqs = generate_mcqs(2000)
     with open("questions.json", "w", encoding="utf-8") as f:
-        json.dump(qs, f, ensure_ascii=False, indent=2)
-    print(f"Generated {len(qs)} Hebrew exam-style questions.")
+        json.dump(mcqs, f, ensure_ascii=False, indent=2)
+    
+    concepts = generate_concepts(1000)
+    with open("concepts.json", "w", encoding="utf-8") as f:
+        json.dump(concepts, f, ensure_ascii=False, indent=2)
+    
+    print(f"Generated {len(mcqs)} MCQs and {len(concepts)} Concepts.")
