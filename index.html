@@ -16,7 +16,6 @@
             --highlight-bg: #fff9c4;
             --highlight-border: #fbc02d;
             --accent-color: #ff5722;
-            --success-bg: #e8f5e9;
         }
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -69,24 +68,27 @@
         }
 
         /* Tool Styles */
-        .tool-box {
-            background: #f1f8ff;
-            border: 2px solid #3498db;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-        }
-        .tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .tool-box { background: #f1f8ff; border: 2px solid #3498db; padding: 20px; border-radius: 10px; margin-bottom: 25px; }
         .perm-input { width: 100%; padding: 12px; font-size: 18px; border-radius: 6px; border: 1px solid #ccc; text-align: center; }
         .perm-result { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
         .perm-col { background: white; padding: 10px; border-radius: 5px; border: 1px solid #eee; text-align: center; }
         .perm-title { font-weight: bold; display: block; border-bottom: 1px solid #eee; margin-bottom: 5px; }
 
-        /* Guide Styles (Inherited from previous) */
-        .guide-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+        /* Guide Styles */
+        .guide-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+        .guide-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .guide-card h3 { color: var(--primary-color); margin-top: 0; border-bottom: 2px solid #e3f2fd; padding-bottom: 10px; }
+        .guide-card h4 { color: var(--accent-color); margin: 15px 0 5px 0; }
+        .mnemonic { background: #e1f5fe; padding: 10px; border-radius: 5px; font-style: italic; border-right: 4px solid #03a9f4; margin: 10px 0; }
+        .trap-box { background: #fff3e0; padding: 15px; border-radius: 5px; border-right: 4px solid #ff9800; margin-top: 15px; }
+        .trap-title { font-weight: bold; color: #e65100; display: block; margin-bottom: 5px; }
         .algorithm-step { border-right: 4px solid var(--primary-color); padding-right: 15px; margin-bottom: 15px; background: #fafafa; padding: 10px; }
         
-        /* Practice & Cards (Inherited) */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: right; }
+        th { background: #f5f5f5; }
+
+        /* Practice & Cards */
         .btn { padding: 12px 25px; background: var(--primary-color); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
         .question { margin-bottom: 40px; padding: 25px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #fafafa; }
         .option { margin: 12px 0; padding: 16px; background: #fff; border: 2px solid #f0f0f0; border-radius: 10px; cursor: pointer; display: flex; align-items: center; }
@@ -101,10 +103,6 @@
         .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 30px; border-radius: 15px; box-sizing: border-box; overflow-y: auto; }
         .flip-card-front { background-color: #fff; border: 2px solid var(--primary-color); }
         .flip-card-back { background-color: var(--primary-color); color: white; transform: rotateY(180deg); }
-        .card-type { font-size: 14px; font-weight: bold; margin-bottom: 10px; }
-        .card-question { font-size: 18px; font-weight: bold; margin-bottom: 15px; }
-        .card-options { text-align: right; width: 100%; list-style: none; padding: 0; font-size: 15px; }
-        .card-options li { margin-bottom: 5px; padding: 8px; background: #f1f1f1; border-radius: 4px; color: #333; }
     </style>
 </head>
 <body>
@@ -121,7 +119,7 @@
         <button class="nav-btn" onclick="showTab('guide')">מדריך למידה עמוק</button>
     </nav>
     
-    <!-- Tab: The Algorithm (NEW) -->
+    <!-- Tab: The Algorithm -->
     <div id="algo" class="tab-content active container">
         <div class="tool-box">
             <h3>🛡️ סימולטור הרשאות Unix (UGO)</h3>
@@ -144,29 +142,19 @@
             </div>
             <div class="algorithm-step"><strong>שלב 4:</strong> בדוק מקרים מיוחדים (האם יש ROOT? האם יש הרשאת מעבר?).</div>
         </div>
-
-        <div class="guide-card">
-            <h3>💡 מחשבון דליפת מידע (אנטרופיה)</h3>
-            <p>כמה ביטים של מידע דלפו? הנוסחה למבחן:</p>
-            <p><strong>לוגריתם בבסיס 2 של (מספר האפשרויות לפני / מספר האפשרויות אחרי)</strong></p>
-            <div class="mnemonic">
-                דוגמה: היו 16 אפשרויות. התוכנית הדפיסה פלט שצמצם ל-4 אפשרויות.<br>
-                16 זה 2 בחזקת 4. <br>
-                4 זה 2 בחזקת 2. <br>
-                ההפרש: 4-2 = <strong>2 ביטים דלפו.</strong>
-            </div>
-        </div>
     </div>
 
-    <!-- Other Tabs (Practice, Cards, Guide) -->
+    <!-- Tab 1: Practice -->
     <div id="practice" class="tab-content container">
         <div class="exam-selection">
+            <label>בחר מבחן:</label>
             <select id="examSelect" onchange="loadExam()"></select>
         </div>
         <div id="quizContainer"></div>
         <button id="doneBtn" class="btn" style="width:100%" onclick="showResults()">סיום מבחן והצגת פתרונות</button>
     </div>
 
+    <!-- Tab 2: MCQ Cards -->
     <div id="mcqCards" class="tab-content container">
         <div class="cards-container">
             <div class="flip-card" id="mcqFlipCard" onclick="this.classList.toggle('flipped')">
@@ -174,10 +162,9 @@
                     <div class="flip-card-front">
                         <div class="card-type" id="mcqTopic"></div>
                         <div class="card-question" id="mcqFrontText"></div>
-                        <ul class="card-options" id="mcqOptions"></ul>
+                        <ul class="card-options" id="mcqOptions" style="text-align:right; width:100%; list-style:none; padding:0"></ul>
                     </div>
                     <div class="flip-card-back">
-                        <div class="card-type" style="color:#e3f2fd">פתרון טכני:</div>
                         <div class="card-answer" id="mcqBackText"></div>
                     </div>
                 </div>
@@ -186,6 +173,7 @@
         </div>
     </div>
 
+    <!-- Tab 3: Quick Cards -->
     <div id="cards" class="tab-content container">
         <div class="cards-container">
             <div class="flip-card" id="conceptFlipCard" onclick="this.classList.toggle('flipped')" style="height:300px">
@@ -203,9 +191,47 @@
         </div>
     </div>
 
+    <!-- Tab 4: Deep Learning Guide (RESTORED CONTENT) -->
     <div id="guide" class="tab-content container">
-        <!-- Content from previous deep guide goes here -->
-        <p>מעבר למדריך המלא... (התוכן נשמר בקוד ה-JS להלן)</p>
+        <div class="guide-grid">
+            <div class="guide-card">
+                <h3>בקרת גישה (Unix & Windows)</h3>
+                <p>הספרות הן <strong>4 (R), 2 (W), 1 (X)</strong>.</p>
+                <div class="mnemonic">"רוצה ורץ" (R-W-X) - קריאה, כתיבה, ריצה.</div>
+                <ul>
+                    <li><strong>SUID (4xxx):</strong> מריץ בכוח של הבעלים.</li>
+                    <li><strong>Sticky Bit (1xxx):</strong> רק הבעלים מוחק.</li>
+                </ul>
+                <div class="trap-box">
+                    <span class="trap-title">מלכודת ה-ACL:</span> ביוניקס בסיסי אין דרך לתת למשתמשים שונים הרשאות שונות על אותו קובץ בלי קבוצות מורכבות. 
+                </div>
+            </div>
+
+            <div class="guide-card">
+                <h3>מודלים (BLP vs Biba)</h3>
+                <ul>
+                    <li><strong>BLP (סודיות):</strong> No Read Up, No Write Down.</li>
+                    <li><strong>Biba (שלמות):</strong> No Read Down, No Write Up.</li>
+                </ul>
+                <div class="mnemonic">BLP: "לא קורא למעלה, לא כותב למטה".</div>
+            </div>
+
+            <div class="guide-card">
+                <h3>אנטרופיה ודליפת מידע</h3>
+                <p>נוסחה: log2(אפשרויות לפני / אפשרויות אחרי).</p>
+                <div class="mnemonic">8 אפשרויות ל-2 אפשרויות = 2 ביטים דלפו.</div>
+            </div>
+
+            <div class="guide-card">
+                <h3>פגיעויות תוכנה</h3>
+                <table>
+                    <tr><th>הגנה</th><th>מה זה עושה?</th></tr>
+                    <tr><td>DEP</td><td>חוסם הרצה מהמחסנית.</td></tr>
+                    <tr><td>ASLR</td><td>מגריל כתובות בזיכרון.</td></tr>
+                    <tr><td>Canary</td><td>מזהה גלישה לפני פריצה.</td></tr>
+                </table>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -222,7 +248,7 @@
                 if (n >= 4) { res.push('קריאה (R)'); n -= 4; }
                 if (n >= 2) { res.push('כתיבה (W)'); n -= 2; }
                 if (n >= 1) { res.push('הרצה (X)'); }
-                return res.join(', ') || 'אין הרשאות';
+                return res.join(', ') || 'אין';
             };
             document.getElementById('pOwner').textContent = translate(parts[0]);
             document.getElementById('pGroup').textContent = translate(parts[1]);
@@ -281,13 +307,9 @@
             currentExamQuestions.forEach((q, i) => {
                 const qDiv = document.createElement('div');
                 qDiv.className = 'question';
-                qDiv.innerHTML = `
-                    <div class="question-text">${q.question}</div>
-                    <ul class="options">
-                        ${q.options.map(o => `<li class="option" onclick="this.querySelector('input').checked=true"><input type="radio" name="q${i}" value="${o.replace(/"/g, '&quot;')}"><span>${o}</span></li>`).join('')}
-                    </ul>
-                    <div id="exp${i}" class="explanation-box">${q.explanation}</div>
-                `;
+                qDiv.innerHTML = `<div class="question-text">${q.question}</div>
+                    <ul class="options" style="list-style:none; padding:0">${q.options.map(o => `<li class="option" onclick="this.querySelector('input').checked=true"><input type="radio" name="q${i}" value="${o.replace(/"/g, '&quot;')}"><span>${o}</span></li>`).join('')}</ul>
+                    <div id="exp${i}" class="explanation-box">${q.explanation}</div>`;
                 container.appendChild(qDiv);
             });
             document.getElementById('doneBtn').style.display = 'block';
