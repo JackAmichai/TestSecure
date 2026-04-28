@@ -719,3 +719,82 @@ body::before {
     border-color: var(--accent);
     overflow-y: auto;
 }
+
+/* ===== Open Questions ===== */
+.open-q-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    text-align: right;
+}
+
+.open-q-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    font-size: 0.85rem;
+}
+
+.open-q-badge {
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--accent);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.open-q-topic {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.open-q-source {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-right: auto;
+}
+
+.open-q-text {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+}
+
+.open-q-reveal-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+    font-family: var(--font);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.open-q-reveal-btn:hover {
+    background: rgba(37, 99, 235, 0.05);
+}
+
+.open-q-answer {
+    margin-top: 16px;
+    padding: 16px;
+    background: rgba(16, 185, 129, 0.05);
+    border-right: 3px solid var(--success);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    display: none;
+    animation: fadeIn 0.4s ease;
+}
+
+.open-q-answer.visible {
+    display: block;
+}

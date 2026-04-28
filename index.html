@@ -40,6 +40,7 @@
         <nav class="topics-filter" style="margin-top: 20px;">
             <button class="topic-btn active" data-tab="algo">🚀 האלגוריתם למעבר</button>
             <button class="topic-btn" data-tab="practice">תרגול מבחנים</button>
+            <button class="topic-btn" data-tab="openQuestions">📝 שאלות פתוחות</button>
             <button class="topic-btn" data-tab="mcqCards">כרטיסיות אמריקאיות</button>
             <button class="topic-btn" data-tab="cards">כרטיסיות מושגים</button>
             <button class="topic-btn" data-tab="guide">מדריך למידה עמוק</button>
@@ -83,6 +84,17 @@
                 <button id="doneBtn" class="done-btn" onclick="showResults()">סיום מבחן והצגת פתרונות</button>
             </div>
             <div id="resultsContainer"></div>
+        </div>
+
+        <!-- Tab: Open Questions -->
+        <div id="openQuestions" class="tab-content">
+            <div class="section-title">
+                <h2>שאלות פתוחות</h2>
+                <p>שאלות ממבחנים קודמים ושאלות תרגול נוספות בסגנון זהה. חשוב על התשובה ואז חשוף את הפתרון לביקורת.</p>
+            </div>
+            <div id="openQuestionsContainer" style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px;">
+                <!-- Open questions will be injected here -->
+            </div>
         </div>
 
         <!-- Tab: MCQ Cards -->
@@ -382,6 +394,7 @@
     <script>
         let allQuestions = [];
         let allConcepts = [];
+        let allOpenQuestions = [];
         let currentExamQuestions = [];
 
         function calcUnix() {
@@ -402,9 +415,14 @@
 
         async function init() {
             try {
-                const [qRes, cRes] = await Promise.all([fetch('questions.json'), fetch('concepts.json')]);
+                const [qRes, cRes, oqRes] = await Promise.all([
+                    fetch('questions.json'), 
+                    fetch('concepts.json'),
+                    fetch('open_questions.json')
+                ]);
                 allQuestions = await qRes.json();
                 allConcepts = await cRes.json();
+                allOpenQuestions = await oqRes.json();
 
                 document.getElementById('totalQuestions').textContent = allQuestions.length;
                 const topics = new Set(allQuestions.map(q => q.topic));
@@ -421,6 +439,7 @@
                 loadExam();
                 nextConceptCard();
                 nextMcqCard();
+                renderOpenQuestions();
             } catch (e) { console.error('Error loading data:', e); }
         }
 
@@ -551,6 +570,30 @@
                     <button class="retry-btn" onclick="document.getElementById('examSelect').selectedIndex = (parseInt(document.getElementById('examSelect').value) + 1) % Math.ceil(allQuestions.length / 5); loadExam();">מבחן הבא →</button>
                 </div>
             `;
+        }
+
+        function renderOpenQuestions() {
+            const container = document.getElementById('openQuestionsContainer');
+            container.innerHTML = '';
+            
+            allOpenQuestions.forEach((oq, i) => {
+                const card = document.createElement('div');
+                card.className = 'open-q-card';
+                card.innerHTML = `
+                    <div class="open-q-header">
+                        <span class="open-q-badge">${oq.isOriginal ? '🎯 ממבחן אמיתי' : '📚 שאלת תרגול'}</span>
+                        <span class="open-q-topic">${oq.topic}</span>
+                        <span class="open-q-source">${oq.source}</span>
+                    </div>
+                    <div class="open-q-text">${oq.question.replace(/\\n/g, '<br>')}</div>
+                    <button class="open-q-reveal-btn" onclick="this.nextElementSibling.classList.toggle('visible'); this.textContent = this.textContent === 'הצג פתרון מלא' ? 'הסתר פתרון' : 'הצג פתרון מלא'">הצג פתרון מלא</button>
+                    <div class="open-q-answer">
+                        <div style="font-weight: 600; margin-bottom: 10px; color: var(--success);">פתרון:</div>
+                        ${oq.answer.replace(/\\n/g, '<br>')}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
         }
 
         init();

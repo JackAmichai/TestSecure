@@ -1,5 +1,5 @@
 # TestSecure Project Memory File
-**Last Updated**: 2026-04-28T22:55:00+03:00 (mid-session: rebuilding question bank in 20-question batches)
+**Last Updated**: 2026-04-28T23:10:00+03:00 (mid-session: 3/7 bonus batches done = 60 Q)
 
 ## Project Overview
 Hebrew exam practice tool for Open University course **20940 "מבוא לאבטחת המרחב המקוון"** (Introduction to Cyberspace Security). Multi-tab UI: Practice exams / MCQ Flashcards / Concept Cards / Study Guide / AI Chatbot. Deployed on Vercel.
