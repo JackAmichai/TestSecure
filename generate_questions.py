@@ -10,7 +10,6 @@ def generate_mcqs(count):
     integ_levels = ["High", "Medium", "Low"]
 
     for i in range(count):
-        # Choose template type
         r = random.random()
         if r < 0.25: # BLP
             s, o = random.choice(subjects), random.choice(objects)
@@ -78,7 +77,7 @@ def generate_concepts(count):
         is_tf = random.random() > 0.5
         concepts.append({
             "type": "נכון / לא נכון" if is_tf else "הגדר מושג",
-            "q": item[0] if not is_tf else f"האם {item[0]} משמש ל-{item[1][:30]}...",
+            "q": item[0] if not is_tf else f"האם {item[0]} משמש עבור: {item[1]}",
             "a": item[1]
         })
     return concepts
@@ -92,4 +91,4 @@ if __name__ == "__main__":
     with open("concepts.json", "w", encoding="utf-8") as f:
         json.dump(concepts, f, ensure_ascii=False, indent=2)
     
-    print(f"Generated {len(mcqs)} MCQs and {len(concepts)} Concepts.")
+    print(f"Generated {len(mcqs)} MCQs and {len(concepts)} Concepts without truncation.")
