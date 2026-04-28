@@ -39,9 +39,10 @@
             justify-content: center;
             gap: 10px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         .nav-btn {
-            padding: 12px 25px;
+            padding: 10px 20px;
             border: none;
             border-radius: 30px;
             background: #cfd8dc;
@@ -63,96 +64,86 @@
             border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.05);
         }
-        .exam-selection {
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            background: #fdfdfd;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #e0e0e0;
-        }
-        select {
-            padding: 10px 15px;
-            font-size: 16px;
-            border-radius: 6px;
-            border: 2px solid #cfd8dc;
-            outline: none;
-        }
-        .question {
-            margin-bottom: 40px;
-            padding: 25px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            background-color: #fafafa;
-        }
-        .topic-badge {
-            background-color: var(--secondary-color);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: bold;
-            margin-bottom: 12px;
-            display: inline-block;
-        }
-        .question-text {
-            font-size: 19px;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-        .option {
-            margin: 12px 0;
-            padding: 16px;
-            background: #fff;
-            border: 2px solid #f0f0f0;
-            border-radius: 10px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-        }
+
+        /* Practice Styles */
+        .exam-selection { margin-bottom: 30px; text-align: center; }
+        .question { margin-bottom: 40px; padding: 25px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #fafafa; }
+        .option { margin: 12px 0; padding: 16px; background: #fff; border: 2px solid #f0f0f0; border-radius: 10px; cursor: pointer; display: flex; align-items: center; }
         .option:hover { border-color: var(--primary-color); background-color: #f1f8ff; }
-        .option input { margin-left: 15px; transform: scale(1.3); }
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 18px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .explanation-box {
-            margin-top: 20px;
-            padding: 20px;
-            background-color: var(--highlight-bg);
-            border-right: 8px solid var(--highlight-border);
-            border-radius: 6px;
-            display: none;
-        }
         .correct { border-color: var(--correct-color) !important; background-color: #e8f5e9 !important; }
         .incorrect { border-color: var(--incorrect-color) !important; background-color: #ffebee !important; }
+        .explanation-box { margin-top: 20px; padding: 20px; background-color: var(--highlight-bg); border-right: 8px solid var(--highlight-border); border-radius: 6px; display: none; }
         .reveal { display: block !important; }
 
-        /* Guide Styles */
-        .guide-section { margin-bottom: 30px; }
-        .guide-card {
-            background: #fff;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 15px;
+        /* Quick Cards Styles */
+        .cards-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
         }
-        .guide-card h3 { color: var(--primary-color); margin-top: 0; }
+        .flip-card {
+            background-color: transparent;
+            width: 100%;
+            max-width: 500px;
+            height: 300px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 15px;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            border-radius: 15px;
+            box-sizing: border-box;
+        }
+        .flip-card-front {
+            background-color: #fff;
+            color: #333;
+            border: 2px solid var(--primary-color);
+        }
+        .flip-card-back {
+            background-color: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+        }
+        .card-type {
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .card-question { font-size: 20px; font-weight: bold; }
+        .card-answer { font-size: 18px; }
+
+        /* Guide Styles */
+        .guide-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 15px; }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         th, td { border: 1px solid #ddd; padding: 12px; text-align: right; }
-        th { background-color: #f5f5f5; }
         .trap-highlight { color: #d32f2f; font-weight: bold; }
+
+        .btn { padding: 12px 25px; background: var(--primary-color); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -163,6 +154,7 @@
 
     <nav>
         <button class="nav-btn active" onclick="showTab('practice')">תרגול מבחנים</button>
+        <button class="nav-btn" onclick="showTab('cards')">כרטיסיות למידה מהירה</button>
         <button class="nav-btn" onclick="showTab('guide')">מדריך למידה וטיפים</button>
     </nav>
     
@@ -173,78 +165,80 @@
             <select id="examSelect" onchange="loadExam()"></select>
         </div>
         <div id="quizContainer"></div>
-        <button id="doneBtn" class="btn" onclick="showResults()">סיום מבחן והצגת פתרונות</button>
-        <button id="restartBtn" class="btn" style="display:none; margin-top:10px; background:#78909c" onclick="loadExam()">התחל מחדש</button>
+        <button id="doneBtn" class="btn" style="width:100%" onclick="showResults()">סיום מבחן והצגת פתרונות</button>
+        <button id="restartBtn" class="btn" style="display:none; width:100%; margin-top:10px; background:#78909c" onclick="loadExam()">התחל מחדש</button>
     </div>
 
-    <!-- Tab 2: Guide -->
+    <!-- Tab 2: Quick Cards -->
+    <div id="cards" class="tab-content container">
+        <div class="cards-container">
+            <p>לחץ על הכרטיס כדי לראות את התשובה</p>
+            <div class="flip-card" id="currentCard" onclick="this.classList.toggle('flipped')">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div id="cardType" class="card-type">טוען...</div>
+                        <div id="cardFrontText" class="card-question">טוען שאלה...</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="card-type">תשובה והסבר:</div>
+                        <div id="cardBackText" class="card-answer">טוען תשובה...</div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" onclick="nextCard()">כרטיס הבא ➔</button>
+        </div>
+    </div>
+
+    <!-- Tab 3: Guide -->
     <div id="guide" class="tab-content container">
         <div class="guide-section">
             <h2>שאלות ליבה שחוזרות במבחנים</h2>
             <div class="guide-card">
                 <h3>1. בקרת גישה (Unix/Windows)</h3>
-                <p>בכמעט כל מבחן תופיע שאלה על <strong>מטריצת גישה</strong>. זכור: יוניקס בסיסי (UGO) מוגבל מאוד. אם המטריצה דורשת הרשאות שונות ל-3 משתמשים ספציפיים על אותו קובץ, התשובה היא לרוב שנדרש ACL.</p>
+                <p>בכמעט כל מבחן תופיע שאלה על מטריצת גישה. זכור: יוניקס בסיסי (UGO) מוגבל. נדרש ACL למקרים מורכבים.</p>
             </div>
             <div class="guide-card">
                 <h3>2. מודלי BLP ו-Biba</h3>
                 <ul>
-                    <li><strong>BLP (סודיות):</strong> No Read Up, No Write Down. (אסור להדליף למטה).</li>
-                    <li><strong>Biba (שלמות):</strong> No Read Down, No Write Up. (אסור לסמוך על מה שמתחת).</li>
+                    <li><strong>BLP (סודיות):</strong> No Read Up, No Write Down.</li>
+                    <li><strong>Biba (שלמות):</strong> No Read Down, No Write Up.</li>
                 </ul>
             </div>
         </div>
-
         <div class="guide-section">
             <h2>טעויות נפוצות במבחן</h2>
             <table>
-                <tr>
-                    <th>הטעות</th>
-                    <th>ההסבר הטכני</th>
-                    <th>איך להימנע?</th>
-                </tr>
-                <tr>
-                    <td>SUID vs Sticky Bit</td>
-                    <td>בלבול בין הרשאות ריצה להרשאות מחיקה.</td>
-                    <td>SUID = כוח של הבעלים. Sticky = הגנה על מחיקה.</td>
-                </tr>
-                <tr>
-                    <td>ASLR מונע גלישה</td>
-                    <td>חושבים ש-ASLR עוצר את גלישת החוצץ עצמה.</td>
-                    <td>ASLR רק מזיז את המטרות, הוא לא חוסם את הירי.</td>
-                </tr>
-                <tr>
-                    <td>חתימה = הצפנה</td>
-                    <td>חושבים שחתימה דיגיטלית מצפינה את כל הקובץ.</td>
-                    <td>חתימה היא על ה-HASH בלבד!</td>
-                </tr>
+                <tr><th>הטעות</th><th>הסבר</th><th>מניעה</th></tr>
+                <tr><td>SUID vs Sticky Bit</td><td>בלבול בין כוח מחיקה לכוח הרצה.</td><td>SUID=בעלים, Sticky=הגנת מחיקה.</td></tr>
+                <tr><td>ASLR מונע גלישה</td><td>חושבים שהוא עוצר את ה-Overflow.</td><td>הוא רק מזיז כתובות.</td></tr>
             </table>
-        </div>
-
-        <div class="guide-section">
-            <h2>מלכודות וטיפים ליום המבחן</h2>
-            <div class="guide-card">
-                <p><span class="trap-highlight">מלכודת ה-x בתיקייה:</span> אם אין הרשאת x על תיקייה, לא משנה מה ההרשאות על הקובץ שבתוכה - לא תוכל לגשת אליו!</p>
-                <p><span class="trap-highlight">Covert Channels:</span> אם מבקשים דרך להעביר מידע כשיש חסימה של המודל, חפש משאבים עקיפים: שמות קבצים, נפח דיסק או זמן תגובה.</p>
-                <p><strong>טיפ זהב:</strong> צייר תמיד את רמות הסיווג של הסובייקט והאובייקט לפני שאתה עונה על שאלות BLP/Biba.</p>
-            </div>
         </div>
     </div>
 
     <script>
         let allQuestions = [];
         let currentExamQuestions = [];
+        const quickCards = [
+            { type: "נכון / לא נכון", q: "ASLR מונע את התרחשותה של גלישת חוצץ (Buffer Overflow).", a: "לא נכון. ASLR רק מקשה על ניצול הגלישה על ידי הפיכת כתובות הזיכרון לאקראיות." },
+            { type: "הגדר מושג", q: "SUID (Set User ID)", a: "מנגנון המאפשר למשתמש להריץ קובץ עם ההרשאות של בעל הקובץ (במקום ההרשאות של המריץ)." },
+            { type: "נכון / לא נכון", q: "במודל Bell-LaPadula, משתמש ברמת Secret יכול לכתוב לקובץ ברמת Confidential.", a: "לא נכון. כלל ה-*-Property אוסר כתיבה לרמה נמוכה יותר (No Write Down)." },
+            { type: "הגדר מושג", q: "Sticky Bit", a: "ביט הרשאה על תיקייה המונע ממשתמשים למחוק קבצים שהם לא הבעלים שלהם (שימושי ב-/tmp)." },
+            { type: "נכון / לא נכון", q: "חתימה דיגיטלית מתבצעת על ידי הצפנת כל המסמך במפתח הפרטי של השולח.", a: "לא נכון. חותמים על ה-Hash של המסמך בלבד מטעמי יעילות." },
+            { type: "הגדר מושג", q: "Covert Channel", a: "ערוץ תקשורת בלתי מכוון המאפשר העברת מידע בניגוד למדיניות האבטחה (למשל דרך ניצול משאבי מערכת)." },
+            { type: "נכון / לא נכון", q: "במודל Biba, סובייקט ברמה גבוהה יכול לקרוא אובייקט ברמה נמוכה.", a: "לא נכון. כלל ה-Simple Integrity אוסר קריאה מרמה נמוכה יותר (No Read Down)." }
+        ];
 
         async function init() {
             const response = await fetch('questions.json');
             allQuestions = await response.json();
             const select = document.getElementById('examSelect');
-            const totalExams = Math.ceil(allQuestions.length / 5);
-            for (let i = 0; i < totalExams; i++) {
+            for (let i = 0; i < Math.ceil(allQuestions.length / 5); i++) {
                 const opt = document.createElement('option');
                 opt.value = i; opt.textContent = `מבחן ${i + 1}`;
                 select.appendChild(opt);
             }
             loadExam();
+            nextCard();
         }
 
         function showTab(tabId) {
@@ -252,6 +246,16 @@
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             event.target.classList.add('active');
+        }
+
+        function nextCard() {
+            const card = quickCards[Math.floor(Math.random() * quickCards.length)];
+            document.getElementById('currentCard').classList.remove('flipped');
+            setTimeout(() => {
+                document.getElementById('cardType').textContent = card.type;
+                document.getElementById('cardFrontText').textContent = card.q;
+                document.getElementById('cardBackText').textContent = card.a;
+            }, 100);
         }
 
         function loadExam() {
