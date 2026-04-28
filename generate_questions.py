@@ -38,14 +38,16 @@ def generate_blp_questions():
             s_name, level_hebrew[s_level], o_name, level_hebrew[o_level]
         )
         
-        explanation = "במודל BLP, כלל ה-Simple Security קובע: סובייקט יכול לקרוא אובייקט רק אם רמת הסיווג שלו גבוהה או שווה לרמת האובייקט (No Read Up). "
-        explanation += "{} ברמת {} ".format(s_name, level_hebrew[s_level])
-        explanation += "{} לקרוא {} ברמת {} ".format(
-            "יכול" if can_read else "אינו יכול", o_name, level_hebrew[o_level]
+        explanation = "במודל Bell-LaPadula (BLP), כלל ה-Simple Security (שלב ראשון) קובע חד-משמעית: סובייקט יכול לקרוא אובייקט רק אם רמת הסיווג שלו גבוהה או שווה לרמת הסיווג של האובייקט. "
+        explanation += "זהו מודל סודיות (Confidentiality) המונע דליפת מידע רגיש לרמות נמוכות יותר. "
+        explanation += "במקרה שלנו: {} בעל סיווג '{}' (רמה מספר {} בסולם) מול {} בעל סיווג '{}' (רמה מספר {}). ".format(
+            s_name, level_hebrew[s_level], 3-levels.index(s_level), o_name, level_hebrew[o_level], 3-levels.index(o_level)
         )
-        explanation += "כי רמת הסובייקט {} מרמת האובייקט.".format(
-            "גבוהה או שווה" if can_read else "נמוכה"
+        explanation += "{} ".format(
+            "{} יכול לקרוא את {} כי רמת הסובייקט גבוהה או שווה לרמת האובייקט (index {} <= {}).".format(s_name, o_name, levels.index(s_level), levels.index(o_level)) if can_read 
+            else "{} אינו יכול לקרוא את {} כי רמת הסובייקט נמוכה מרמת האובייקט (index {} > {}).".format(s_name, o_name, levels.index(s_level), levels.index(o_level))
         )
+        explanation += " זכור: BLP = No Read Up (סובייקט גבוהה יכול לקרוא נמוך, אבל לא להפך)."
 
         questions.append({
             "topic": "מודל Bell-LaPadula",
@@ -73,14 +75,16 @@ def generate_blp_questions():
             s_name, level_hebrew[s_level], o_name, level_hebrew[o_level]
         )
         
-        explanation = "במודל BLP, כלל ה-*-Property קובע: סובייקט יכול לכתוב לאובייקט רק אם רמת הסיווג שלו נמוכה או שווה לרמת האובייקט (No Write Down). "
-        explanation += "{} ברמת {} ".format(s_name, level_hebrew[s_level])
-        explanation += "{} לכתוב ל-{} ברמת {} ".format(
-            "יכול" if can_write else "אינו יכול", o_name, level_hebrew[o_level]
+        explanation = "במודל Bell-LaPadula (BLP), כלל ה-*-Property (שלב שני) קובע: סובייקט יכול לכתוב לאובייקט רק אם רמת הסיווג שלו נמוכה או שווה לרמת הסיווג של האובייקט. "
+        explanation += "זאת כדי למנוע דליפת מידע רגיש ממשתמש ברמה גבוהה למשתמש ברמה נמוכה. "
+        explanation += "במקרה שלנו: {} בעל סיווג '{}' (אינדקס {}) כותב ל-{} בעל סיווג '{}' (אינדקס {}). ".format(
+            s_name, level_hebrew[s_level], levels.index(s_level), o_name, level_hebrew[o_level], levels.index(o_level)
         )
-        explanation += "כי רמת הסובייקט {} מרמת האובייקט.".format(
-            "נמוכה או שווה" if can_write else "גבוהה"
+        explanation += "{} ".format(
+            "{} יכול לכתוב ל-{} כי רמת הסובייקט נמוכה או שווה לרמת האובייקט (אינדקס {} >= {}).".format(s_name, o_name, levels.index(s_level), levels.index(o_level)) if can_write
+            else "{} אינו יכול לכתוב ל-{} כי רמת הסובייקט גבוהה מרמת האובייקט (אינדקס {} < {}).".format(s_name, o_name, levels.index(s_level), levels.index(o_level))
         )
+        explanation += " זכור: BLP = No Write Down (סובייקט נמוך יכול לכתוב גבוהה, אבל לא להפך)."
 
         questions.append({
             "topic": "מודל Bell-LaPadula",
