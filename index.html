@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מערכת תרגול - אבטחת מערכות תוכנה</title>
+    <title>מערכת תרגול ומדריך - אבטחת מערכות תוכנה</title>
     <style>
         :root {
             --primary-color: #1e88e5;
@@ -20,21 +20,43 @@
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             line-height: 1.6;
             color: var(--text-color);
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
             background-color: var(--bg-color);
         }
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             padding: 20px;
             background: linear-gradient(135deg, #1e88e5, #1565c0);
             color: white;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        h1 { margin: 0; font-size: 24px; }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .nav-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 30px;
+            background: #cfd8dc;
+            color: #455a64;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .nav-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
         .container {
             background-color: var(--card-bg);
             padding: 30px;
@@ -47,7 +69,7 @@
             justify-content: center;
             align-items: center;
             gap: 15px;
-            background: #fff;
+            background: #fdfdfd;
             padding: 15px;
             border-radius: 8px;
             border: 1px solid #e0e0e0;
@@ -58,7 +80,6 @@
             border-radius: 6px;
             border: 2px solid #cfd8dc;
             outline: none;
-            cursor: pointer;
         }
         .question {
             margin-bottom: 40px;
@@ -66,7 +87,6 @@
             border: 1px solid #e0e0e0;
             border-radius: 8px;
             background-color: #fafafa;
-            position: relative;
         }
         .topic-badge {
             background-color: var(--secondary-color);
@@ -82,12 +102,6 @@
             font-size: 19px;
             font-weight: 600;
             margin-bottom: 20px;
-            color: #37474f;
-            white-space: pre-wrap;
-        }
-        .options {
-            list-style-type: none;
-            padding: 0;
         }
         .option {
             margin: 12px 0;
@@ -96,18 +110,11 @@
             border: 2px solid #f0f0f0;
             border-radius: 10px;
             cursor: pointer;
-            transition: all 0.2s;
             display: flex;
             align-items: center;
         }
-        .option:hover {
-            border-color: var(--primary-color);
-            background-color: #f1f8ff;
-        }
-        .option input {
-            margin-left: 15px;
-            transform: scale(1.3);
-        }
+        .option:hover { border-color: var(--primary-color); background-color: #f1f8ff; }
+        .option input { margin-left: 15px; transform: scale(1.3); }
         .btn {
             display: block;
             width: 100%;
@@ -119,11 +126,7 @@
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.1s, background 0.2s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        .btn:active { transform: scale(0.99); }
-        .btn:hover { background-color: #1565c0; }
         .explanation-box {
             margin-top: 20px;
             padding: 20px;
@@ -131,46 +134,100 @@
             border-right: 8px solid var(--highlight-border);
             border-radius: 6px;
             display: none;
-            animation: fadeIn 0.5s ease;
         }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .explanation-title {
-            font-weight: bold;
-            color: #f57f17;
-            margin-bottom: 8px;
-            display: block;
-            font-size: 16px;
-        }
-        .correct { border-color: var(--correct-color) !important; background-color: #e8f5e9 !important; color: #1b5e20; }
-        .incorrect { border-color: var(--incorrect-color) !important; background-color: #ffebee !important; color: #b71c1c; }
+        .correct { border-color: var(--correct-color) !important; background-color: #e8f5e9 !important; }
+        .incorrect { border-color: var(--incorrect-color) !important; background-color: #ffebee !important; }
         .reveal { display: block !important; }
-        #restartBtn { background-color: #78909c; margin-top: 15px; display: none; }
-        @media (max-width: 600px) {
-            .container { padding: 15px; }
-            .question-text { font-size: 17px; }
+
+        /* Guide Styles */
+        .guide-section { margin-bottom: 30px; }
+        .guide-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
         }
+        .guide-card h3 { color: var(--primary-color); margin-top: 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: right; }
+        th { background-color: #f5f5f5; }
+        .trap-highlight { color: #d32f2f; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>תרגול מבחן: אבטחת מערכות תוכנה (20940)</h1>
+        <h1>אבטחת מערכות תוכנה (20940) - המדריך המלא</h1>
     </header>
+
+    <nav>
+        <button class="nav-btn active" onclick="showTab('practice')">תרגול מבחנים</button>
+        <button class="nav-btn" onclick="showTab('guide')">מדריך למידה וטיפים</button>
+    </nav>
     
-    <div class="container">
+    <!-- Tab 1: Practice -->
+    <div id="practice" class="tab-content active container">
         <div class="exam-selection">
             <label for="examSelect"><strong>בחר מבחן:</strong></label>
-            <select id="examSelect" onchange="loadExam()">
-                <!-- Populated by JS -->
-            </select>
+            <select id="examSelect" onchange="loadExam()"></select>
         </div>
-
-        <div id="quizContainer">
-            <!-- Questions loaded here -->
-        </div>
-
+        <div id="quizContainer"></div>
         <button id="doneBtn" class="btn" onclick="showResults()">סיום מבחן והצגת פתרונות</button>
-        <button id="restartBtn" class="btn" onclick="loadExam()">התחל מבחן זה מחדש</button>
+        <button id="restartBtn" class="btn" style="display:none; margin-top:10px; background:#78909c" onclick="loadExam()">התחל מחדש</button>
+    </div>
+
+    <!-- Tab 2: Guide -->
+    <div id="guide" class="tab-content container">
+        <div class="guide-section">
+            <h2>שאלות ליבה שחוזרות במבחנים</h2>
+            <div class="guide-card">
+                <h3>1. בקרת גישה (Unix/Windows)</h3>
+                <p>בכמעט כל מבחן תופיע שאלה על <strong>מטריצת גישה</strong>. זכור: יוניקס בסיסי (UGO) מוגבל מאוד. אם המטריצה דורשת הרשאות שונות ל-3 משתמשים ספציפיים על אותו קובץ, התשובה היא לרוב שנדרש ACL.</p>
+            </div>
+            <div class="guide-card">
+                <h3>2. מודלי BLP ו-Biba</h3>
+                <ul>
+                    <li><strong>BLP (סודיות):</strong> No Read Up, No Write Down. (אסור להדליף למטה).</li>
+                    <li><strong>Biba (שלמות):</strong> No Read Down, No Write Up. (אסור לסמוך על מה שמתחת).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="guide-section">
+            <h2>טעויות נפוצות במבחן</h2>
+            <table>
+                <tr>
+                    <th>הטעות</th>
+                    <th>ההסבר הטכני</th>
+                    <th>איך להימנע?</th>
+                </tr>
+                <tr>
+                    <td>SUID vs Sticky Bit</td>
+                    <td>בלבול בין הרשאות ריצה להרשאות מחיקה.</td>
+                    <td>SUID = כוח של הבעלים. Sticky = הגנה על מחיקה.</td>
+                </tr>
+                <tr>
+                    <td>ASLR מונע גלישה</td>
+                    <td>חושבים ש-ASLR עוצר את גלישת החוצץ עצמה.</td>
+                    <td>ASLR רק מזיז את המטרות, הוא לא חוסם את הירי.</td>
+                </tr>
+                <tr>
+                    <td>חתימה = הצפנה</td>
+                    <td>חושבים שחתימה דיגיטלית מצפינה את כל הקובץ.</td>
+                    <td>חתימה היא על ה-HASH בלבד!</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="guide-section">
+            <h2>מלכודות וטיפים ליום המבחן</h2>
+            <div class="guide-card">
+                <p><span class="trap-highlight">מלכודת ה-x בתיקייה:</span> אם אין הרשאת x על תיקייה, לא משנה מה ההרשאות על הקובץ שבתוכה - לא תוכל לגשת אליו!</p>
+                <p><span class="trap-highlight">Covert Channels:</span> אם מבקשים דרך להעביר מידע כשיש חסימה של המודל, חפש משאבים עקיפים: שמות קבצים, נפח דיסק או זמן תגובה.</p>
+                <p><strong>טיפ זהב:</strong> צייר תמיד את רמות הסיווג של הסובייקט והאובייקט לפני שאתה עונה על שאלות BLP/Biba.</p>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -178,91 +235,61 @@
         let currentExamQuestions = [];
 
         async function init() {
-            try {
-                const response = await fetch('questions.json');
-                allQuestions = await response.json();
-                populateExamSelect();
-                loadExam();
-            } catch (error) {
-                console.error("שגיאה בטעינת השאלות:", error);
-            }
-        }
-
-        function populateExamSelect() {
+            const response = await fetch('questions.json');
+            allQuestions = await response.json();
             const select = document.getElementById('examSelect');
             const totalExams = Math.ceil(allQuestions.length / 5);
             for (let i = 0; i < totalExams; i++) {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = `מבחן ${i + 1}`;
-                select.appendChild(option);
+                const opt = document.createElement('option');
+                opt.value = i; opt.textContent = `מבחן ${i + 1}`;
+                select.appendChild(opt);
             }
+            loadExam();
+        }
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
         }
 
         function loadExam() {
-            const examIndex = document.getElementById('examSelect').value;
-            const start = examIndex * 5;
-            currentExamQuestions = allQuestions.slice(start, start + 5);
-            
+            const idx = document.getElementById('examSelect').value;
+            currentExamQuestions = allQuestions.slice(idx * 5, idx * 5 + 5);
             const container = document.getElementById('quizContainer');
             container.innerHTML = '';
-            
-            currentExamQuestions.forEach((q, qIdx) => {
+            currentExamQuestions.forEach((q, i) => {
                 const qDiv = document.createElement('div');
                 qDiv.className = 'question';
                 qDiv.innerHTML = `
                     <span class="topic-badge">${q.topic}</span>
                     <div class="question-text">${q.question}</div>
                     <ul class="options">
-                        ${q.options.map((opt, optIdx) => `
-                            <li class="option" onclick="selectOption(this)">
-                                <input type="radio" name="q${qIdx}" value="${opt.replace(/"/g, '&quot;')}">
-                                <span>${opt}</span>
-                            </li>
-                        `).join('')}
+                        ${q.options.map(o => `<li class="option" onclick="this.querySelector('input').checked=true"><input type="radio" name="q${i}" value="${o.replace(/"/g, '&quot;')}"><span>${o}</span></li>`).join('')}
                     </ul>
-                    <div id="exp${qIdx}" class="explanation-box">
-                        <span class="explanation-title">💡 פתרון ונימוק טכני:</span>
-                        <div class="explanation-content">${q.explanation}</div>
-                    </div>
+                    <div id="exp${i}" class="explanation-box"><span style="color:#f57f17; font-weight:bold">פתרון ונימוק:</span><br>${q.explanation}</div>
                 `;
                 container.appendChild(qDiv);
             });
-            
             document.getElementById('doneBtn').style.display = 'block';
             document.getElementById('restartBtn').style.display = 'none';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function selectOption(el) {
-            const radio = el.querySelector('input');
-            if (!radio.disabled) {
-                radio.checked = true;
-            }
         }
 
         function showResults() {
-            currentExamQuestions.forEach((q, qIdx) => {
-                const selected = document.querySelector(`input[name="q${qIdx}"]:checked`);
-                const expBox = document.getElementById(`exp${qIdx}`);
-                const options = document.querySelectorAll(`input[name="q${qIdx}"]`);
-                
-                expBox.classList.add('reveal');
-                
-                options.forEach(optInput => {
-                    const li = optInput.closest('li');
-                    optInput.disabled = true;
-                    if (optInput.value === q.answer) {
-                        li.classList.add('correct');
-                    } else if (selected && optInput.value === selected.value) {
-                        li.classList.add('incorrect');
-                    }
+            currentExamQuestions.forEach((q, i) => {
+                const sel = document.querySelector(`input[name="q${i}"]:checked`);
+                document.getElementById(`exp${i}`).classList.add('reveal');
+                document.querySelectorAll(`input[name="q${i}"]`).forEach(inp => {
+                    const li = inp.closest('li');
+                    inp.disabled = true;
+                    if (inp.value === q.answer) li.classList.add('correct');
+                    else if (sel && inp.value === sel.value) li.classList.add('incorrect');
                 });
             });
             document.getElementById('doneBtn').style.display = 'none';
             document.getElementById('restartBtn').style.display = 'block';
         }
-
         init();
     </script>
 </body>
