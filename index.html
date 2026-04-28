@@ -65,28 +65,22 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.05);
         }
 
-        /* Practice Styles */
-        .exam-selection { margin-bottom: 30px; text-align: center; }
+        /* Common Styles */
+        .btn { padding: 12px 25px; background: var(--primary-color); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
         .question { margin-bottom: 40px; padding: 25px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #fafafa; }
         .option { margin: 12px 0; padding: 16px; background: #fff; border: 2px solid #f0f0f0; border-radius: 10px; cursor: pointer; display: flex; align-items: center; }
-        .option:hover { border-color: var(--primary-color); background-color: #f1f8ff; }
         .correct { border-color: var(--correct-color) !important; background-color: #e8f5e9 !important; }
         .incorrect { border-color: var(--incorrect-color) !important; background-color: #ffebee !important; }
         .explanation-box { margin-top: 20px; padding: 20px; background-color: var(--highlight-bg); border-right: 8px solid var(--highlight-border); border-radius: 6px; display: none; }
         .reveal { display: block !important; }
 
-        /* Quick Cards Styles */
-        .cards-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
+        /* Flip Card Styles (Used in two tabs) */
+        .cards-container { display: flex; flex-direction: column; align-items: center; gap: 20px; }
         .flip-card {
             background-color: transparent;
             width: 100%;
-            max-width: 500px;
-            height: 300px;
+            max-width: 600px;
+            height: 400px;
             perspective: 1000px;
             cursor: pointer;
         }
@@ -100,9 +94,7 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             border-radius: 15px;
         }
-        .flip-card.flipped .flip-card-inner {
-            transform: rotateY(180deg);
-        }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
         .flip-card-front, .flip-card-back {
             position: absolute;
             width: 100%;
@@ -113,37 +105,22 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 30px;
             border-radius: 15px;
             box-sizing: border-box;
+            overflow-y: auto;
         }
-        .flip-card-front {
-            background-color: #fff;
-            color: #333;
-            border: 2px solid var(--primary-color);
-        }
-        .flip-card-back {
-            background-color: var(--primary-color);
-            color: white;
-            transform: rotateY(180deg);
-        }
-        .card-type {
-            font-size: 12px;
-            font-weight: bold;
-            color: var(--secondary-color);
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-        .card-question { font-size: 20px; font-weight: bold; }
-        .card-answer { font-size: 18px; }
+        .flip-card-front { background-color: #fff; border: 2px solid var(--primary-color); }
+        .flip-card-back { background-color: var(--primary-color); color: white; transform: rotateY(180deg); }
+        .card-type { font-size: 14px; font-weight: bold; color: var(--secondary-color); margin-bottom: 10px; }
+        .card-question { font-size: 20px; font-weight: bold; margin-bottom: 15px; }
+        .card-options { text-align: right; width: 100%; font-size: 16px; list-style: none; padding: 0; }
+        .card-options li { margin-bottom: 8px; padding: 8px; background: #f9f9f9; border-radius: 5px; border: 1px solid #eee; }
+        .card-answer { font-size: 18px; line-height: 1.4; }
 
-        /* Guide Styles */
-        .guide-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 15px; }
+        /* Guide Table */
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         th, td { border: 1px solid #ddd; padding: 12px; text-align: right; }
-        .trap-highlight { color: #d32f2f; font-weight: bold; }
-
-        .btn { padding: 12px 25px; background: var(--primary-color); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -154,7 +131,8 @@
 
     <nav>
         <button class="nav-btn active" onclick="showTab('practice')">תרגול מבחנים</button>
-        <button class="nav-btn" onclick="showTab('cards')">כרטיסיות למידה מהירה</button>
+        <button class="nav-btn" onclick="showTab('mcqCards')">כרטיסיות אמריקאיות</button>
+        <button class="nav-btn" onclick="showTab('cards')">כרטיסיות מושגים</button>
         <button class="nav-btn" onclick="showTab('guide')">מדריך למידה וטיפים</button>
     </nav>
     
@@ -169,49 +147,55 @@
         <button id="restartBtn" class="btn" style="display:none; width:100%; margin-top:10px; background:#78909c" onclick="loadExam()">התחל מחדש</button>
     </div>
 
-    <!-- Tab 2: Quick Cards -->
-    <div id="cards" class="tab-content container">
+    <!-- Tab 2: MCQ Cards -->
+    <div id="mcqCards" class="tab-content container">
         <div class="cards-container">
-            <p>לחץ על הכרטיס כדי לראות את התשובה</p>
-            <div class="flip-card" id="currentCard" onclick="this.classList.toggle('flipped')">
+            <p>השאלה מלפנים, התשובה וההסבר מאחור (לחץ להיפוך)</p>
+            <div class="flip-card" id="mcqFlipCard" onclick="this.classList.toggle('flipped')">
                 <div class="flip-card-inner">
                     <div class="flip-card-front">
-                        <div id="cardType" class="card-type">טוען...</div>
-                        <div id="cardFrontText" class="card-question">טוען שאלה...</div>
+                        <div class="card-type" id="mcqTopic">טוען...</div>
+                        <div class="card-question" id="mcqFrontText">טוען שאלה...</div>
+                        <ul class="card-options" id="mcqOptions"></ul>
                     </div>
                     <div class="flip-card-back">
-                        <div class="card-type">תשובה והסבר:</div>
-                        <div id="cardBackText" class="card-answer">טוען תשובה...</div>
+                        <div class="card-type" style="color:#e3f2fd">תשובה נכונה והסבר:</div>
+                        <div class="card-answer" id="mcqBackText"></div>
                     </div>
                 </div>
             </div>
-            <button class="btn" onclick="nextCard()">כרטיס הבא ➔</button>
+            <button class="btn" onclick="nextMcqCard()">שאלה אמריקאית הבאה ➔</button>
         </div>
     </div>
 
-    <!-- Tab 3: Guide -->
+    <!-- Tab 3: Quick Concept Cards -->
+    <div id="cards" class="tab-content container">
+        <div class="cards-container">
+            <p>כרטיסיות מושגים ונכון/לא נכון</p>
+            <div class="flip-card" id="conceptFlipCard" onclick="this.classList.toggle('flipped')" style="height:300px">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div id="cardType" class="card-type">טוען...</div>
+                        <div id="cardFrontText" class="card-question"></div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="card-type" style="color:#e3f2fd">תשובה והסבר:</div>
+                        <div id="cardBackText" class="card-answer"></div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" onclick="nextConceptCard()">כרטיס מושג הבא ➔</button>
+        </div>
+    </div>
+
+    <!-- Tab 4: Guide -->
     <div id="guide" class="tab-content container">
         <div class="guide-section">
-            <h2>שאלות ליבה שחוזרות במבחנים</h2>
-            <div class="guide-card">
-                <h3>1. בקרת גישה (Unix/Windows)</h3>
-                <p>בכמעט כל מבחן תופיע שאלה על מטריצת גישה. זכור: יוניקס בסיסי (UGO) מוגבל. נדרש ACL למקרים מורכבים.</p>
+            <h2>שאלות ליבה וטיפים</h2>
+            <div class="question" style="background:#fff">
+                <h3>טיפ למבחן:</h3>
+                <p>תמיד נסה לפסול תשובות. במבחן אמריקאי באבטחה, לעיתים קרובות יש שתי תשובות שנראות נכונות, אך אחת מהן היא הכלל המדויק יותר של המודל (למשל Star Property ב-BLP).</p>
             </div>
-            <div class="guide-card">
-                <h3>2. מודלי BLP ו-Biba</h3>
-                <ul>
-                    <li><strong>BLP (סודיות):</strong> No Read Up, No Write Down.</li>
-                    <li><strong>Biba (שלמות):</strong> No Read Down, No Write Up.</li>
-                </ul>
-            </div>
-        </div>
-        <div class="guide-section">
-            <h2>טעויות נפוצות במבחן</h2>
-            <table>
-                <tr><th>הטעות</th><th>הסבר</th><th>מניעה</th></tr>
-                <tr><td>SUID vs Sticky Bit</td><td>בלבול בין כוח מחיקה לכוח הרצה.</td><td>SUID=בעלים, Sticky=הגנת מחיקה.</td></tr>
-                <tr><td>ASLR מונע גלישה</td><td>חושבים שהוא עוצר את ה-Overflow.</td><td>הוא רק מזיז כתובות.</td></tr>
-            </table>
         </div>
     </div>
 
@@ -222,23 +206,23 @@
             { type: "נכון / לא נכון", q: "ASLR מונע את התרחשותה של גלישת חוצץ (Buffer Overflow).", a: "לא נכון. ASLR רק מקשה על ניצול הגלישה על ידי הפיכת כתובות הזיכרון לאקראיות." },
             { type: "הגדר מושג", q: "SUID (Set User ID)", a: "מנגנון המאפשר למשתמש להריץ קובץ עם ההרשאות של בעל הקובץ (במקום ההרשאות של המריץ)." },
             { type: "נכון / לא נכון", q: "במודל Bell-LaPadula, משתמש ברמת Secret יכול לכתוב לקובץ ברמת Confidential.", a: "לא נכון. כלל ה-*-Property אוסר כתיבה לרמה נמוכה יותר (No Write Down)." },
-            { type: "הגדר מושג", q: "Sticky Bit", a: "ביט הרשאה על תיקייה המונע ממשתמשים למחוק קבצים שהם לא הבעלים שלהם (שימושי ב-/tmp)." },
-            { type: "נכון / לא נכון", q: "חתימה דיגיטלית מתבצעת על ידי הצפנת כל המסמך במפתח הפרטי של השולח.", a: "לא נכון. חותמים על ה-Hash של המסמך בלבד מטעמי יעילות." },
-            { type: "הגדר מושג", q: "Covert Channel", a: "ערוץ תקשורת בלתי מכוון המאפשר העברת מידע בניגוד למדיניות האבטחה (למשל דרך ניצול משאבי מערכת)." },
-            { type: "נכון / לא נכון", q: "במודל Biba, סובייקט ברמה גבוהה יכול לקרוא אובייקט ברמה נמוכה.", a: "לא נכון. כלל ה-Simple Integrity אוסר קריאה מרמה נמוכה יותר (No Read Down)." }
+            { type: "הגדר מושג", q: "Sticky Bit", a: "ביט הרשאה על תיקייה המונע ממשתמשים למחוק קבצים שהם לא הבעלים שלהם (שימושי ב-/tmp)." }
         ];
 
         async function init() {
-            const response = await fetch('questions.json');
-            allQuestions = await response.json();
-            const select = document.getElementById('examSelect');
-            for (let i = 0; i < Math.ceil(allQuestions.length / 5); i++) {
-                const opt = document.createElement('option');
-                opt.value = i; opt.textContent = `מבחן ${i + 1}`;
-                select.appendChild(opt);
-            }
-            loadExam();
-            nextCard();
+            try {
+                const response = await fetch('questions.json');
+                allQuestions = await response.json();
+                const select = document.getElementById('examSelect');
+                for (let i = 0; i < Math.ceil(allQuestions.length / 5); i++) {
+                    const opt = document.createElement('option');
+                    opt.value = i; opt.textContent = `מבחן ${i + 1}`;
+                    select.appendChild(opt);
+                }
+                loadExam();
+                nextConceptCard();
+                nextMcqCard();
+            } catch (e) { console.error(e); }
         }
 
         function showTab(tabId) {
@@ -248,14 +232,26 @@
             event.target.classList.add('active');
         }
 
-        function nextCard() {
+        function nextConceptCard() {
             const card = quickCards[Math.floor(Math.random() * quickCards.length)];
-            document.getElementById('currentCard').classList.remove('flipped');
+            document.getElementById('conceptFlipCard').classList.remove('flipped');
             setTimeout(() => {
                 document.getElementById('cardType').textContent = card.type;
                 document.getElementById('cardFrontText').textContent = card.q;
                 document.getElementById('cardBackText').textContent = card.a;
-            }, 100);
+            }, 150);
+        }
+
+        function nextMcqCard() {
+            const q = allQuestions[Math.floor(Math.random() * allQuestions.length)];
+            document.getElementById('mcqFlipCard').classList.remove('flipped');
+            setTimeout(() => {
+                document.getElementById('mcqTopic').textContent = q.topic;
+                document.getElementById('mcqFrontText').textContent = q.question;
+                const optList = document.getElementById('mcqOptions');
+                optList.innerHTML = q.options.map(o => `<li>${o}</li>`).join('');
+                document.getElementById('mcqBackText').innerHTML = `<strong>תשובה נכונה:</strong> ${q.answer}<br><br><strong>הסבר:</strong> ${q.explanation}`;
+            }, 150);
         }
 
         function loadExam() {
@@ -272,7 +268,7 @@
                     <ul class="options">
                         ${q.options.map(o => `<li class="option" onclick="this.querySelector('input').checked=true"><input type="radio" name="q${i}" value="${o.replace(/"/g, '&quot;')}"><span>${o}</span></li>`).join('')}
                     </ul>
-                    <div id="exp${i}" class="explanation-box"><span style="color:#f57f17; font-weight:bold">פתרון ונימוק:</span><br>${q.explanation}</div>
+                    <div id="exp${i}" class="explanation-box"><strong>פתרון:</strong> ${q.explanation}</div>
                 `;
                 container.appendChild(qDiv);
             });
