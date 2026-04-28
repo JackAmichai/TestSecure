@@ -37,6 +37,11 @@
     </header>
 
     <div id="app">
+        
+        <div style="max-width: 600px; margin: 0 auto 20px;">
+            <input type="text" id="globalSearch" placeholder="🔍 חיפוש מושגים, שאלות או נושאים..." style="width: 100%; padding: 14px 20px; border-radius: 30px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); font-family: var(--font); font-size: 1.05rem; box-shadow: var(--shadow);" onkeyup="handleGlobalSearch()">
+            <div id="searchResults" style="display: none; background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 15px; margin-top: 10px; max-height: 400px; overflow-y: auto; box-shadow: var(--shadow-lg);"></div>
+        </div>
         <nav class="topics-filter" style="margin-top: 20px;">
             <button class="topic-btn active" data-tab="algo">🚀 האלגוריתם למעבר</button>
             <button class="topic-btn" data-tab="practice">תרגול מבחנים</button>
@@ -377,7 +382,8 @@
                     </div>
                 </div>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
-                    <button class="retry-btn" onclick="chatbotAskQuestion()">שאל שאלה אקראית</button>
+                    <button class="retry-btn" onclick="chatbotAskQuestion()">שאל שאלה אמריקאית</button>
+                    <button class="retry-btn" onclick="chatbotAskOpenQuestion()">שאל שאלה פתוחה</button>
                     <button class="retry-btn" onclick="chatbotStartExam()">התחל מבחן (5 שאלות)</button>
                     <button class="retry-btn" onclick="chatbotGetTip()">תן לי טיפ ללמידה</button>
                     <button class="retry-btn" onclick="chatbotShowStats()">הצג סטטיסטיקות</button>
@@ -598,6 +604,77 @@
 
         init();
 
+        
+        // Global Search
+        function handleGlobalSearch() {
+            const query = document.getElementById('globalSearch').value.toLowerCase().trim();
+            const resDiv = document.getElementById('searchResults');
+            if (query.length < 2) {
+                resDiv.style.display = 'none';
+                return;
+            }
+            
+            let results = [];
+            
+            // Search Concepts
+            allConcepts.forEach(c => {
+                if (c.q.toLowerCase().includes(query) || c.a.toLowerCase().includes(query)) {
+                    results.push(`<div style="padding: 10px; border-bottom: 1px solid var(--border);"><strong>מושג (${c.type}):</strong> ${c.q}<br><small style="color: var(--text-muted);">${c.a}</small></div>`);
+                }
+            });
+            
+            // Search MCQ
+            allQuestions.forEach(q => {
+                if (q.question.toLowerCase().includes(query) || q.answer.toLowerCase().includes(query)) {
+                    results.push(`<div style="padding: 10px; border-bottom: 1px solid var(--border);"><strong>שאלה אמריקאית (${q.topic}):</strong> ${q.question}<br><small style="color: var(--success);">תשובה: ${q.answer}</small></div>`);
+                }
+            });
+            
+            // Search Open Questions
+            allOpenQuestions.forEach(oq => {
+                if (oq.question.toLowerCase().includes(query) || oq.answer.toLowerCase().includes(query)) {
+                    results.push(`<div style="padding: 10px; border-bottom: 1px solid var(--border);"><strong>שאלה פתוחה (${oq.topic}):</strong> ${oq.question}<br><small style="color: var(--accent);">מקור: ${oq.source}</small></div>`);
+                }
+            });
+            
+            if (results.length > 0) {
+                resDiv.innerHTML = results.slice(0, 15).join('');
+                resDiv.style.display = 'block';
+            } else {
+                resDiv.innerHTML = '<div style="padding: 10px; text-align: center; color: var(--text-muted);">לא נמצאו תוצאות.</div>';
+                resDiv.style.display = 'block';
+            }
+        }
+
+        // Better evaluation helper
+        function evaluateAnswerBetter(text, q) {
+            let isCorrect = text.toLowerCase().trim() === q.answer.toLowerCase().trim();
+            if (!isCorrect && q.options) {
+                const answerIndex = q.options.findIndex(o => o === q.answer);
+                const validInputs = [
+                    String(answerIndex + 1), 
+                    String.fromCharCode(97 + answerIndex), // a,b,c,d
+                    String.fromCharCode(1488 + answerIndex) // א,ב,ג,ד
+                ];
+                if (validInputs.includes(text.toLowerCase().trim())) {
+                    isCorrect = true;
+                }
+            }
+            return isCorrect;
+        }
+
+        // Open Question Chatbot functionality
+        let currentChatOpenQuestion = null;
+        
+        function chatbotAskOpenQuestion() {
+            if (!chatbot) return;
+            const q = chatbot.getRandomOpenQuestion();
+            if (!q) return;
+            chatbotMode = 'open_question';
+            currentChatOpenQuestion = q;
+            addChatMessage('בוט', '<strong>שאלה פתוחה (' + q.topic + '):</strong><br>' + q.question.replace(/\n/g, '<br>') + '<br><br>הקלד את תשובתך (או לחץ שלח כדי לחשוף את הפתרון).', 'bot');
+        }
+
         // Chatbot integration
         let chatbot = null;
         let chatbotMode = 'idle'; // 'idle', 'question', 'exam'
@@ -683,12 +760,31 @@
             input.value = '';
 
             if (chatbotMode === 'question' && chatbot.currentQuestion) {
-                const result = chatbot.evaluateAnswer(text);
+                const isCorrect = evaluateAnswerBetter(text, chatbot.currentQuestion);
+                const result = {
+                    message: isCorrect ? '✅ תשובה נכונה!' : `❌ תשובה לא נכונה. התשובה הנכונה היא: ${chatbot.currentQuestion.answer}`,
+                    explanation: chatbot.currentQuestion.explanation
+                };
                 addChatMessage('בוט', result.message + '<br><br><small>' + result.explanation + '</small>',+  'bot');
                 chatbotMode = 'idle';
+                        } else if (chatbotMode === 'open_question') {
+                if (!currentChatOpenQuestion) { chatbotMode = 'idle'; return; }
+                if (text.trim() === 'כן' || text.trim() === 'צדקתי') {
+                    addChatMessage('בוט', 'מעולה! כל הכבוד! 🎉', 'bot');
+                    chatbotMode = 'idle';
+                    return;
+                } else if (text.trim() === 'לא' || text.trim() === 'טעיתי') {
+                    addChatMessage('בוט', 'לא נורא, בשביל זה אנחנו מתרגלים! תרצה שאלה נוספת?', 'bot');
+                    chatbotMode = 'idle';
+                    return;
+                }
+                
+                // Show official answer
+                addChatMessage('בוט', '<strong>הפתרון המלא:</strong><br>' + currentChatOpenQuestion.answer.replace(/\n/g, '<br>') + '<br><br><strong>האם צדקת? (כן/לא)</strong>', 'bot');
+                // stay in open_question mode to wait for yes/no
             } else if (chatbotMode === 'exam') {
                 const q = examQuestions[examCurrent];
-                const isCorrect = text.toLowerCase() === q.answer.toLowerCase() || text === q.answer;
+                const isCorrect = evaluateAnswerBetter(text, q);
                 chatbot.totalAnswered++;
                 if (isCorrect) chatbot.score++;
                 

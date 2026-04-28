@@ -8,6 +8,7 @@ class TestSecureChatbot {
     constructor() {
         this.questions = [];
         this.concepts = [];
+        this.openQuestions = [];
         this.currentQuestion = null;
         this.score = 0;
         this.totalAnswered = 0;
@@ -17,15 +18,17 @@ class TestSecureChatbot {
         this.examIndex = 0;
     }
 
-    async init() {
+        async init() {
         try {
-            const [qRes, cRes] = await Promise.all([
+            const [qRes, cRes, oqRes] = await Promise.all([
                 fetch('questions.json'),
-                fetch('concepts.json')
+                fetch('concepts.json'),
+                fetch('open_questions.json')
             ]);
             this.questions = await qRes.json();
             this.concepts = await cRes.json();
-            console.log(`Chatbot initialized with ${this.questions.length} questions and ${this.concepts.length} concepts`);
+            this.openQuestions = await oqRes.json();
+            console.log(`Chatbot initialized`);
             return true;
         } catch (e) {
             console.error('Error loading chatbot data:', e);
@@ -174,3 +177,8 @@ class TestSecureChatbot {
 
 // Export for use in HTML
 window.TestSecureChatbot = TestSecureChatbot;
+
+    getRandomOpenQuestion() {
+        if (!this.openQuestions || this.openQuestions.length === 0) return null;
+        return this.openQuestions[Math.floor(Math.random() * this.openQuestions.length)];
+    }
