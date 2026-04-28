@@ -65,15 +65,47 @@
                 </div>
             </div>
 
-            <div class="guide-card" style="max-width: 600px; margin: 0 auto;">
-                <h3>📝 אלגוריתם לפתרון שאלת מודלים (BLP / Biba)</h3>
-                <div class="algorithm-step"><strong>שלב 1:</strong> זהה את הסוג - "סודיות" (BLP) או "שלמות" (Biba).</div>
-                <div class="algorithm-step"><strong>שלב 2:</strong> רשום את הדרגות: האם הסובייקט (המשתמש) גבוה/נמוך מהאובייקט (הקובץ)?</div>
-                <div class="algorithm-step"><strong>שלב 3:</strong> יישם את הכלל:
-                    <br>• <strong>BLP:</strong> "קריאה למטה, כתיבה למעלה" (אל תדליף!).
-                    <br>• <strong>Biba:</strong> "קריאה למעלה, כתיבה למטה" (אל תזדהם!).
+            <div class="guide-card" style="max-width: 700px; margin: 0 auto; line-height: 1.6;">
+                <h3>📝 אלגוריתם מורחב לפתרון מודלים (BLP / Biba)</h3>
+                
+                <div style="background: rgba(37,99,235,0.05); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--border);">
+                    <h4 style="margin-top: 0; color: var(--accent);">🔢 מה מסמלים המספרים (Index)?</h4>
+                    <p style="margin-bottom: 0;">במודלים, לכל רמת סיווג (כמו 'סודי ביותר' או 'בלמ"ס') מותאם מספר, שנקרא אינדקס. <strong>המספר מייצג את ה"גובה" או ה"חשיבות" של ההרשאה.</strong><br>
+                    לדוגמה: "סודי ביותר" יקבל אינדקס 3 (הכי גבוה), ו-"בלמ"ס" יקבל אינדקס 0 (הכי נמוך).<br>
+                    כשאומרים "למעלה" הכוונה למספר גבוה יותר, וכשאומרים "למטה" הכוונה למספר נמוך יותר.</p>
                 </div>
-                <div class="algorithm-step"><strong>שלב 4:</strong> בדוק מקרים מיוחדים (האם יש ROOT? האם יש הרשאת מעבר?).</div>
+
+                <div class="algorithm-step"><strong>שלב 1:</strong> זהה איזה מודל השאלה דורשת - <strong>BLP</strong> (שומר על סודיות - מונע דליפת מידע) או <strong>Biba</strong> (שומר על שלמות - מונע השחתת מידע על ידי מידע לא אמין).</div>
+                
+                <div class="algorithm-step"><strong>שלב 2:</strong> תרגם למספרים: רשום מה האינדקס של המשתמש ומה האינדקס של הקובץ.</div>
+                
+                <div class="algorithm-step"><strong>שלב 3:</strong> יישם את חוקי הברזל בהתבסס על המספרים שרשמת:
+                    <br><br><strong style="color: var(--accent);">🛡️ מודל BLP (מגן על סודיות - לא להדליף החוצה!):</strong>
+                    <br>• <strong>קריאה:</strong> "קריאה למטה" (No Read Up) - מותר לך לקרוא רק מקבצים עם מספר <strong>קטן או שווה</strong> לשלך. (אסור למשתמש 'סודי' לקרוא קובץ 'סודי ביותר').
+                    <br>• <strong>כתיבה:</strong> "כתיבה למעלה" (No Write Down) - מותר לך לכתוב רק לקבצים עם מספר <strong>גדול או שווה</strong> לשלך. (כדי שמשתמש 'סודי' לא יעתיק את הסוד לקובץ 'בלמ"ס' וידליף אותו!).
+                    
+                    <br><br><strong style="color: var(--success);">🎯 מודל Biba (מגן על שלמות - לא להזדהם ממידע נחות!):</strong>
+                    <br>• <strong>קריאה:</strong> "קריאה למעלה" (No Read Down) - מותר לך לקרוא רק מקבצים עם מספר <strong>גדול או שווה</strong> לשלך. (כדי שלא תקרא נתונים ממקור לא אמין ותשתמש בהם).
+                    <br>• <strong>כתיבה:</strong> "כתיבה למטה" (No Write Up) - מותר לך לכתוב רק לקבצים עם מספר <strong>קטן או שווה</strong> לשלך. (כדי שמשתמש לא אמין עם מספר נמוך לא ידרוס קובץ מערכת קריטי עם מספר גבוה).
+                </div>
+                
+                <div class="algorithm-step"><strong>שלב 4:</strong> בדוק מקרים מיוחדים. האם המשתמש הוא Trusted Subject (תהליך אמין שמוכח שאין בו וירוס)? אם כן, מותר לו לחרוג מהכללים ולכתוב "למטה" במודל BLP.</div>
+
+                <div style="background: var(--bg-secondary); padding: 20px; border-radius: 8px; margin-top: 25px; border-right: 4px solid var(--accent);">
+                    <h4 style="margin-top: 0; margin-bottom: 10px;">💡 דוגמה ספציפית: מבחן על מודל BLP (סודיות)</h4>
+                    <p style="margin-bottom: 10px;"><strong>הנתונים:</strong><br>
+                    • סיווגים: סודי ביותר (3) > סודי (2) > שמור (1) > בלמ"ס (0)<br>
+                    • אליס היא משתמשת בסיווג <strong>"סודי" (אינדקס 2)</strong>.<br>
+                    • קובץ A בסיווג <strong>"בלמ"ס" (אינדקס 0)</strong>.<br>
+                    • קובץ B בסיווג <strong>"סודי ביותר" (אינדקס 3)</strong>.</p>
+                    
+                    <p style="margin-bottom: 0;"><strong>האם מותר לאליס לבצע את הפעולות הבאות?</strong><br>
+                    1. <strong>לקרוא את קובץ A?</strong> <span style="color: var(--success); font-weight: bold;">כן.</span> אליס (2) > קובץ (0). זוהי "קריאה למטה" וזה מותר (אליס מסווגת מספיק).<br>
+                    2. <strong>לקרוא את קובץ B?</strong> <span style="color: #ef4444; font-weight: bold;">לא.</span> אליס (2) < קובץ (3). אסור לקרוא למעלה (No Read Up).<br>
+                    3. <strong>לכתוב לקובץ A?</strong> <span style="color: #ef4444; font-weight: bold;">לא.</span> אליס (2) > קובץ (0). אסור לכתוב למטה (No Write Down), כי אליס עלולה לכתוב שם סודות שייחשפו לכולם!<br>
+                    4. <strong>לכתוב לקובץ B?</strong> <span style="color: var(--success); font-weight: bold;">כן.</span> אליס (2) < קובץ (3). "כתיבה למעלה" מותרת, הסוד שלה פשוט נשמר במקום אפילו יותר מאובטח.
+                    </p>
+                </div>
             </div>
         </div>
 
