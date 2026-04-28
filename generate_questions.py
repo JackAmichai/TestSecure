@@ -127,9 +127,9 @@ def generate_blp_questions():
         questions.append({
             "topic": "מודל Bell-LaPadula",
             "question": concept["q"],
-            "options": concept["options"] + ["אף אחד מהנ\"ל", "תלוי במערכת ההפעלה"],
+            "options": concept["options"],
             "answer": concept["a"],
-            "explanation": "במודל Bell-LaPadula: {}. זהו מודל אמריקאי שפותח בשנות ה-70 כדי להגן על סודיות מידע רגיש.".format(concept['a'])
+            "explanation": concept.get("explanation") or "במודל Bell-LaPadula: {}. זהו מודל אמריקאי שפותח בשנות ה-70 כדי להגן על סודיות מידע רגיש.".format(concept['a'])
         })
 
     return questions
@@ -228,9 +228,9 @@ def generate_biba_questions():
         questions.append({
             "topic": "מודל Biba",
             "question": concept["q"],
-            "options": concept["options"] + ["אף אחד מהנ\"ל"],
+            "options": concept["options"],
             "answer": concept["a"],
-            "explanation": "במודל Biba: {}. המודל מתמקד בשלמות המידע ומונע זיהום של מידע אמין על ידי מידע לא אמין.".format(concept['a'])
+            "explanation": concept.get("explanation") or "במודל Biba: {}. המודל מתמקד בשלמות המידע ומונע זיהום של מידע אמין על ידי מידע לא אמין.".format(concept['a'])
         })
 
     return questions
@@ -327,9 +327,9 @@ def generate_unix_questions():
         questions.append({
             "topic": "הרשאות Unix",
             "question": concept["q"],
-            "options": concept["options"] + ["אף אחד מהנ\"ל", "תלוי בגרסת ה-Linux"],
+            "options": concept["options"],
             "answer": concept["a"],
-            "explanation": "{} . הרשאות Unix מבוססות על מודל דיסקרטי (DAC) שבו הבעלים קובע מי יכול לגשת לקובץ.".format(concept['a'])
+            "explanation": concept.get("explanation") or "{} . הרשאות Unix מבוססות על מודל דיסקרטי (DAC) שבו הבעלים קובע מי יכול לגשת לקובץ.".format(concept['a'])
         })
 
     return questions
@@ -387,9 +387,9 @@ def generate_access_control_questions():
         questions.append({
             "topic": "בקרת גישה",
             "question": concept["q"],
-            "options": concept["options"] + ["אף אחד מהנ\"ל"],
+            "options": concept["options"],
             "answer": concept["a"],
-            "explanation": "{} . זהו מושג מרכזי בבקרת גישה במערכות מחשב.".format(concept['a'])
+            "explanation": concept.get("explanation") or "{} . זהו מושג מרכזי בבקרת גישה במערכות מחשב.".format(concept['a'])
         })
 
     return questions
@@ -452,9 +452,9 @@ def generate_symmetric_crypto_questions():
         questions.append({
             "topic": "הצפנה סימטרית",
             "question": concept["q"],
-            "options": concept["options"] + ["אף אחד מהנ\"ל"],
+            "options": concept["options"],
             "answer": concept["a"],
-            "explanation": "{} . בהצפנה סימטרית אותו מפתח משמש להצפנה ולפענוח.".format(concept['a'])
+            "explanation": concept.get("explanation") or "{} . בהצפנה סימטרית אותו מפתח משמש להצפנה ולפענוח.".format(concept['a'])
         })
 
     return questions
@@ -512,9 +512,9 @@ def generate_asymmetric_crypto_questions():
         questions.append({
             "topic": "הצפנה אסימטרית",
             "question": concept["q"],
-            "options": concept["options"] + ["אף אחד מהנ\"ל"],
+            "options": concept["options"],
             "answer": concept["a"],
-            "explanation": "{} . בהצפנה אסימטרית יש מפתח ציבורי (פומבי) ומפתח פרטי (סודי).".format(concept['a'])
+            "explanation": concept.get("explanation") or "{} . בהצפנה אסימטרית יש מפתח ציבורי (פומבי) ומפתח פרטי (סודי).".format(concept['a'])
         })
 
     return questions
@@ -572,9 +572,9 @@ def generate_hash_questions():
         questions.append({
             "topic": "Hash ו-MAC",
             "question": concept["q"],
-            "options": concept["options"] + ["אף אחד מהנ\"ל"],
+            "options": concept["options"],
             "answer": concept["a"],
-            "explanation": "{} . פונקציות גיבוב משמשות לאימות שלמות המידע.".format(concept['a'])
+            "explanation": concept.get("explanation") or "{} . פונקציות גיבוב משמשות לאימות שלמות המידע.".format(concept['a'])
         })
 
     return questions
@@ -627,9 +627,9 @@ def generate_kerberos_questions():
         questions.append({
             "topic": "Kerberos",
             "question": concept["q"],
-            "options": concept["options"] + ["אף אחד מהנ\"ל"],
+            "options": concept["options"],
             "answer": concept["a"],
-            "explanation": "{} . Kerberos פותח ב-MIT והוא הפרוטוקול הסטנדרטי ב-Windows domains.".format(concept['a'])
+            "explanation": concept.get("explanation") or "{} . Kerberos פותח ב-MIT והוא הפרוטוקול הסטנדרטי ב-Windows domains.".format(concept['a'])
         })
 
     return questions
@@ -677,9 +677,9 @@ def generate_ssl_tls_questions():
         questions.append({
             "topic": "SSL/TLS",
             "question": concept["q"],
-            "options": concept["options"] + ["אף אחד מהנ\"ל"],
+            "options": concept["options"],
             "answer": concept["a"],
-            "explanation": "{} . TLS פועל בשכבת התחבורה (Transport Layer) ומספק הצפנה ואימות.".format(concept['a'])
+            "explanation": concept.get("explanation") or "{} . TLS פועל בשכבת התחבורה (Transport Layer) ומספק הצפנה ואימות.".format(concept['a'])
         })
 
     return questions
@@ -727,9 +727,9 @@ def generate_firewall_questions():
         questions.append({
             "topic": "חומות אש (Firewalls)",
             "question": concept["q"],
-            "options": concept["options"] + ["אף אחד מהנ\"ל"],
+            "options": concept["options"],
             "answer": concept["a"],
-            "explanation": "{} . חומות אש הן קו ההגנה הראשון ברשתות מחשבים.".format(concept['a'])
+            "explanation": concept.get("explanation") or "{} . חומות אש הן קו ההגנה הראשון ברשתות מחשבים.".format(concept['a'])
         })
 
     return questions
@@ -782,9 +782,9 @@ def generate_buffer_overflow_questions():
         questions.append({
             "topic": "Buffer Overflow",
             "question": concept["q"],
-            "options": concept["options"] + ["אף אחד מהנ\"ל"],
+            "options": concept["options"],
             "answer": concept["a"],
-            "explanation": "{} . פגיעויות גלישת חוצץ הן מהנפוצות והמסוכנות ביותר.".format(concept['a'])
+            "explanation": concept.get("explanation") or "{} . פגיעויות גלישת חוצץ הן מהנפוצות והמסוכנות ביותר.".format(concept['a'])
         })
 
     return questions
@@ -832,9 +832,9 @@ def generate_web_vuln_questions():
         questions.append({
             "topic": "פגיעויות ווב",
             "question": concept["q"],
-            "options": concept["options"] + ["אף אחד מהנ\"ל"],
+            "options": concept["options"],
             "answer": concept["a"],
-            "explanation": "{} . פגיעויות ווב הן מהנפוצות ביותר ברשת.".format(concept['a'])
+            "explanation": concept.get("explanation") or "{} . פגיעויות ווב הן מהנפוצות ביותר ברשת.".format(concept['a'])
         })
 
     return questions
@@ -887,9 +887,9 @@ def generate_malware_questions():
         questions.append({
             "topic": "תוכנות זדוניות",
             "question": concept["q"],
-            "options": concept["options"] + ["אף אחד מהנ\"ל"],
+            "options": concept["options"],
             "answer": concept["a"],
-            "explanation": "{} . תוכנות זדוניות מהווים איום משמעותי על אבטחת מערכות.".format(concept['a'])
+            "explanation": concept.get("explanation") or "{} . תוכנות זדוניות מהווים איום משמעותי על אבטחת מערכות.".format(concept['a'])
         })
 
     return questions
@@ -942,9 +942,9 @@ def generate_ids_ips_questions():
         questions.append({
             "topic": "IDS/IPS",
             "question": concept["q"],
-            "options": concept["options"] + ["אף אחד מהנ\"ל"],
+            "options": concept["options"],
             "answer": concept["a"],
-            "explanation": "{} . IDS/IPS הן מערכות חיוניות לאבטחת רשתות.".format(concept['a'])
+            "explanation": concept.get("explanation") or "{} . IDS/IPS הן מערכות חיוניות לאבטחת רשתות.".format(concept['a'])
         })
 
     return questions
@@ -992,9 +992,9 @@ def generate_info_flow_questions():
         questions.append({
             "topic": "אנטרופיה וזרימת מידע",
             "question": concept["q"],
-            "options": concept["options"] + ["אף אחד מהנ\"ל"],
+            "options": concept["options"],
             "answer": concept["a"],
-            "explanation": "{} . אנטרופיה היא מושג מרכזי בתורת האינפורמציה והאבטחה.".format(concept['a'])
+            "explanation": concept.get("explanation") or "{} . אנטרופיה היא מושג מרכזי בתורת האינפורמציה והאבטחה.".format(concept['a'])
         })
 
     return questions
@@ -1042,9 +1042,9 @@ def generate_auth_questions():
         questions.append({
             "topic": "אימות (Authentication)",
             "question": concept["q"],
-            "options": concept["options"] + ["אף אחד מהנ\"ל"],
+            "options": concept["options"],
             "answer": concept["a"],
-            "explanation": "{} . אימות משתמשים הוא קו ההגנה הראשון במערכות מחשב.".format(concept['a'])
+            "explanation": concept.get("explanation") or "{} . אימות משתמשים הוא קו ההגנה הראשון במערכות מחשב.".format(concept['a'])
         })
 
     return questions

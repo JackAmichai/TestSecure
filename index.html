@@ -37,7 +37,7 @@
     </header>
 
     <div id="app">
-        <nav>
+        <nav class="topics-filter" style="margin-top: 20px;">
             <button class="topic-btn active" data-tab="algo">🚀 האלגוריתם למעבר</button>
             <button class="topic-btn" data-tab="practice">תרגול מבחנים</button>
             <button class="topic-btn" data-tab="mcqCards">כרטיסיות אמריקאיות</button>
@@ -92,7 +92,7 @@
                 <p>לחץ על הכרטיסייה כדי להפוך אותה</p>
             </div>
             <div style="max-width: 600px; margin: 0 auto;">
-                <div class="flip-card" id="mcqFlipCard">
+                <div class="flip-card" id="mcqFlipCard" onclick="this.classList.toggle('flipped')">
                     <div class="flip-card-inner">
                         <div class="flip-card-front">
                             <div class="card-type" id="mcqTopic" style="color: var(--accent); font-weight: 600; margin-bottom: 12px;"></div>
@@ -115,7 +115,7 @@
                 <p>לחץ על הכרטיסייה כדי להפוך אותה</p>
             </div>
             <div style="max-width: 600px; margin: 0 auto;">
-                <div class="flip-card" id="conceptFlipCard" style="height: 300px;">
+                <div class="flip-card" id="conceptFlipCard" style="height: 300px;" onclick="this.classList.toggle('flipped')">
                     <div class="flip-card-inner">
                         <div class="flip-card-front">
                             <div id="cardType" class="card-type" style="color: var(--accent); font-weight: 600; margin-bottom: 16px;"></div>
@@ -154,7 +154,7 @@
                 <div class="guide-card">
                     <h3>מודלים (BLP vs Biba)</h3>
                     <table style="width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem;">
-                        <tr style="background: rgba(255,255,255,0.05);">
+                        <tr style="background: rgba(0,0,0,0.05);">
                             <th style="padding: 8px; border: 1px solid var(--border);">מודל</th>
                             <th style="padding: 8px; border: 1px solid var(--border);">מטרה</th>
                             <th style="padding: 8px; border: 1px solid var(--border);">כלל</th>
@@ -186,7 +186,7 @@
                 <div class="guide-card">
                     <h3>פגיעויות תוכנה ומנגנוני הגנה</h3>
                     <table style="width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85rem;">
-                        <tr style="background: rgba(255,255,255,0.05);">
+                        <tr style="background: rgba(0,0,0,0.05);">
                             <th style="padding: 8px; border: 1px solid var(--border);">הגנה</th>
                             <th style="padding: 8px; border: 1px solid var(--border);">מה זה עושה?</th>
                         </tr>
@@ -279,7 +279,7 @@
                             <strong>התשובה (בחר נכון):</strong> ASLR, DEP/NX, Canary, Stack Randomization
                         </div>
                         <table style="width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85rem;">
-                            <tr style="background: rgba(255,255,255,0.05);">
+                            <tr style="background: rgba(0,0,0,0.05);">
                                 <th style="padding: 8px; border: 1px solid var(--border);">הגנה</th>
                                 <th style="padding: 8px; border: 1px solid var(--border);">מה היא מונעת</th>
                             </tr>
@@ -470,7 +470,7 @@
                 document.getElementById('mcqTopic').textContent = q.topic;
                 document.getElementById('mcqFrontText').textContent = q.question;
                 const optList = document.getElementById('mcqOptions');
-                optList.innerHTML = q.options.map(o => `<li style="padding: 8px; margin: 4px 0; background: rgba(255,255,255,0.05); border-radius: 6px;">${o}</li>`).join('');
+                optList.innerHTML = q.options.map(o => `<li style="padding: 8px; margin: 4px 0; background: rgba(0,0,0,0.05); border-radius: 6px;">${o}</li>`).join('');
                 document.getElementById('mcqBackText').innerHTML = `<strong>תשובה נכונה:</strong> ${q.answer}<br><br>${q.explanation}`;
             }, 150);
         }

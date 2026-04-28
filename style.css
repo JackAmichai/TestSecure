@@ -1,24 +1,24 @@
 /* ===== CSS Variables & Reset ===== */
 :root {
-    --bg-primary: #0a0e1a;
-    --bg-secondary: #111827;
-    --bg-card: #1a2235;
-    --bg-card-hover: #1f2a40;
-    --accent: #3b82f6;
-    --accent-glow: rgba(59, 130, 246, 0.3);
-    --accent-secondary: #06b6d4;
-    --success: #10b981;
-    --error: #ef4444;
-    --warning: #f59e0b;
-    --text-primary: #f1f5f9;
-    --text-secondary: #94a3b8;
+    --bg-primary: #f8fafc;
+    --bg-secondary: #f1f5f9;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f8fafc;
+    --accent: #2563eb;
+    --accent-glow: rgba(37, 99, 235, 0.2);
+    --accent-secondary: #0891b2;
+    --success: #059669;
+    --error: #dc2626;
+    --warning: #d97706;
+    --text-primary: #0f172a;
+    --text-secondary: #334155;
     --text-muted: #64748b;
-    --border: rgba(148, 163, 184, 0.1);
-    --border-active: rgba(59, 130, 246, 0.4);
+    --border: rgba(148, 163, 184, 0.3);
+    --border-active: rgba(37, 99, 235, 0.5);
     --radius: 12px;
     --radius-lg: 16px;
-    --shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.4);
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
     --font: 'Heebo', sans-serif;
 }
 
@@ -49,8 +49,8 @@ body::before {
     right: 0;
     bottom: 0;
     background:
-        radial-gradient(ellipse at 20% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 80%, rgba(6, 182, 212, 0.06) 0%, transparent 50%);
+        radial-gradient(ellipse at 20% 20%, rgba(37, 99, 235, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(8, 145, 178, 0.06) 0%, transparent 50%);
     pointer-events: none;
     z-index: 0;
 }
@@ -64,9 +64,19 @@ body::before {
     display: none !important;
 }
 
+/* ===== Tabs ===== */
+.tab-content {
+    display: none;
+    animation: fadeIn 0.4s ease;
+}
+
+.tab-content.active {
+    display: block;
+}
+
 /* ===== Header ===== */
 #main-header {
-    background: rgba(17, 24, 39, 0.85);
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
@@ -183,7 +193,7 @@ body::before {
 .topic-btn:hover {
     border-color: var(--accent);
     color: var(--accent);
-    background: rgba(59, 130, 246, 0.08);
+    background: rgba(37, 99, 235, 0.08);
 }
 
 .topic-btn.active {
@@ -270,7 +280,7 @@ body::before {
     color: var(--text-secondary);
     padding: 4px 10px;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(0, 0, 0, 0.04);
 }
 
 .exam-card.completed .exam-card-score {
@@ -373,7 +383,7 @@ body::before {
     padding: 14px 18px;
     border-radius: 10px;
     border: 1px solid var(--border);
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(0, 0, 0, 0.02);
     color: var(--text-primary);
     font-family: var(--font);
     font-size: 0.95rem;
@@ -404,7 +414,7 @@ body::before {
     width: 28px;
     height: 28px;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(0, 0, 0, 0.06);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -624,4 +634,53 @@ body::before {
         font-size: 0.65rem;
         min-height: 24px;
     }
+}
+
+/* ===== Flip Cards ===== */
+.flip-card {
+    background-color: transparent;
+    perspective: 1000px;
+    width: 100%;
+    min-height: 250px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    min-height: 250px;
+}
+
+.flip-card.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: var(--shadow);
+}
+
+.flip-card-back {
+    transform: rotateY(180deg);
+    border-color: var(--accent);
+    overflow-y: auto;
 }
