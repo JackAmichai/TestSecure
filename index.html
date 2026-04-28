@@ -3,233 +3,359 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מערכת תרגול ומדריך - אבטחת מערכות תוכנה</title>
-    <style>
-        :root {
-            --primary-color: #1e88e5;
-            --secondary-color: #607d8b;
-            --bg-color: #f4f7f9;
-            --card-bg: #ffffff;
-            --text-color: #263238;
-            --correct-color: #43a047;
-            --incorrect-color: #e53935;
-            --highlight-bg: #fff9c4;
-            --highlight-border: #fbc02d;
-            --accent-color: #ff5722;
-        }
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: var(--bg-color);
-        }
-        header {
-            text-align: center;
-            margin-bottom: 20px;
-            padding: 25px;
-            background: linear-gradient(135deg, #1e88e5, #1565c0);
-            color: white;
-            border-radius: 12px;
-        }
-        nav {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-        .nav-btn {
-            padding: 10px 18px;
-            border: none;
-            border-radius: 30px;
-            background: #cfd8dc;
-            color: #455a64;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 14px;
-        }
-        .nav-btn.active {
-            background: var(--primary-color);
-            color: white;
-            box-shadow: 0 4px 8px rgba(30, 136, 229, 0.3);
-        }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
-        .container {
-            background-color: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-        }
-
-        /* Tool Styles */
-        .tool-box { background: #f1f8ff; border: 2px solid #3498db; padding: 20px; border-radius: 10px; margin-bottom: 25px; }
-        .perm-input { width: 100%; padding: 12px; font-size: 18px; border-radius: 6px; border: 1px solid #ccc; text-align: center; }
-        .perm-result { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
-        .perm-col { background: white; padding: 10px; border-radius: 5px; border: 1px solid #eee; text-align: center; }
-        .perm-title { font-weight: bold; display: block; border-bottom: 1px solid #eee; margin-bottom: 5px; }
-
-        /* Guide Styles */
-        .guide-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
-        .guide-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-        .guide-card h3 { color: var(--primary-color); margin-top: 0; border-bottom: 2px solid #e3f2fd; padding-bottom: 10px; }
-        .guide-card h4 { color: var(--accent-color); margin: 15px 0 5px 0; }
-        .mnemonic { background: #e1f5fe; padding: 10px; border-radius: 5px; font-style: italic; border-right: 4px solid #03a9f4; margin: 10px 0; }
-        .trap-box { background: #fff3e0; padding: 15px; border-radius: 5px; border-right: 4px solid #ff9800; margin-top: 15px; }
-        .trap-title { font-weight: bold; color: #e65100; display: block; margin-bottom: 5px; }
-        .algorithm-step { border-right: 4px solid var(--primary-color); padding-right: 15px; margin-bottom: 15px; background: #fafafa; padding: 10px; }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: right; }
-        th { background: #f5f5f5; }
-
-        /* Practice & Cards */
-        .btn { padding: 12px 25px; background: var(--primary-color); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        .question { margin-bottom: 40px; padding: 25px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #fafafa; }
-        .option { margin: 12px 0; padding: 16px; background: #fff; border: 2px solid #f0f0f0; border-radius: 10px; cursor: pointer; display: flex; align-items: center; }
-        .correct { border-color: var(--correct-color) !important; background-color: #e8f5e9 !important; }
-        .incorrect { border-color: var(--incorrect-color) !important; background-color: #ffebee !important; }
-        .explanation-box { margin-top: 20px; padding: 20px; background-color: var(--highlight-bg); border-right: 8px solid var(--highlight-border); border-radius: 6px; display: none; }
-        .reveal { display: block !important; }
-
-        .flip-card { background-color: transparent; width: 100%; max-width: 600px; height: 380px; perspective: 1000px; cursor: pointer; margin: 0 auto; }
-        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-radius: 15px; }
-        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
-        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 30px; border-radius: 15px; box-sizing: border-box; overflow-y: auto; }
-        .flip-card-front { background-color: #fff; border: 2px solid var(--primary-color); }
-        .flip-card-back { background-color: var(--primary-color); color: white; transform: rotateY(180deg); }
-    </style>
+    <title>TestSecure - מערכת תרגול לאבטחת מערכות תוכנה (20940)</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-
-    <header>
-        <h1>אבטחת מערכות תוכנה (20940) - המרכז למעבר המבחן</h1>
+    <header id="main-header">
+        <div class="header-content">
+            <div class="logo-area">
+                <div class="shield-icon">🛡️</div>
+                <div class="logo-text">
+                    <h1>TestSecure</h1>
+                    <span class="course-code">20940 - מבוא לאבטחת המרחב המקוון</span>
+                </div>
+            </div>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalQuestions">0</span>
+                    <span class="stat-label">שאלות</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalTopics">0</span>
+                    <span class="stat-label">נושאים</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="completedExams">0</span>
+                    <span class="stat-label">מבחנים שנעשו</span>
+                </div>
+            </div>
+        </div>
     </header>
 
-    <nav>
-        <button class="nav-btn active" onclick="showTab('algo')">🚀 האלגוריתם למעבר</button>
-        <button class="nav-btn" onclick="showTab('practice')">תרגול מבחנים</button>
-        <button class="nav-btn" onclick="showTab('mcqCards')">כרטיסיות אמריקאיות</button>
-        <button class="nav-btn" onclick="showTab('cards')">כרטיסיות מושגים</button>
-        <button class="nav-btn" onclick="showTab('guide')">מדריך למידה עמוק</button>
-    </nav>
-    
-    <!-- Tab: The Algorithm -->
-    <div id="algo" class="tab-content active container">
-        <div class="tool-box">
-            <h3>🛡️ סימולטור הרשאות Unix (UGO)</h3>
-            <p>הכנס 3 ספרות (למשל 754) כדי לראות מה כל קבוצה יכולה לעשות:</p>
-            <input type="number" id="unixInput" class="perm-input" placeholder="למשל 754" oninput="calcUnix()">
-            <div id="unixResult" class="perm-result">
-                <div class="perm-col"><span class="perm-title">בעלים (Owner)</span><span id="pOwner">-</span></div>
-                <div class="perm-col"><span class="perm-title">קבוצה (Group)</span><span id="pGroup">-</span></div>
-                <div class="perm-col"><span class="perm-title">אחרים (Others)</span><span id="pOthers">-</span></div>
-            </div>
-        </div>
+    <div id="app">
+        <nav style="display: flex; justify-content: center; gap: 8px; margin: 20px auto; max-width: 1200px; padding: 0 24px; flex-wrap: wrap;">
+            <button class="topic-btn active" onclick="showTab('algo'); setActiveNav(this)">🚀 האלגוריתם למעבר</button>
+            <button class="topic-btn" onclick="showTab('practice'); setActiveNav(this)">תרגול מבחנים</button>
+            <button class="topic-btn" onclick="showTab('mcqCards'); setActiveNav(this)">כרטיסיות אמריקאיות</button>
+            <button class="topic-btn" onclick="showTab('cards'); setActiveNav(this)">כרטיסיות מושגים</button>
+            <button class="topic-btn" onclick="showTab('guide'); setActiveNav(this)">מדריך למידה עמוק</button>
+        </nav>
 
-        <div class="guide-card">
-            <h3>📝 אלגוריתם לפתרון שאלת מודלים (BLP / Biba)</h3>
-            <div class="algorithm-step"><strong>שלב 1:</strong> זהה את הסוג - "סודיות" (BLP) או "שלמות" (Biba).</div>
-            <div class="algorithm-step"><strong>שלב 2:</strong> רשום את הדרגות: האם הסובייקט (המשתמש) גבוה/נמוך מהאובייקט (הקובץ)?</div>
-            <div class="algorithm-step"><strong>שלב 3:</strong> יישם את הכלל:
-                <br>• <strong>BLP:</strong> "קריאה למטה, כתיבה למעלה" (אל תדליף!).
-                <br>• <strong>Biba:</strong> "קריאה למעלה, כתיבה למטה" (אל תזדהם!).
-            </div>
-            <div class="algorithm-step"><strong>שלב 4:</strong> בדוק מקרים מיוחדים (האם יש ROOT? האם יש הרשאת מעבר?).</div>
-        </div>
-    </div>
-
-    <!-- Tab 1: Practice -->
-    <div id="practice" class="tab-content container">
-        <div class="exam-selection">
-            <label>בחר מבחן:</label>
-            <select id="examSelect" onchange="loadExam()"></select>
-        </div>
-        <div id="quizContainer"></div>
-        <button id="doneBtn" class="btn" style="width:100%" onclick="showResults()">סיום מבחן והצגת פתרונות</button>
-    </div>
-
-    <!-- Tab 2: MCQ Cards -->
-    <div id="mcqCards" class="tab-content container">
-        <div class="cards-container">
-            <div class="flip-card" id="mcqFlipCard" onclick="this.classList.toggle('flipped')">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front">
-                        <div class="card-type" id="mcqTopic"></div>
-                        <div class="card-question" id="mcqFrontText"></div>
-                        <ul class="card-options" id="mcqOptions" style="text-align:right; width:100%; list-style:none; padding:0"></ul>
-                    </div>
-                    <div class="flip-card-back">
-                        <div class="card-answer" id="mcqBackText"></div>
-                    </div>
-                </div>
-            </div>
-            <button class="btn" onclick="nextMcqCard()">הבא ➔</button>
-        </div>
-    </div>
-
-    <!-- Tab 3: Quick Cards -->
-    <div id="cards" class="tab-content container">
-        <div class="cards-container">
-            <div class="flip-card" id="conceptFlipCard" onclick="this.classList.toggle('flipped')" style="height:300px">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front">
-                        <div id="cardType" class="card-type"></div>
-                        <div id="cardFrontText" class="card-question"></div>
-                    </div>
-                    <div class="flip-card-back">
-                        <div id="cardBackText" class="card-answer"></div>
-                    </div>
-                </div>
-            </div>
-            <button class="btn" onclick="nextConceptCard()">הבא ➔</button>
-        </div>
-    </div>
-
-    <!-- Tab 4: Deep Learning Guide (RESTORED CONTENT) -->
-    <div id="guide" class="tab-content container">
-        <div class="guide-grid">
-            <div class="guide-card">
-                <h3>בקרת גישה (Unix & Windows)</h3>
-                <p>הספרות הן <strong>4 (R), 2 (W), 1 (X)</strong>.</p>
-                <div class="mnemonic">"רוצה ורץ" (R-W-X) - קריאה, כתיבה, ריצה.</div>
-                <ul>
-                    <li><strong>SUID (4xxx):</strong> מריץ בכוח של הבעלים.</li>
-                    <li><strong>Sticky Bit (1xxx):</strong> רק הבעלים מוחק.</li>
-                </ul>
-                <div class="trap-box">
-                    <span class="trap-title">מלכודת ה-ACL:</span> ביוניקס בסיסי אין דרך לתת למשתמשים שונים הרשאות שונות על אותו קובץ בלי קבוצות מורכבות. 
+        <!-- Tab: Algorithm -->
+        <div id="algo" class="tab-content active" style="max-width: 1200px; margin: 0 auto; padding: 0 24px 80px;">
+            <div class="guide-card" style="max-width: 600px; margin: 0 auto 20px;">
+                <h3>🛡️ סימולטור הרשאות Unix (UGO)</h3>
+                <p>הכנס 3 ספרות (למשל 754) כדי לראות מה כל קבוצה יכולה לעשות:</p>
+                <input type="number" id="unixInput" class="perm-input" placeholder="למשל 754" oninput="calcUnix()">
+                <div id="unixResult" class="perm-result">
+                    <div class="perm-col"><span class="perm-title">בעלים (Owner)</span><span id="pOwner">-</span></div>
+                    <div class="perm-col"><span class="perm-title">קבוצה (Group)</span><span id="pGroup">-</span></div>
+                    <div class="perm-col"><span class="perm-title">אחרים (Others)</span><span id="pOthers">-</span></div>
                 </div>
             </div>
 
-            <div class="guide-card">
-                <h3>מודלים (BLP vs Biba)</h3>
-                <ul>
-                    <li><strong>BLP (סודיות):</strong> No Read Up, No Write Down.</li>
-                    <li><strong>Biba (שלמות):</strong> No Read Down, No Write Up.</li>
-                </ul>
-                <div class="mnemonic">BLP: "לא קורא למעלה, לא כותב למטה".</div>
+            <div class="guide-card" style="max-width: 600px; margin: 0 auto;">
+                <h3>📝 אלגוריתם לפתרון שאלת מודלים (BLP / Biba)</h3>
+                <div class="algorithm-step"><strong>שלב 1:</strong> זהה את הסוג - "סודיות" (BLP) או "שלמות" (Biba).</div>
+                <div class="algorithm-step"><strong>שלב 2:</strong> רשום את הדרגות: האם הסובייקט (המשתמש) גבוה/נמוך מהאובייקט (הקובץ)?</div>
+                <div class="algorithm-step"><strong>שלב 3:</strong> יישם את הכלל:
+                    <br>• <strong>BLP:</strong> "קריאה למטה, כתיבה למעלה" (אל תדליף!).
+                    <br>• <strong>Biba:</strong> "קריאה למעלה, כתיבה למטה" (אל תזדהם!).
+                </div>
+                <div class="algorithm-step"><strong>שלב 4:</strong> בדוק מקרים מיוחדים (האם יש ROOT? האם יש הרשאת מעבר?).</div>
+            </div>
+        </div>
+
+        <!-- Tab: Practice -->
+        <div id="practice" class="tab-content" style="max-width: 800px; margin: 0 auto; padding: 32px 24px 100px;">
+            <div class="exam-header">
+                <label style="color: var(--text-secondary); margin-bottom: 8px; display: block;">בחר מבחן:</label>
+                <select id="examSelect" onchange="loadExam()" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); font-family: var(--font); font-size: 1rem; margin-bottom: 24px;">
+                </select>
+            </div>
+            <div id="quizContainer"></div>
+            <div class="exam-actions">
+                <button id="doneBtn" class="done-btn" onclick="showResults()">סיום מבחן והצגת פתרונות</button>
+            </div>
+            <div id="resultsContainer"></div>
+        </div>
+
+        <!-- Tab: MCQ Cards -->
+        <div id="mcqCards" class="tab-content" style="max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; text-align: center;">
+            <div class="section-title">
+                <h2>כרטיסיות אמריקאיות</h2>
+                <p>לחץ על הכרטיסייה כדי להפוך אותה</p>
+            </div>
+            <div style="max-width: 600px; margin: 0 auto;">
+                <div class="flip-card" id="mcqFlipCard" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="card-type" id="mcqTopic" style="color: var(--accent); font-weight: 600; margin-bottom: 12px;"></div>
+                            <div class="card-question" id="mcqFrontText" style="font-size: 1.1rem; line-height: 1.7; margin-bottom: 20px;"></div>
+                            <ul class="card-options" id="mcqOptions" style="text-align: right; width: 100%; list-style: none; padding: 0;"></ul>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="card-answer" id="mcqBackText" style="font-size: 1rem; line-height: 1.7;"></div>
+                        </div>
+                    </div>
+                </div>
+                <button class="retry-btn" onclick="nextMcqCard()" style="margin-top: 20px;">הבא ➔</button>
+            </div>
+        </div>
+
+        <!-- Tab: Concept Cards -->
+        <div id="cards" class="tab-content" style="max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; text-align: center;">
+            <div class="section-title">
+                <h2>כרטיסיות מושגים</h2>
+                <p>לחץ על הכרטיסייה כדי להפוך אותה</p>
+            </div>
+            <div style="max-width: 600px; margin: 0 auto;">
+                <div class="flip-card" id="conceptFlipCard" onclick="this.classList.toggle('flipped')" style="height: 300px;">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div id="cardType" class="card-type" style="color: var(--accent); font-weight: 600; margin-bottom: 16px;"></div>
+                            <div id="cardFrontText" class="card-question" style="font-size: 1.3rem; font-weight: 600;"></div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div id="cardBackText" class="card-answer" style="font-size: 1rem; line-height: 1.7;"></div>
+                        </div>
+                    </div>
+                </div>
+                <button class="retry-btn" onclick="nextConceptCard()" style="margin-top: 20px;">הבא ➔</button>
+            </div>
+        </div>
+
+        <!-- Tab: Guide -->
+        <div id="guide" class="tab-content" style="max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px;">
+            <div class="section-title">
+                <h2>מדריך למידה עמוק</h2>
+                <p>מושגי יסוד ומלכודות נפוצות</p>
+            </div>
+            <div class="guide-grid">
+                <div class="guide-card">
+                    <h3>בקרת גישה (Unix & Windows)</h3>
+                    <p>הספרות הן <strong>4 (R), 2 (W), 1 (X)</strong>.</p>
+                    <div class="mnemonic">"רוצה ורץ" (R-W-X) - קריאה, כתיבה, ריצה.</div>
+                    <ul style="text-align: right; padding-right: 20px;">
+                        <li><strong>SUID (4xxx):</strong> מריץ בכוח של הבעלים.</li>
+                        <li><strong>SGID (2xxx):</strong> מריץ עם הרשאות הקבוצה.</li>
+                        <li><strong>Sticky Bit (1xxx):</strong> רק הבעלים מוחק.</li>
+                    </ul>
+                    <div class="trap-box">
+                        <span class="trap-title">מלכודת ה-ACL:</span> ביוניקס בסיסי אין דרך לתת למשתמשים שונים הרשאות שונות על אותו קובץ בלי קבוצות מורכבות.
+                    </div>
+                </div>
+
+                <div class="guide-card">
+                    <h3>מודלים (BLP vs Biba)</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem;">
+                        <tr style="background: rgba(255,255,255,0.05);">
+                            <th style="padding: 8px; border: 1px solid var(--border);">מודל</th>
+                            <th style="padding: 8px; border: 1px solid var(--border);">מטרה</th>
+                            <th style="padding: 8px; border: 1px solid var(--border);">כלל</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid var(--border);"><strong>BLP</strong></td>
+                            <td style="padding: 8px; border: 1px solid var(--border);">סודיות</td>
+                            <td style="padding: 8px; border: 1px solid var(--border);">No Read Up, No Write Down</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid var(--border);"><strong>Biba</strong></td>
+                            <td style="padding: 8px; border: 1px solid var(--border);">שלמות</td>
+                            <td style="padding: 8px; border: 1px solid var(--border);">No Read Down, No Write Up</td>
+                        </tr>
+                    </table>
+                    <div class="mnemonic">BLP: "לא קורא למעלה, לא כותב למטה" - מונע דליפת מידע.</div>
+                </div>
+
+                <div class="guide-card">
+                    <h3>אנטרופיה ודליפת מידור</h3>
+                    <p><strong>נוסחה:</strong> log₂(אפשרויות לפני / אפשרויות אחרי)</p>
+                    <p><strong>דוגמה:</strong> 8 אפשרויות ל-2 אפשרויות = log₂(4) = 2 ביטים דלפו.</p>
+                    <div class="mnemonic">יותר אפשרויות לפני = יותר אנטרופיה אבדה.</div>
+                    <div class="trap-box">
+                        <span class="trap-title">מלכודת הלוגריתם:</span> אנטרופיה נמדדת בלוגריתם, לא בהפרש רגיל!
+                    </div>
+                </div>
+
+                <div class="guide-card">
+                    <h3>פגיעויות תוכנה ומנגנוני הגנה</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85rem;">
+                        <tr style="background: rgba(255,255,255,0.05);">
+                            <th style="padding: 8px; border: 1px solid var(--border);">הגנה</th>
+                            <th style="padding: 8px; border: 1px solid var(--border);">מה זה עושה?</th>
+                        </tr>
+                        <tr><td style="padding: 8px; border: 1px solid var(--border);">DEP</td><td style="padding: 8px; border: 1px solid var(--border);">חוסם הרצה מהמחסנית.</td></tr>
+                        <tr><td style="padding: 8px; border: 1px solid var(--border);">ASLR</td><td style="padding: 8px; border: 1px solid var(--border);">מגריל כתובות בזיכרון.</td></tr>
+                        <tr><td style="padding: 8px; border: 1px solid var(--border);">Canary</td><td style="padding: 8px; border: 1px solid var(--border);">מזהה גלישה לפני פריצה.</td></tr>
+                        <tr><td style="padding: 8px; border: 1px solid var(--border);">NX Bit</td><td style="padding: 8px; border: 1px solid var(--border);">מסמן זיכרון כלא-ניתן-להרצה.</td></tr>
+                    </table>
+                </div>
+
+                <div class="guide-card">
+                    <h3>קריפטוגרפיה - הצפנה סימטרית</h3>
+                    <ul style="text-align: right; padding-right: 20px;">
+                        <li><strong>AES:</strong> Advanced Encryption Standard - 128/192/256 ביט.</li>
+                        <li><strong>DES:</strong> הוחלף ע"י AES (56 ביט מפתח בלבד).</li>
+                        <li><strong>ECB Mode:</strong> הצפנה בלוק בלוק - חשוף להתקפות דפוסים!</li>
+                        <li><strong>CBC Mode:</strong> כל בלוק מקושר לקודם (IV נדרש).</li>
+                    </ul>
+                    <div class="trap-box">
+                        <span class="trap-title">מלכודת ה-ECB:</span> ECB תמיד נותן פלט זהה לאותו קלט - חושף דפוסים!
+                    </div>
+                </div>
+
+                <div class="guide-card">
+                    <h3>קריפטוגרפיה - הצפנה אסימטרית</h3>
+                    <ul style="text-align: right; padding-right: 20px;">
+                        <li><strong>RSA:</strong> מבוסס על פירוק מספרים לגורמים - איטי, לסשנים.</li>
+                        <li><strong>Diffie-Hellman:</strong> הסכמת מפתחות - יוצר מפתח משותף.</li>
+                        <li><strong>Digital Signature:</strong> חתימה עם המפתח הפרטי, אימות עם הציבורי.</li>
+                    </ul>
+                    <div class="mnemonic">RSA = סימטרי לסשנים, אסימטרי להחלפת מפתחות.</div>
+                </div>
             </div>
 
-            <div class="guide-card">
-                <h3>אנטרופיה ודליפת מידע</h3>
-                <p>נוסחה: log2(אפשרויות לפני / אפשרויות אחרי).</p>
-                <div class="mnemonic">8 אפשרויות ל-2 אפשרויות = 2 ביטים דלפו.</div>
-            </div>
+            <!-- Tips & Tricks Section - Recurring Exam Questions -->
+            <div style="margin-top: 40px; padding: 20px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 12px;">
+                <h3 style="color: #f59e0b; text-align: center; font-size: 1.3rem;">💡 טיפים והוקוסים - שאלות חוזרות במבחנים</h3>
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 20px;">שאלות שמופיעות שוב ושוב במבחנים - כדאי להכיר היטב!</p>
+                
+                <div class="guide-grid" style="margin-top: 20px;">
+                    <!-- BLP/Biba - Most Common -->
+                    <div class="guide-card" style="border: 2px solid rgba(239, 68, 68, 0.3);">
+                        <h3 style="color: #ef4444;">🔴 מודלי BLP ו-Biba - שאלות חוזרות</h3>
+                        <div class="trap-box">
+                            <span class="trap-title">שאלה נפוצה (מופיעה ב-91, 92, מועד א1, מועד א2):</span>
+                            נתונה מערכת עם משתמשים וקבצים ברמות סיווג שונות.<br>
+                            <strong>השאלה:</strong> האם משתמש X יכול לקרוא/לכתוב לקובץ Y?<br>
+                            <strong>הטיפ:</strong> זכור: BLP = "לא קורא למעלה, לא כותב למטה" | Biba = "לא קורא למטה, לא כותב למעלה"
+                        </div>
+                        <ul style="text-align: right; padding-right: 20px; margin-top: 15px;">
+                            <li><strong>BLP:</strong> Simple Security = No Read Up | *-Property = No Write Down</li>
+                            <li><strong>Biba:</strong> Simple Integrity = No Read Down | *-Integrity = No Write Up</li>
+                            <li><strong>מבחן:</strong> רמות נמוכות במספר = רמה גבוהה יותר (TS=0, Secret=1, C=2, U=3)</li>
+                        </ul>
+                    </div>
 
-            <div class="guide-card">
-                <h3>פגיעויות תוכנה</h3>
-                <table>
-                    <tr><th>הגנה</th><th>מה זה עושה?</th></tr>
-                    <tr><td>DEP</td><td>חוסם הרצה מהמחסנית.</td></tr>
-                    <tr><td>ASLR</td><td>מגריל כתובות בזיכרון.</td></tr>
-                    <tr><td>Canary</td><td>מזהה גלישה לפני פריצה.</td></tr>
-                </table>
+                    <!-- Access Control Representation -->
+                    <div class="guide-card" style="border: 2px solid rgba(59, 130, 246, 0.3);">
+                        <h3 style="color: #3b82f6;">📋 ייצוג מטריצת הגישה (מופיע ב-91, 92)</h3>
+                        <div class="trap-box">
+                            <span class="trap-title">שאלה נפוצה:</span>
+                            האם ניתן לייצג מטריצת גישה ב-UNIX (9 ביטים)? הראו כיצד.<br>
+                            <strong>התשובה:</strong> לא ב-UNIX רגיל (יש רק rwx לבעלים/קבוצה/אחרים). אפשר ב-Windows עם ACL.
+                        </div>
+                        <ul style="text-align: right; padding-right: 20px; margin-top: 15px;">
+                            <li><strong>ACL:</strong> רשימה לכל אובייקט - מי רשאי לגשת</li>
+                            <li><strong>C-List:</strong> רשימת יכולת לכל סובייקט - לאילו אובייקטים יש גישה</li>
+                            <li><strong>Access Matrix:</strong> טבלה של כל הסובייקטים × כל האובייקטים</li>
+                        </ul>
+                    </div>
+
+                    <!-- RSA Digital Signature -->
+                    <div class="guide-card" style="border: 2px solid rgba(16, 185, 129, 0.3);">
+                        <h3 style="color: #10b981;">🔐 RSA חתימה דיגיטלית (מופיע ב-91, 92, מועד א1)</h3>
+                        <div class="trap-box">
+                            <span class="trap-title">שאלת חתימה (נפוצה מאוד):</span>
+                            אליס רוצה לשלוח הודעה M לבוב ולחתום עליה.<br>
+                            <strong>השאלה:</strong> כיצד בוב מאמת שההודעה באמת מאליס?<br>
+                            <strong>התשובה:</strong> אליס חותמת עם המפתח הפרטי שלה: S = M^d mod n. בוב בודק עם המפתח הציבורי: M = S^e mod n.
+                        </div>
+                        <ul style="text-align: right; padding-right: 20px; margin-top: 15px;">
+                            <li><strong>חתימה:</strong> הודעה + מפתח פרטי → חתימה</li>
+                            <li><strong>אימות:</strong> חתימה + מפתח ציבורי → הודעה מקורית</li>
+                            <li><strong>דוגמה:</strong> אם e=3, d=?. כל M מותאם עם S=M^3, בודקים S^?=M</li>
+                        </ul>
+                    </div>
+
+                    <!-- Buffer Overflow Defenses -->
+                    <div class="guide-card" style="border: 2px solid rgba(245, 158, 11, 0.3);">
+                        <h3 style="color: #f59e0b;">🛡️ הגנות מפני Buffer Overflow (מופיע ב-91, 92, מועד א1, מועד א2)</h3>
+                        <div class="trap-box">
+                            <span class="trap-title">שאלה נפוצה:</span>
+                            תנו דוגמה לפגיעות Buffer Overflow ואיזה מהגנות הבאות ימנעו אותה.<br>
+                            <strong>הגנות (בחר נכון):</strong> ASLR, DEP/NX, Canary, Stack Randomization
+                        </div>
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85rem;">
+                            <tr style="background: rgba(255,255,255,0.05);">
+                                <th style="padding: 8px; border: 1px solid var(--border);">הגנה</th>
+                                <th style="padding: 8px; border: 1px solid var(--border);">מה היא מונעת</th>
+                            </tr>
+                            <tr><td style="padding: 8px; border: 1px solid var(--border);">DEP/NX</td><td style="padding: 8px; border: 1px solid var(--border);">הרצת קוד מה-Stack</td></tr>
+                            <tr><td style="padding: 8px; border: 1px solid var(--border);">ASLR</td><td style="padding: 8px; border: 1px solid var(--border);">ניחוש כתובות זיכרון</td></tr>
+                            <tr><td style="padding: 8px; border: 1px solid var(--border);">Canary</td><td style="padding: 8px; border: 1px solid var(--border);">גלישת Stack</td></tr>
+                            <tr><td style="padding: 8px; border: 1px solid var(--border);">Stack Randomization</td><td style="padding: 8px; border: 1px solid var(--border);">ניחוש כתובת החזרה</td></tr>
+                        </table>
+                    </div>
+
+                    <!-- Hash & HMAC -->
+                    <div class="guide-card" style="border: 2px solid rgba(139, 92, 246, 0.3);">
+                        <h3 style="color: #8b5cf6;">🔐 Hash ו-HMAC (מופיע ב-91, 92, מועד א1)</h3>
+                        <div class="trap-box">
+                            <span class="trap-title">שאלה נפוצה:</span>
+                            מערכת משתמשת בפונקציית גיבוב t למשלוח הודעות.<br>
+                            הסבירו כיצד השיטה נפרצת וכיצד HMAC פותרת זאת.<br>
+                            <strong>הבעיה:</strong> התוקף יכול לשנות M→M' ו-g(M)→g(M') ללא צורך במפתח.<br>
+                            <strong>הפתרון:</strong> HMAC = Hash(key + Hash(key + message)) - דורש מפתח סודי!
+                        </div>
+                        <ul style="text-align: right; padding-right: 20px; margin-top: 15px;">
+                            <li><strong>Hash רגיל:</strong> צד ג' יכול לזייף (אין מפתח)</li>
+                            <li><strong>HMAC:</strong> מאמת גם שלמות וגם מקור (דורש מפתח סודי)</li>
+                            <li><strong>MD5:</strong> לא בטוח - יש התנגשויות (collisions)</li>
+                        </ul>
+                    </div>
+
+                    <!-- Firewall Rules -->
+                    <div class="guide-card" style="border: 2px solid rgba(236, 72, 153, 0.3);">
+                        <h3 style="color: #ec4899;">🔥 חומת אש - כתיבת חוקים (מופיע ב-91, 92)</h3>
+                        <div class="trap-box">
+                            <span class="trap-title">שאלת כתיבת חוקים (Stateless Firewall):</span>
+                            כתבו טבלת חוקים שמאפשרת תעבורה יוצאת מהארגון לרשת, דוא"ל יוצא, ודפדפן.<br>
+                            <strong>התשובה:</strong> ALLOW OUTBOUND TCP port 25 (SMTP), 80 (HTTP), 443 (HTTPS)
+                        </div>
+                        <ul style="text-align: right; padding-right: 20px; margin-top: 15px;">
+                            <li><strong>Stateless:</strong> בודק כל חבילה בנפרד, ללא זיכרון</li>
+                            <li><strong>Stateful:</strong> זוכר מצב חיבורים (מאפשר תעבורה חוזרת)</li>
+                            <li><strong>Proxy:</strong> בודק גם את תוכן היישום (Application Layer)</li>
+                        </ul>
+                    </div>
+
+                    <!-- Kerberos Tickets -->
+                    <div class="guide-card" style="border: 2px solid rgba(6, 182, 212, 0.3);">
+                        <h3 style="color: #06b6d4;">🎫 Kerberos (מופיע ב-91, 92, מועד א1)</h3>
+                        <div class="trap-box">
+                            <span class="trap-title">שאלת Kerberos (נפוצה):</span>
+                            הציגו את פרוטוקול Kerberos להתחברות לשרת קבצים.<br>
+                            <strong>השלבים:</strong> 1. בקשת TGT מה-AS → 2. בקשת Service Ticket מה-TGS → 3. התחברות לשרת
+                        </div>
+                        <ul style="text-align: right; padding-right: 20px; margin-top: 15px;">
+                            <li><strong>AS:</strong> Authentication Server - מאמת משתמשים, מעניק TGT</li>
+                            <li><strong>TGS:</strong> Ticket Granting Server - מעניק Service Tickets</li>
+                            <li><strong>TGT:</strong> Ticket Granting Ticket - מאפשר קבלת כרטיסי שירות</li>
+                            <li><strong>יתרון:</strong> סיסמה לא עוברת ברשת (הצפנה סימטרית)</li>
+                        </ul>
+                    </div>
+
+                    <!-- Common Confusions -->
+                    <div class="guide-card" style="border: 2px solid rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.05);">
+                        <h3 style="color: #ef4444;">⚠️ דברים שסטודנטים מתבלבלים בהם - שים לב!</h3>
+                        <ul style="text-align: right; padding-right: 20px;">
+                            <li><strong>ב-BLP:</strong> רמה 0 (TS) גבוהה מרמה 3 (U) - לא להתבלבל!</li>
+                            <li><strong>RSA:</strong> חתימה = מודולו d (פרטי), אימות = מודולו e (ציבורי)</li>
+                            <li><strong>ECB Mode:</strong> אותו קלט = אותו פלט תמיד → חושף דפוסים! תמיד בחר CBC</li>
+                            <li><strong>Hash vs MAC:</strong> Hash פשוט לא מאמת מקור, MAC כולל מפתח (מאמת גם מקור)</li>
+                            <li><strong>Salt:</strong> מונע Rainbow Tables אבל לא Brute Force! (מונע הצפנה מראש)</li>
+                            <li><strong>IDS vs IPS:</strong> IDS רק מתריע, IPS חוסם תעבורה זדונית</li>
+                            <li><strong>Stateless vs Stateful:</strong> Stateless בודק כל חבילה בנפרד, Stateful זוכר חיבורים</li>
+                            <li><strong>Zero-day:</strong> פגיעות שלא ידועה (אין Patch) - הכי מסוכנת!</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -248,7 +374,7 @@
                 if (n >= 4) { res.push('קריאה (R)'); n -= 4; }
                 if (n >= 2) { res.push('כתיבה (W)'); n -= 2; }
                 if (n >= 1) { res.push('הרצה (X)'); }
-                return res.join(', ') || 'אין';
+                return res.join(', ') || 'אין הרשאות';
             };
             document.getElementById('pOwner').textContent = translate(parts[0]);
             document.getElementById('pGroup').textContent = translate(parts[1]);
@@ -260,21 +386,33 @@
                 const [qRes, cRes] = await Promise.all([fetch('questions.json'), fetch('concepts.json')]);
                 allQuestions = await qRes.json();
                 allConcepts = await cRes.json();
+
+                document.getElementById('totalQuestions').textContent = allQuestions.length;
+                const topics = new Set(allQuestions.map(q => q.topic));
+                document.getElementById('totalTopics').textContent = topics.size;
+
                 const select = document.getElementById('examSelect');
-                for (let i = 0; i < Math.ceil(allQuestions.length / 5); i++) {
+                const numExams = Math.ceil(allQuestions.length / 5);
+                for (let i = 0; i < numExams; i++) {
                     const opt = document.createElement('option');
-                    opt.value = i; opt.textContent = `מבחן ${i + 1}`;
+                    opt.value = i;
+                    opt.textContent = `מבחן ${i + 1}`;
                     select.appendChild(opt);
                 }
-                loadExam(); nextConceptCard(); nextMcqCard();
-            } catch (e) { console.error(e); }
+                loadExam();
+                nextConceptCard();
+                nextMcqCard();
+            } catch (e) { console.error('Error loading data:', e); }
         }
 
         function showTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
+        }
+
+        function setActiveNav(btn) {
+            document.querySelectorAll('nav .topic-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
         }
 
         function nextConceptCard() {
@@ -283,7 +421,11 @@
             setTimeout(() => {
                 document.getElementById('cardType').textContent = card.type;
                 document.getElementById('cardFrontText').textContent = card.q;
-                document.getElementById('cardBackText').textContent = card.a;
+                let backContent = card.a;
+                if (card.explanation && card.explanation.trim() !== '') {
+                    backContent += '<br><br><small style="color: var(--text-muted); font-size: 0.9rem;">' + card.explanation + '</small>';
+                }
+                document.getElementById('cardBackText').innerHTML = backContent;
             }, 150);
         }
 
@@ -294,40 +436,89 @@
                 document.getElementById('mcqTopic').textContent = q.topic;
                 document.getElementById('mcqFrontText').textContent = q.question;
                 const optList = document.getElementById('mcqOptions');
-                optList.innerHTML = q.options.map(o => `<li>${o}</li>`).join('');
-                document.getElementById('mcqBackText').innerHTML = `<strong>תשובה:</strong> ${q.answer}<br><br>${q.explanation}`;
+                optList.innerHTML = q.options.map(o => `<li style="padding: 8px; margin: 4px 0; background: rgba(255,255,255,0.05); border-radius: 6px;">${o}</li>`).join('');
+                document.getElementById('mcqBackText').innerHTML = `<strong>תשובה נכונה:</strong> ${q.answer}<br><br>${q.explanation}`;
             }, 150);
         }
 
         function loadExam() {
-            const idx = document.getElementById('examSelect').value;
+            const idx = parseInt(document.getElementById('examSelect').value);
             currentExamQuestions = allQuestions.slice(idx * 5, idx * 5 + 5);
             const container = document.getElementById('quizContainer');
             container.innerHTML = '';
             currentExamQuestions.forEach((q, i) => {
                 const qDiv = document.createElement('div');
-                qDiv.className = 'question';
-                qDiv.innerHTML = `<div class="question-text">${q.question}</div>
-                    <ul class="options" style="list-style:none; padding:0">${q.options.map(o => `<li class="option" onclick="this.querySelector('input').checked=true"><input type="radio" name="q${i}" value="${o.replace(/"/g, '&quot;')}"><span>${o}</span></li>`).join('')}</ul>
-                    <div id="exp${i}" class="explanation-box">${q.explanation}</div>`;
+                qDiv.className = 'question-card';
+                qDiv.innerHTML = `
+                    <div class="question-number">
+                        <span class="q-badge">שאלה ${i + 1}</span>
+                        <span style="color: var(--text-muted); font-size: 0.8rem; margin-right: auto;">${q.topic}</span>
+                    </div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="options-list">
+                        ${q.options.map((o, j) => `
+                            <button class="option-btn" onclick="selectOption(this, ${i}, '${o.replace(/'/g, "\\'")}')">
+                                <div class="option-letter">${String.fromCharCode(97 + j)}</div>
+                                <div class="option-text">${o}</div>
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div class="explanation">${q.explanation}</div>
+                `;
                 container.appendChild(qDiv);
             });
             document.getElementById('doneBtn').style.display = 'block';
+            document.getElementById('resultsContainer').innerHTML = '';
+        }
+
+        function selectOption(btn, qIndex, selectedValue) {
+            const card = btn.closest('.question-card');
+            if (card.classList.contains('revealed')) return;
+
+            card.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
         }
 
         function showResults() {
+            let correctCount = 0;
             currentExamQuestions.forEach((q, i) => {
-                const sel = document.querySelector(`input[name="q${i}"]:checked`);
-                document.getElementById(`exp${i}`).classList.add('reveal');
-                document.querySelectorAll(`input[name="q${i}"]`).forEach(inp => {
-                    const li = inp.closest('li');
-                    inp.disabled = true;
-                    if (inp.value === q.answer) li.classList.add('correct');
-                    else if (sel && inp.value === sel.value) li.classList.add('incorrect');
+                const card = document.querySelectorAll('.question-card')[i];
+                const selectedBtn = card.querySelector('.selected');
+                const selectedValue = selectedBtn ? selectedBtn.querySelector('.option-text').textContent : null;
+
+                card.classList.add('revealed');
+
+                card.querySelectorAll('.option-btn').forEach(btn => {
+                    const btnValue = btn.querySelector('.option-text').textContent;
+                    if (btnValue === q.answer) {
+                        btn.classList.add('correct-answer');
+                    } else if (btn.classList.contains('selected') && btnValue !== q.answer) {
+                        btn.classList.add('wrong-answer');
+                    }
+                    btn.disabled = true;
                 });
+
+                if (selectedValue === q.answer) correctCount++;
             });
+
             document.getElementById('doneBtn').style.display = 'none';
+
+            const resultsDiv = document.getElementById('resultsContainer');
+            const percentage = Math.round((correctCount / currentExamQuestions.length) * 100);
+            let scoreClass = 'bad';
+            if (percentage >= 80) scoreClass = 'good';
+            else if (percentage >= 60) scoreClass = 'medium';
+
+            resultsDiv.innerHTML = `
+                <div class="results-summary">
+                    <div class="results-score ${scoreClass}">${correctCount}/${currentExamQuestions.length}</div>
+                    <div class="results-label">ציון: ${percentage}%</div>
+                    <button class="retry-btn" onclick="loadExam()">נסה שוב</button>
+                    <button class="retry-btn" onclick="document.getElementById('examSelect').selectedIndex = (parseInt(document.getElementById('examSelect').value) + 1) % Math.ceil(allQuestions.length / 5); loadExam();">מבחן הבא →</button>
+                </div>
+            `;
         }
+
         init();
     </script>
 </body>
