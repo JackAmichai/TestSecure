@@ -265,7 +265,7 @@ def generate_unix_questions():
                 "question": "לקובץ יש הרשאות {}. האם הבעלים יכול לקרוא את הקובץ?".format(perms),
                 "options": [u_read, "לא" if u_read == "כן" else "כן", "רק אם יש SUID", "תלוי במערכת ההפעלה"],
                 "answer": u_read,
-                "explanation": "הספרה הראשונה ({}) מייצגת את הרשאות הבעלים. {}.".format(u, "ערך 4 כלול (קריאה)" if u >= 4 else "ערך 4 לא כלול (אין קריאה)")
+                "explanation": "ב-UNIX, 9-ביטי ההרשאות מתפרשים כשלוש ספרות אוקטליות: Owner, Group, Other. כל ספרה מקודדת R(4)+W(2)+X(1). בקובץ {} הספרה הראשונה היא {} ({}). {}.".format(perms, u, ("rwx" if u==7 else "rw-" if u==6 else "r-x" if u==5 else "r--" if u==4 else "-wx" if u==3 else "-w-" if u==2 else "--x" if u==1 else "---"), "מכאן שהבעלים יכול לקרוא (ביט 4 דלוק)" if u >= 4 else "אין לבעלים הרשאת קריאה (ביט 4 כבוי)")
             })
         elif q_type == 'other_read':
             questions.append({
@@ -273,7 +273,7 @@ def generate_unix_questions():
                 "question": "לקובץ יש הרשאות {}. האם משתמש שאינו הבעלים ואינו בקבוצה יכול לקרוא את הקובץ?".format(perms),
                 "options": [o_read, "לא" if o_read == "כן" else "כן", "רק אם Sticky Bit דלוק", "רק ב-Windows"],
                 "answer": o_read,
-                "explanation": "הספרה השלישית ({}) מייצגת את הרשאות 'אחרים'. {}.".format(o, "ערך 4 כלול (קריאה)" if o >= 4 else "ערך 4 לא כלול (אין קריאה)")
+                "explanation": "ב-UNIX, הספרה השלישית מקודדת את הרשאות 'Other' — כל מי שאינו הבעלים ואינו בקבוצה. הקובץ עם הרשאות {} ובעל {} עבור Other ({}). {}.".format(perms, o, ("rwx" if o==7 else "rw-" if o==6 else "r-x" if o==5 else "r--" if o==4 else "-wx" if o==3 else "-w-" if o==2 else "--x" if o==1 else "---"), "ערך 4 דלוק → קריאה מותרת" if o >= 4 else "ערך 4 כבוי → אין קריאה למשתמש זר")
             })
         elif q_type == 'other_write':
             questions.append({
@@ -281,7 +281,7 @@ def generate_unix_questions():
                 "question": "לקובץ יש הרשאות {}. האם משתמש שאינו הבעלים יכול לכתוב לקובץ?".format(perms),
                 "options": [o_write, "לא" if o_write == "כן" else "כן", "כן, רק אם הוא ROOT", "תלוי ב-SELinux"],
                 "answer": o_write,
-                "explanation": "הספרה השלישית ({}) מייצגת את הרשאות 'אחרים'. {}.".format(o, "ערך 2 כלול (כתיבה)" if o >= 2 else "ערך 2 לא כלול (אין כתיבה)")
+                "explanation": "ב-UNIX, ביטי כתיבה לקובץ נמדדים בכל קטגוריה. הקובץ עם הרשאות {} מקצה ל-Other את הערך {}. ערך W=2 בתוך הספרה משמעו 'כתיבה מותרת'. {}. שים לב: ROOT עוקף את ההרשאות הללו.".format(perms, o, "כאן Other כן יכול לכתוב (ביט 2 דלוק)" if o >= 2 else "כאן Other לא יכול לכתוב (ביט 2 כבוי)")
             })
 
     # SUID, SGID, Sticky Bit
@@ -354,7 +354,8 @@ def generate_access_control_questions():
         {
             "q": "מהו RBAC (Role-Based Access Control)?",
             "a": "בקרת גישה המבוססת על תפקידים בארגון",
-            "options": ["בקרת גישה המבוססת על תפקידים בארגון", "בקרת גישה המבוססת על רמות סיווג", "בקרת גישה המבוססת על הבעלים", "בקרת גישה ללא זיהוי"]
+            "options": ["בקרת גישה המבוססת על תפקידים בארגון", "בקרת גישה המבוססת על רמות סיווג", "בקרת גישה המבוססת על הבעלים", "בקרת גישה ללא זיהוי"],
+            "explanation": "ב-RBAC הרשאות מוקצות ל'תפקידים' (Manager, Developer, Auditor) ולא ישירות למשתמשים. משתמשים מקבלים תפקיד אחד או יותר. יתרון: כשעובד מתחלף, אין צורך לעדכן הרשאות בכל מערכת — מספיק לשנות את התפקידים שלו. נפוץ ב-Active Directory, AWS IAM, Kubernetes."
         },
         {
             "q": "מהו ACL (Access Control List)?",
@@ -374,7 +375,8 @@ def generate_access_control_questions():
         {
             "q": "איזה מודל גישה מתאים ביותר למערכת ממשלתית עם סיווגים?",
             "a": "MAC (Mandatory Access Control)",
-            "options": ["MAC (Mandatory Access Control)", "DAC (Discretionary Access Control)", "RBAC (Role-Based Access Control)", "ACL בלבד"]
+            "options": ["MAC (Mandatory Access Control)", "DAC (Discretionary Access Control)", "RBAC (Role-Based Access Control)", "ACL בלבד"],
+            "explanation": "MAC אוכף מדיניות מרכזית שמשתמשים אינם יכולים לעקוף — מתאים בדיוק לסיווגים ממשלתיים (TS/Secret/Confidential). מודל BLP הוא MAC קלאסי. DAC מאפשר לבעלים להעביר הרשאות (לא מתאים — יכול לדלוף). RBAC מתאים לארגוני עסק עם תפקידים, לא לסיווגים היררכיים."
         },
         {
             "q": "מה היתרון של RBAC על פני DAC?",
@@ -404,17 +406,20 @@ def generate_symmetric_crypto_questions():
         {
             "q": "איזה אלגוריתם הוא הצפנה סימטרית?",
             "a": "AES",
-            "options": ["AES", "RSA", "Diffie-Hellman", "SHA-256"]
+            "options": ["AES", "RSA", "Diffie-Hellman", "SHA-256"],
+            "explanation": "AES (Advanced Encryption Standard) הוא הצופן הסימטרי הסטנדרטי כיום — אותו מפתח משמש להצפנה ולפענוח. RSA הוא אסימטרי. Diffie-Hellman הוא פרוטוקול להחלפת מפתחות. SHA-256 הוא פונקציית גיבוב. AES פועל על בלוקים של 128 ביט ועם מפתחות 128/192/256 ביט."
         },
         {
             "q": "מהו אורך המפתח של AES-128?",
             "a": "128 ביט",
-            "options": ["128 ביט", "56 ביט", "256 ביט", "1024 ביט"]
+            "options": ["128 ביט", "56 ביט", "256 ביט", "1024 ביט"],
+            "explanation": "AES תומך בשלושה אורכי מפתח: 128, 192, ו-256 ביט. 'AES-128' מציין מפתח באורך 128 ביט — עדיין נחשב בטוח לחלוטין. 56 ביט הוא אורך מפתח DES (שבור). 1024 ביט הוא אורך מפתח RSA (אסימטרי, לא AES)."
         },
         {
             "q": "מהו אורך המפתח של AES-256?",
             "a": "256 ביט",
-            "options": ["256 ביט", "128 ביט", "512 ביט", "64 ביט"]
+            "options": ["256 ביט", "128 ביט", "512 ביט", "64 ביט"],
+            "explanation": "AES-256 הוא הגרסה החזקה ביותר של AES — מפתח 256 ביט נותן 2^256 צירופים אפשריים, שזה הרבה מעבר ליכולת חישובית של מחשב קוונטי תיאורטי (אלגוריתם Grover מקטין ל-2^128 שעדיין בטוח). שימוש: TLS, דיסק מוצפן, ענן."
         },
         {
             "q": "מהו החסרון העיקרי של מצב ECB (Electronic Codebook)?",
@@ -444,7 +449,8 @@ def generate_symmetric_crypto_questions():
         {
             "q": "באיזה מצב הצפנה אפשר לבצע הצפנה מקבילית?",
             "a": "ECB (כל בלוק מוצפן בנפרד)",
-            "options": ["ECB (כל בלוק מוצפן בנפרד)", "CBC (כל בלוק תלוי בקודם)", "CFB", "OFB"]
+            "options": ["ECB (כל בלוק מוצפן בנפרד)", "CBC (כל בלוק תלוי בקודם)", "CFB", "OFB"],
+            "explanation": "ב-ECB כל בלוק מוצפן עצמאית — אפשר במקביל. CBC,CFB דורשים את הבלוק המוצפן הקודם — סדרתי בלבד. עם זאת, ECB אינו בטוח לשימוש (חושף תבניות) ולכן בפועל משתמשים ב-CTR שגם מאפשר מקביליות וגם בטוח."
         }
     ]
 
@@ -469,7 +475,8 @@ def generate_asymmetric_crypto_questions():
         {
             "q": "איזה אלגוריתם הוא הצפנה אסימטרית?",
             "a": "RSA",
-            "options": ["RSA", "AES", "DES", "3DES"]
+            "options": ["RSA", "AES", "DES", "3DES"],
+            "explanation": "RSA הוא אלגוריתם הצפנה אסימטרי המבוסס על קושי בפירוק לגורמים של מספרים גדולים. כל משתמש מחזיק זוג מפתחות: ציבורי ופרטי. AES, DES ו-3DES הם אלגוריתמים סימטריים — שניהם הצדדים חולקים את אותו מפתח."
         },
         {
             "q": "על מה מבוסס האלגוריתם RSA?",
@@ -554,7 +561,8 @@ def generate_hash_questions():
         {
             "q": "כיצד מונעים התקפת Rainbow Table?",
             "a": "שימוש ב-Salt ייחודי לכל סיסמה",
-            "options": ["שימוש ב-Salt ייחודי לכל סיסמה", "שימוש ב-AES במקום גיבוב", "שימוש בסיסמאות קצרות", "שימוש ב-MD5"]
+            "options": ["שימוש ב-Salt ייחודי לכל סיסמה", "שימוש ב-AES במקום גיבוב", "שימוש בסיסמאות קצרות", "שימוש ב-MD5"],
+            "explanation": "Rainbow Table היא טבלה מחושבת מראש: 'סיסמה → Hash'. Salt ייחודי לכל משתמש (16+ ביטים) מאלץ את התוקף לבנות טבלה נפרדת לכל salt — בלתי-מעשי. Salt קצר מ-128 ביט עדיין מספק את ההגנה. נוסף ל-Salt: בחירה באלגוריתם איטי (bcrypt/Argon2) שמייקר עוד יותר את הפיצוח האופליין."
         },
         {
             "q": "מדוע MD5 נחשב לא בטוח?",
@@ -719,7 +727,8 @@ def generate_firewall_questions():
         {
             "q": "איזה כלל חומת אש (Rule) מתיר תעבורה HTTP יוצאת?",
             "a": "ALLOW OUTBOUND TCP port 80",
-            "options": ["ALLOW OUTBOUND TCP port 80", "ALLOW INBOUND TCP port 80", "ALLOW OUTBOUND UDP port 53", "DENY ALL"]
+            "options": ["ALLOW OUTBOUND TCP port 80", "ALLOW INBOUND TCP port 80", "ALLOW OUTBOUND UDP port 53", "DENY ALL"],
+            "explanation": "HTTP פועל מעל TCP בפורט 80. תעבורה 'יוצאת' (OUTBOUND) היא פנייה של עובד באירגון אל שרת חיצוני. ALLOW INBOUND port 80 הוא הכלל למי שמפעיל שרת Web פנימית. ALLOW OUTBOUND UDP 53 הוא DNS. בחומת אש Stateful, הכלל הזה מאפשר אוטומטית את התגובה החוזרת מהשרת."
         }
     ]
 
@@ -1052,43 +1061,65 @@ def generate_auth_questions():
 
 # ============ Main Generator ============
 def generate_all_questions():
-    """Generate all 300 questions across 16 topics"""
+    """Generate all 300 questions across the curriculum.
+
+    Strategy:
+      1. Pull from each topic generator (the curated content questions).
+      2. Pull from BLP/Biba/Unix random generators (kept smaller to avoid dupes).
+      3. Append the curated bonus_questions.BONUS bank (140 hand-crafted Q).
+      4. Deduplicate by question text (preserving first occurrence).
+      5. Shuffle and trim/keep to exactly 300.
+      6. Assign IDs 1..300.
+    """
     all_questions = []
 
-    # Generate questions from each topic
-    all_questions.extend(generate_blp_questions())  # ~31 questions
-    all_questions.extend(generate_biba_questions())  # ~31 questions
-    all_questions.extend(generate_unix_questions())  # ~22 questions
-    all_questions.extend(generate_access_control_questions())  # ~8 questions
-    all_questions.extend(generate_symmetric_crypto_questions())  # ~9 questions
-    all_questions.extend(generate_asymmetric_crypto_questions())  # ~8 questions
-    all_questions.extend(generate_hash_questions())  # ~8 questions
-    all_questions.extend(generate_kerberos_questions())  # ~7 questions
-    all_questions.extend(generate_ssl_tls_questions())  # ~6 questions
-    all_questions.extend(generate_firewall_questions())  # ~6 questions
-    all_questions.extend(generate_buffer_overflow_questions())  # ~7 questions
-    all_questions.extend(generate_web_vuln_questions())  # ~6 questions
-    all_questions.extend(generate_malware_questions())  # ~7 questions
-    all_questions.extend(generate_ids_ips_questions())  # ~7 questions
-    all_questions.extend(generate_info_flow_questions())  # ~6 questions
-    all_questions.extend(generate_auth_questions())  # ~6 questions
+    # ---- Topic generators (mostly curated content) ----
+    all_questions.extend(generate_blp_questions())
+    all_questions.extend(generate_biba_questions())
+    all_questions.extend(generate_unix_questions())
+    all_questions.extend(generate_access_control_questions())
+    all_questions.extend(generate_symmetric_crypto_questions())
+    all_questions.extend(generate_asymmetric_crypto_questions())
+    all_questions.extend(generate_hash_questions())
+    all_questions.extend(generate_kerberos_questions())
+    all_questions.extend(generate_ssl_tls_questions())
+    all_questions.extend(generate_firewall_questions())
+    all_questions.extend(generate_buffer_overflow_questions())
+    all_questions.extend(generate_web_vuln_questions())
+    all_questions.extend(generate_malware_questions())
+    all_questions.extend(generate_ids_ips_questions())
+    all_questions.extend(generate_info_flow_questions())
+    all_questions.extend(generate_auth_questions())
 
-    # Shuffle and select exactly 300 questions
-    random.shuffle(all_questions)
+    # ---- Bonus bank: 140 hand-crafted past-exam-style questions ----
+    try:
+        from bonus_questions import BONUS
+        all_questions.extend(BONUS)
+    except ImportError:
+        print("WARNING: bonus_questions.py not found — output will be smaller than 300 unique.")
 
-    # If we have more than 300, trim; if less, duplicate some
-    if len(all_questions) > 300:
-        all_questions = all_questions[:300]
-    elif len(all_questions) < 300:
-        # Duplicate some questions to reach 300
-        while len(all_questions) < 300:
-            all_questions.append(random.choice(all_questions))
+    # ---- Deduplicate by question text (preserving first occurrence) ----
+    seen_texts = set()
+    unique = []
+    for q in all_questions:
+        if q["question"] not in seen_texts:
+            seen_texts.add(q["question"])
+            unique.append(q)
 
-    # Assign IDs
-    for i, q in enumerate(all_questions, 1):
-        q['id'] = i
+    # ---- Shuffle and trim/pad ----
+    random.shuffle(unique)
+    if len(unique) >= 300:
+        final = unique[:300]
+    else:
+        # Should not happen with the bonus bank, but keep a clear warning.
+        print("WARNING: only {} unique questions — bank too small; output will be < 300.".format(len(unique)))
+        final = unique
 
-    return all_questions
+    # ---- Assign IDs ----
+    for i, q in enumerate(final, 1):
+        q["id"] = i
+
+    return final
 
 
 def generate_concepts():
